@@ -3,8 +3,8 @@ var schemaOptions = {
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
 }
 var HocKy = mongoose.Schema({
-    tenHocKy: {type: String, require: true},
-    heSo: { type: Number, require: true }
+    TenHocKy: {type: String, require: true},
+    HeSo: { type: Number, require: true }
 }, schemaOptions)
 
 module.exports = mongoose.model('HocKy', HocKy)
