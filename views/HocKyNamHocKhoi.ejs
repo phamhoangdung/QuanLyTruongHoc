@@ -1,0 +1,307 @@
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1></h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">DataTables</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <!-- năm học -->
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Năm học</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="tblresultNamHoc" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>ID</th>
+                                    <th>Năm học</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                        <div class="col-12">
+                            <button type="button" class="btn btn-primary" id="btnAddNamHoc" name="btnAddNamHoc"><i
+                                    class="fa fa-plus"></i>&nbsp; Thêm năm học</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card -->
+            </div>
+            <div class="col-6">
+                <!-- Học kỳ -->
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Học kỳ</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table id="tblresultHocKy" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>ID</th>
+                                        <th>Học kỳ</th>
+                                        <th>Hệ số</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer">
+                            <div class="col-12">
+                                <button type="button" class="btn btn-primary" id="btnAddHocKy" name="btnAddHocKy"><i
+                                        class="fa fa-plus"></i>&nbsp; Thêm Học kỳ</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- Khối -->
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Khối học</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table id="tblresultKhoi" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>ID</th>
+                                        <th>Tên khối</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                        <!-- /.card-body -->
+                        <div class="card-footer">
+                            <div class="col-12">
+                                <button type="button" class="btn btn-primary" id="btnAddKhoi" name="btnAddKhoi"><i
+                                        class="fa fa-plus"></i>&nbsp; Thêm khối học</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+
+<!-- The Modal delete-->
+<div class="modal fade" id="deletemodal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Xoá môn học</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <h5></h5>
+                <form method="post" class="form-horizontal" id="frmDelete">
+                    <input type="hidden" id="r_id">
+                </form>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+                <button type="submit" class="btn btn-success" form="frmDelete" id="btnSubmit">Xóa</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- ! The Modal appConfirm-->
+
+
+<!-- The Modal create -->
+<div class="modal fade" id="createModalNamHoc">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Tạo mới năm học</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form role="form" id="frmPostNamHoc" method="Post">
+                    <div class="card-body">
+                        <div class="row form-group">
+                            <div class="col-md-12">
+                                <label for="viTri">Tên môn học</label>
+                                <input type="text" class="form-control" id="c_TenNamHoc" name="TenNamHoc"
+                                    placeholder="Tên môn học...">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success" form="frmPostNamHoc" id="btnSubmitConfirm">Thêm</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ! The Modal create -->
+<!-- The Modal create -->
+<div class="modal fade" id="createModalHocKy">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Tạo mới học kỳ</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form role="form" id="frmPostHocKy" method="Post">
+                    <div class="card-body">
+                        <div class="row form-group">
+                            <div class="col-md-6">
+                                <label for="viTri">Học kỳ</label>
+                                <input type="text" class="form-control" id="c_TenHocKy" name="TenHocKy"
+                                    placeholder="Học kỳ...">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="viTri">Hệ số</label>
+                                <input type="text" class="form-control" id="c_HeSo" name="HeSo" placeholder="Hệ số...">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success" form="frmPostHocKy" id="btnSubmitConfirm">Thêm</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ! The Modal create -->
+<!-- The Modal create -->
+<div class="modal fade" id="createModalKhoi">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Tạo khối học</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form role="form" id="frmPostKhoi" method="Post">
+                    <div class="card-body">
+                        <div class="row form-group">
+                            <div class="col-md-12">
+                                <label for="viTri">Tên khối</label>
+                                <input type="text" class="form-control" id="c_TenKhoi" name="TenKhoi"
+                                    placeholder="Tên khối...">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success" form="frmPostKhoi" id="btnSubmitConfirm">Thêm</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ! The Modal create -->
+
+
+<!-- The Modal update -->
+<div class="modal fade" id="updatemodal">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Chỉnh sửa thông tin môn học</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form role="form" id="frmPut" method="Put">
+                    <input type="hidden" id="u_id">
+                    <div class="card-body">
+                        <div class="row form-group">
+                            <div class="col-md-6">
+                                <label for="viTri">Tên môn học</label>
+                                <input type="text" class="form-control" id="u_TenMonHoc" name="TenMonHoc"
+                                    placeholder="Tên môn học...">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="viTri">Số tiết</label>
+                                <input type="number" class="form-control" id="u_SoTiet" name="SoTiet"
+                                    placeholder="Số tiết...">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success" form="frmPut" id="btnSubmitUpdate">Cập nhật</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<%- contentFor('pageSectionA')%>
+<script src="javascripts/HocKyNamHocKhoi.js"></script>
