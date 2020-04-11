@@ -4,6 +4,7 @@ exports.GetMonHoc = (req, res) => {
     const options = {
         offset: req.body.start,
         page: req.body.draw,
+        sort: { created_at: -1 },
         limit: req.body.length,
         collation: {
             locale: 'en'

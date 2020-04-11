@@ -20,7 +20,6 @@ exports.GetKhoi = (req, res) => {
 exports.CreateKhoi = async (req, res) => {
     try {
         req.checkBody('TenKhoi', 'Tên khối trống !').notEmpty();
-        req.checkBody('SoTiet', 'Số tiết trống !').notEmpty();
         const errors = req.validationErrors();
         if (errors) {
             res.status(200).json({ status: false, msg: errors, code: 'ERR_CREATE_KHOI' });

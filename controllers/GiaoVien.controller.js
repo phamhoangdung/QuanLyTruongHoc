@@ -2,8 +2,9 @@ const GiaoVien = require('../models/GiaoVien.model');
 
 exports.GetGiaoVien = (req, res) => {
     const options = {
-        page: 1,
-        limit: 10,
+        offset: req.body.start,
+        page: req.body.draw,
+        limit: req.body.length,
         collation: {
             locale: 'en'
         }
@@ -12,13 +13,17 @@ exports.GetGiaoVien = (req, res) => {
         if (error) {
             res.status(200).json({ status: false, msg: error, code: 'ERR_GET_GIAOVIEN' });
         } else {
-            res.status(200).json({ status: true, data: result })
+            res.status(200).json({ status: true, data: result.docs, recordsTotal: result.limit, recordsFiltered: result.totalDocs })
         }
     })
 }
 exports.CreateGiaoVien = async (req, res) => {
     try {
         req.checkBody('TenGiaoVien', 'Tên giáo viên trống !').notEmpty();
+        req.checkBody('GioTinh', 'Giới tính trống !').notEmpty();
+        req.checkBody('DiaChi', 'Địa chỉ trống !').notEmpty();
+        req.checkBody('DienThoai', 'Điện thoại trống !').notEmpty();
+        req.checkBody('Email', 'Email trống !').notEmpty();
         const errors = req.validationErrors();
         if (errors) {
             res.status(200).json({ status: false, msg: errors[0], code: 'ERR_CREATE_GIAOVIEN' });
@@ -46,8 +51,12 @@ exports.CreateGiaoVien = async (req, res) => {
     }
 }
 exports.UpdateGiaoVien = async (req, res) => {
-    req.checkBody('TenGiaoVien', 'Tên giáo viên trống !').notEmpty();
     req.checkParams('id', 'id giáo viên trống !').isMongoId();
+    req.checkBody('TenGiaoVien', 'Tên giáo viên trống !').notEmpty();
+    req.checkBody('GioTinh', 'Giới tính trống !').notEmpty();
+    req.checkBody('DiaChi', 'Địa chỉ trống !').notEmpty();
+    req.checkBody('DienThoai', 'Điện thoại trống !').notEmpty();
+    req.checkBody('Email', 'Email trống !').notEmpty();
     const errors = req.validationErrors();
     if (errors) {
         res.status(200).json({ status: false, msg: errors[0], code: 'ERR_CREATE_GIAOVIEN' });
@@ -66,7 +75,7 @@ exports.UpdateGiaoVien = async (req, res) => {
             }
         } catch (error) {
             console.log(error);
-            
+
             res.status(500).json({ status: false, msg: error, code: 'ERR_UPDATE_GIAOVIEN' })
         }
     }

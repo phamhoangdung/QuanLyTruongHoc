@@ -13,7 +13,7 @@ exports.GetHocKy = (req, res) => {
         if (error) {
             res.status(200).json({ status: false, msg: error, code: 'ERR_GET_HOCKY' });
         } else {
-            res.status(200).json({ status: true, data: result.docs, recordsTotal: result.limit , recordsFiltered: result.totalDocs })
+            res.status(200).json({ status: true, data: result.docs, recordsTotal: result.limit, recordsFiltered: result.totalDocs })
         }
     })
 }
@@ -27,6 +27,7 @@ exports.CreateHocKy = async (req, res) => {
         } else {
             var monHoc = new HocKy({
                 TenHocKy: req.body.TenHocKy,
+                HeSo: req.body.HeSo
             });
             await monHoc.save((error, result) => {
                 if (error)
