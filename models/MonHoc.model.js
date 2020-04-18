@@ -8,5 +8,6 @@ var MonHoc = mongoose.Schema({
     TenMonHoc: { type: String, require: true },
     SoTiet: { type: Number, require: true }
 }, schemaOptions)
+MonHoc.index({'$**': 'text'});
 MonHoc.plugin(mongoosePaginate);
 module.exports = mongoose.model('MonHoc', MonHoc)

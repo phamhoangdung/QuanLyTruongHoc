@@ -74,13 +74,10 @@ var tableKhoi = $('#tblresultKhoi').DataTable({
         // },
         "cache": true,
         "dataSrc": function (json) {
-            console.log(json.data);
-
             json.data.forEach(element => {
                 element.Method = `<a class=" my-method-button btnEdit fa-hover"    title="Sửa tài khoản" ><i class="fa fa-edit"></i></a> &nbsp
                                 <a class=" my-method-button btnDelete fa-hover"    title="Xóa tài khoản" ><i class="fa fa-trash"></i></a>`;
             });
-
             return json.data;
         },
     },
@@ -266,19 +263,19 @@ $('#frmPostKhoi').submit((e) => {
 });
 
 $("#tblresultNamHoc").on("click", ".btnEdit", function () {
-    var obj = $('#tblresult').DataTable().row($(this).parents('tr')).data();
+    var obj = $('#tblresultNamHoc').DataTable().row($(this).parents('tr')).data();
     $('#u_id').val(obj._id);
     $('#u_TenNamHoc').val(obj.TenNamHoc);
     $("#updatemodalNamHoc").modal('show');
 });
 $("#tblresultKhoi").on("click", ".btnEdit", function () {
-    var obj = $('#tblresult').DataTable().row($(this).parents('tr')).data();
+    var obj = $('#tblresultKhoi').DataTable().row($(this).parents('tr')).data();
     $('#u_id').val(obj._id);
     $('#u_TenKhoi').val(obj.TenKhoi);
     $("#updatemodalKhoi").modal('show');
 });
 $("#tblresultHocKy").on("click", ".btnEdit", function () {
-    var obj = $('#tblresult').DataTable().row($(this).parents('tr')).data();
+    var obj = $('#tblresultHocKy').DataTable().row($(this).parents('tr')).data();
     $('#u_id').val(obj._id);
     $('#u_TenHocKy').val(obj.TenHocKy);
     $('#u_HeSo').val(obj.HeSo);
@@ -292,7 +289,7 @@ $('#frmPutNamHoc').submit((e) => {
         uri: 'nam-hoc/update/' + id,
         method: "PUT",
         tableName: "#tblresultNamHoc",
-        modalName: "#updateModalNamHoc"
+        modalName: "#updatemodalNamHoc"
     }
     e.preventDefault();
     let form = $('#frmPutNamHoc').serializeArray();
@@ -304,7 +301,7 @@ $('#frmPutHocKy').submit((e) => {
         uri: 'hoc-ky/update/' + id,
         method: "PUT",
         tableName: "#tblresultHocKy",
-        modalName: "#updateModalHocKy"
+        modalName: "#updatemodalHocKy"
     }
     e.preventDefault();
     let form = $('#frmPutHocKy').serializeArray();
@@ -316,46 +313,82 @@ $('#frmPutKhoi').submit((e) => {
         uri: 'khoi/update/' + id,
         method: "PUT",
         tableName: "#tblresultKhoi",
-        modalName: "#updateModalKhoi"
+        modalName: "#updatemodalKhoi"
     }
     e.preventDefault();
     let form = $('#frmPutKhoi').serializeArray();
     sendData(option, form)
 });
 //---- remove 
-$("#tblresult").on("click", ".btnDelete", function () {
-    var obj = $('#tblresult').DataTable().row($(this).parents('tr')).data();
+$("#tblresultNamHoc").on("click", ".btnDelete", function () {
+    var obj = $('#tblresultNamHoc').DataTable().row($(this).parents('tr')).data();
     $("#r_id").val(obj._id);
-    $('#deletemodal h4').html("Xoá môn học");
-    let q = "Bạn có chắc chắn muốn môn học <b>" + obj.TenMonHoc + " " + "</b> không?";
+    $('#deletemodalNamHoc h4').html("Xoá năm học");
+    let q = "Bạn có chắc chắn muốn xoá <b>" + obj.TenNamHoc + " " + "</b> không?";
     $("#btnSubmitDetail").html("Xóa")
-    $('#deletemodal h5').html(q);
-    $("#deletemodal").modal('show');
+    $('#deletemodalNamHoc h5').html(q);
+    $("#deletemodalNamHoc").modal('show');
+});
+$("#tblresultHocKy").on("click", ".btnDelete", function () {
+    var obj = $('#tblresultHocKy').DataTable().row($(this).parents('tr')).data();
+    $("#r_id").val(obj._id);
+    $('#deletemodalHocKy h4').html("Xoá học kỳ");
+    let q = "Bạn có chắc chắn muốn xoá <b>" + obj.TenHocKy + " " + "</b> không?";
+    $("#btnSubmitDetail").html("Xóa")
+    $('#deletemodalHocKy h5').html(q);
+    $("#deletemodalHocKy").modal('show');
+});
+$("#tblresultKhoi").on("click", ".btnDelete", function () {
+    var obj = $('#tblresultKhoi').DataTable().row($(this).parents('tr')).data();
+    $("#r_id").val(obj._id);
+    $('#deletemodalKhoi h4').html("Xoá khối học");
+    let q = "Bạn có chắc chắn muốn xoá <b>" + obj.TenKhoi + " " + "</b> không?";
+    $("#btnSubmitDetail").html("Xóa")
+    $('#deletemodalKhoi h5').html(q);
+    $("#deletemodalKhoi").modal('show');
 });
 
-$('#frmDelete').submit((e) => {
+$('#frmDeleteNamHoc').submit((e) => {
     e.preventDefault();
     $("#btnSubmitConfirm").attr("disabled", true);
     var id = $('#r_id').val();
-    $.ajax({
-        url: "/api/v1/mon-hoc/delete/" + id,
-        method: "delete",
-    })
-        .done((data) => {
-            if (data.status) {
-                $('#tblresult').DataTable().ajax.reload();
-                $("#deletemodal").modal('hide');
-                toastr["success"](data.msg);
-            }
-            else {
-                toastr["error"]("Xảy ra lỗi: " + data.msg);
-            }
-        })
-        .fail(() => {
-            $("#deletemodal").modal('hide');
-            toastr["error"]("Xảy ra lỗi, vui lòng tải lại trang!");
-        });
     $("#btnSubmitConfirm").removeAttr("disabled");
+    let option = {
+        uri: 'nam-hoc/delete/' + id,
+        method: "DELETE",
+        tableName: "#tblresultNamHoc",
+        modalName: "#deletemodalNamHoc"
+    }
+    let form = [];
+    sendData(option, form)
+});
+$('#frmDeleteHocKy').submit((e) => {
+    e.preventDefault();
+    $("#btnSubmitConfirm").attr("disabled", true);
+    var id = $('#r_id').val();
+    $("#btnSubmitConfirm").removeAttr("disabled");
+    let option = {
+        uri: 'hoc-ky/delete/' + id,
+        method: "DELETE",
+        tableName: "#tblresultHocKy",
+        modalName: "#deletemodalHocKy"
+    }
+    let form = [];
+    sendData(option, form)
+});
+$('#frmDeleteKhoi').submit((e) => {
+    e.preventDefault();
+    $("#btnSubmitConfirm").attr("disabled", true);
+    var id = $('#r_id').val();
+    $("#btnSubmitConfirm").removeAttr("disabled");
+    let option = {
+        uri: 'khoi/delete/' + id,
+        method: "DELETE",
+        tableName: "#tblresultKhoi",
+        modalName: "#deletemodalKhoi"
+    }
+    let form = [];
+    sendData(option, form)
 });
 
 toastr.options = {

@@ -6,14 +6,15 @@ var schemaOptions = {
 }
 var GiaoVien = mongoose.Schema({
     TenGiaoVien: { type: String, require: true },
-    GioTinh: Boolean,
+    GioTinh: Number,
     DiaChi: String,
     DienThoai: String,
     Email: String,
     AnhDaiDien: String, // ảnh đại diện
-    // MonHoc_id: { type: mongoose.Schema.Types.ObjectId, ref: "MonHoc" },
-    // DanToc_id: { type: mongoose.Schema.Types.ObjectId, ref: "DanToc" },
-    // TonGiao_id: { type: mongoose.Schema.Types.ObjectId, ref: "TonGiao" },
+    MonHoc_id: { type: mongoose.Schema.Types.ObjectId, ref: "MonHoc" },
+    DanToc_id: { type: mongoose.Schema.Types.ObjectId, ref: "DanToc" },
+    TonGiao_id: { type: mongoose.Schema.Types.ObjectId, ref: "TonGiao" },
 }, schemaOptions)
+GiaoVien.index({'$**': 'text'});
 GiaoVien.plugin(mongoosePaginate);
 module.exports = mongoose.model('GiaoVien', GiaoVien)

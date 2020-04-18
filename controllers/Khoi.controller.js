@@ -1,5 +1,18 @@
 const Khoi = require('../models/Khoi.model');
 
+exports.selectKhoi = async (req, res) => {
+    let data;
+    if (req.query.search) {
+        data = await Khoi.find({ $text: { $search: req.query.search } });
+    } else {
+        data = await Khoi.find({});
+    }
+    let result = [];
+    data.map((e, i) => {
+        result.push({ "id": e._id, "text": e.TenKhoi });
+    })
+    res.status(200).json(result);
+}
 exports.GetKhoi = (req, res) => {
     const options = {
         offset: req.body.start,
@@ -13,7 +26,7 @@ exports.GetKhoi = (req, res) => {
         if (error) {
             res.status(200).json({ status: false, msg: error, code: 'ERR_GET_KHOI' });
         } else {
-            res.status(200).json({ status: true, data: result.docs, recordsTotal: result.limit , recordsFiltered: result.totalDocs })
+            res.status(200).json({ status: true, data: result.docs, recordsTotal: result.limit, recordsFiltered: result.totalDocs })
         }
     })
 }
@@ -24,10 +37,10 @@ exports.CreateKhoi = async (req, res) => {
         if (errors) {
             res.status(200).json({ status: false, msg: errors, code: 'ERR_CREATE_KHOI' });
         } else {
-            var monHoc = new Khoi({
+            var khoi = new Khoi({
                 TenKhoi: req.body.TenKhoi,
             });
-            await monHoc.save((error, result) => {
+            await khoi.save((error, result) => {
                 if (error)
                     res.status(200).json({ status: false, msg: error, code: 'ERR_CREATE_KHOI' })
                 res.status(200).json({ status: true, msg: 'Tạo mới khối thành công!', data: result })
@@ -46,13 +59,13 @@ exports.UpdateKhoi = async (req, res) => {
         res.status(200).json({ status: false, msg: errors[0], code: 'ERR_UPDATE_KHOI' });
     } else {
         try {
-            const monHoc = await Khoi.findById(req.params.id);
-            if (monHoc) {
-                monHoc.set(req.body);
-                monHoc.save((error, result) => {
+            const khoi = await Khoi.findById(req.params.id);
+            if (khoi) {
+                khoi.set(req.body);
+                khoi.save((error, result) => {
                     if (error)
                         res.status(200).json({ status: false, msg: error, code: 'ERR_UPDATE_KHOI' })
-                    res.status(200).json({ status: true, msg: 'Cập nhật mới khối thành công!', data: monHoc })
+                    res.status(200).json({ status: true, msg: 'Cập nhật thành công!', data: khoi })
                 })
             } else {
                 res.status(200).json({ status: false, msg: 'Không có dữ liệu', code: 'ERR_UPDATE_KHOI' })
@@ -71,7 +84,7 @@ exports.DeleteKhoi = (req, res) => {
         Khoi.findByIdAndDelete(req.params.id, (error, result) => {
             if (error)
                 res.status(200).json({ status: false, msg: error, code: 'ERR_DELETE_KHOI' });
-            res.status(200).json({ status: true, msg: 'Xoá khối ' + result.TenKhoi + ' thành công!' });
+            res.status(200).json({ status: true, msg: 'Xoá ' + result.TenKhoi + ' thành công!' });
         })
     }
 }

@@ -9,7 +9,8 @@ var LopHoc = mongoose.Schema({
     SiSo: Number,
     Khoi_id: { type: mongoose.Schema.Types.ObjectId, ref: "Khoi" },
     NamHoc_id: { type: mongoose.Schema.Types.ObjectId, ref: "NamHoc" },
-    GiaoVienChuNhiem_id: { type: mongoose.Schema.Types.ObjectId, ref: "GiaoVien" }
+    GiaoVien_id: { type: mongoose.Schema.Types.ObjectId, ref: "GiaoVien" },
+    status: { type: Number, default: 1 }
 }, schemaOptions)
 LopHoc.plugin(mongoosePaginate);
 module.exports = mongoose.model('LopHoc', LopHoc)

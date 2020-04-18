@@ -1,10 +1,27 @@
 const GiaoVien = require('../models/GiaoVien.model');
-
+const LopHoc = require('../models/LopHoc.model');
+exports.selectGiaoVien = async (req, res) => {
+    let data;
+    console.log(req.query.search);
+    if (req.query.search) {
+        data = await GiaoVien.find({ $text: { $search: req.query.search } });
+    } else {
+        data = await GiaoVien.find({});
+    }
+    let result = [];
+    data.map((e, i) => {
+        result.push({ "id": e._id, "text": e.TenGiaoVien });
+    })
+    res.status(200).json(result);
+}
 exports.GetGiaoVien = (req, res) => {
     const options = {
         offset: req.body.start,
         page: req.body.draw,
+        sort: { created_at: -1 },
         limit: req.body.length,
+        populate: [{ path: "MonHoc_id", select: "_id TenMonHoc" }, { path: "DanToc_id", select: "_id TenDanToc" },
+        { path: "TonGiao_id", select: "_id TenTonGiao" }],
         collation: {
             locale: 'en'
         }
@@ -80,16 +97,21 @@ exports.UpdateGiaoVien = async (req, res) => {
         }
     }
 }
-exports.DeleteGiaoVien = (req, res) => {
-    req.checkParams('id', 'id giáo viên trống !').notEmpty();
+exports.DeleteGiaoVien = async (req, res) => {
+    req.checkParams('id', 'id giáo viên trống !').isMongoId();
     const errors = req.validationErrors();
     if (errors) {
-        res.status(200).json({ status: false, msg: errors[0], code: 'ERR_CREATE_GIAOVIEN' });
+        res.status(200).json({ status: false, msg: errors, code: 'ERR_CREATE_GIAOVIEN' });
     } else {
-        GiaoVien.findByIdAndDelete(req.params.id, (error, result) => {
-            if (error)
-                res.status(200).json({ status: false, msg: error, code: 'ERR_DELETE_GIAOVIEN' });
-            res.status(200).json({ status: true, msg: 'Xoá giáo viên ' + result.TenGiaoVien + ' thành công!' });
-        })
+        let lophoc = await LopHoc.findOne({GiaoVien_id:req.params.id});
+        if(lophoc){
+            res.status(200).json({ status: false, msg: "Giáo viên này đang được sử dụng, không thể xoá !", code: 'ERR_DELETE_GIAOVIEN' });
+        }else{
+            GiaoVien.findByIdAndDelete(req.params.id, (error, result) => {
+                if (error)
+                    res.status(200).json({ status: false, msg: error, code: 'ERR_DELETE_GIAOVIEN' });
+                res.status(200).json({ status: true, msg: 'Xoá giáo viên ' + result.TenGiaoVien + ' thành công!' });
+            })
+        }
     }
 }

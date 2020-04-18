@@ -1,5 +1,19 @@
 const TonGiao = require('../models/TonGiao.model');
 
+exports.selectTonGiao = async (req, res) => {
+    let data;
+    console.log(req.query.search);
+    if (req.query.search) {
+        data = await TonGiao.find({ $text: { $search: req.query.search } });
+    } else {
+        data = await TonGiao.find({});
+    }
+    let result = [];
+    data.map((e, i) => {
+        result.push({ "id": e._id, "text": e.TenTonGiao });
+    })
+    res.status(200).json(result);
+}
 exports.GetTonGiao = (req, res) => {
     const options = {
         offset: req.body.start,

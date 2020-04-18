@@ -126,35 +126,6 @@
     </section>
     <!-- /.content -->
 </div>
-
-<!-- The Modal delete-->
-<div class="modal fade" id="deletemodal">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h4 class="modal-title">Xoá môn học</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-
-            <!-- Modal body -->
-            <div class="modal-body">
-                <h5></h5>
-                <form method="post" class="form-horizontal" id="frmDelete">
-                    <input type="hidden" id="r_id">
-                </form>
-            </div>
-
-            <!-- Modal footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
-                <button type="submit" class="btn btn-success" form="frmDelete" id="btnSubmit">Xóa</button>
-            </div>
-
-        </div>
-    </div>
-</div>
 <!-- ! The Modal appConfirm-->
 
 
@@ -264,30 +235,25 @@
 
 
 <!-- The Modal update -->
-<div class="modal fade" id="updatemodal">
+<div class="modal fade" id="updatemodalNamHoc">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h4 class="modal-title">Chỉnh sửa thông tin môn học</h4>
+                <h4 class="modal-title">Chỉnh sửa thông tin năm học</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <!-- Modal body -->
             <div class="modal-body">
-                <form role="form" id="frmPut" method="Put">
+                <form role="form" id="frmPutNamHoc" method="Put">
                     <input type="hidden" id="u_id">
                     <div class="card-body">
                         <div class="row form-group">
                             <div class="col-md-6">
                                 <label for="viTri">Tên môn học</label>
-                                <input type="text" class="form-control" id="u_TenMonHoc" name="TenMonHoc"
-                                    placeholder="Tên môn học...">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="viTri">Số tiết</label>
-                                <input type="number" class="form-control" id="u_SoTiet" name="SoTiet"
-                                    placeholder="Số tiết...">
+                                <input type="text" class="form-control" id="u_TenNamHoc" name="TenNamHoc"
+                                    placeholder="Năm học...">
                             </div>
                         </div>
                     </div>
@@ -295,13 +261,166 @@
             </div>
             <!-- Modal footer -->
             <div class="modal-footer">
-                <button type="submit" class="btn btn-success" form="frmPut" id="btnSubmitUpdate">Cập nhật</button>
+                <button type="submit" class="btn btn-success" form="frmPutNamHoc" id="btnSubmitUpdate">Cập nhật</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- The Modal update -->
+<div class="modal fade" id="updatemodalHocKy">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Chỉnh sửa thông tin học kỳ</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form role="form" id="frmPutHocKy" method="Put">
+                    <input type="hidden" id="u_id">
+                    <div class="card-body">
+                        <div class="row form-group">
+                            <div class="col-md-6">
+                                <label for="viTri">Hoc kỳ</label>
+                                <input type="text" class="form-control" id="u_TenHocKy" name="TenHocKy"
+                                    placeholder="Học kỳ...">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="viTri">Hệ số</label>
+                                <input type="text" class="form-control" id="u_HeSo" name="HeSo"
+                                    placeholder="Hệ số...">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success" form="frmPutHocKy" id="btnSubmitUpdate">Cập nhật</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- The Modal update -->
+<div class="modal fade" id="updatemodalKhoi">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Chỉnh sửa thông tin khối học</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form role="form" id="frmPutKhoi" method="Put">
+                    <input type="hidden" id="u_id">
+                    <div class="card-body">
+                        <div class="row form-group">
+                            <div class="col-md-6">
+                                <label for="viTri">Tên khối</label>
+                                <input type="text" class="form-control" id="u_TenKhoi" name="TenKhoi"
+                                    placeholder="Tên khối...">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success" form="frmPutKhoi" id="btnSubmitUpdate">Cập nhật</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- The Modal delete-->
+<div class="modal fade" id="deletemodalNamHoc">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title"></h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <h5></h5>
+                <form method="DELETE" class="form-horizontal" id="frmDeleteNamHoc">
+                    <input type="hidden" id="r_id">
+                </form>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+                <button type="submit" class="btn btn-success" form="frmDeleteNamHoc" id="btnSubmit">Xóa</button>
             </div>
 
         </div>
     </div>
 </div>
+<!-- The Modal delete-->
+<div class="modal fade" id="deletemodalHocKy">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
 
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title"></h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <h5></h5>
+                <form method="DELETE" class="form-horizontal" id="frmDeleteHocKy">
+                    <input type="hidden" id="r_id">
+                </form>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+                <button type="submit" class="btn btn-success" form="frmDeleteHocKy" id="btnSubmit">Xóa</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- The Modal delete-->
+<div class="modal fade" id="deletemodalKhoi">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title"></h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <h5></h5>
+                <form method="DELETE" class="form-horizontal" id="frmDeleteKhoi">
+                    <input type="hidden" id="r_id">
+                </form>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+                <button type="submit" class="btn btn-success" form="frmDeleteKhoi" id="btnSubmit">Xóa</button>
+            </div>
+
+        </div>
+    </div>
+</div>
 <%- contentFor('pageSectionA')%>
 <script src="javascripts/HocKyNamHocKhoi.js"></script>

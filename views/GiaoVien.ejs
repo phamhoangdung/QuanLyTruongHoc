@@ -1,0 +1,269 @@
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>DataTables</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">DataTables</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="tblresult" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Họ</th>
+                                    <th>Tên</th>
+                                    <th>Giới tính</th>
+                                    <th>Địa chỉ</th>
+                                    <th>Số ĐT</th>
+                                    <th>Email</th>
+                                    <th>Ảnh</th>
+                                    <th>ID môn</th>
+                                    <th>Môn Học phụ trách</th>
+                                    <th>ID dân tộc</th>
+                                    <th>Dân tộc</th>
+                                    <th>ID tôn giáo</th>
+                                    <th>Tôn giáo</th>
+                                    <th>thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Họ</th>
+                                    <th>Tên</th>
+                                    <th>Giới tính</th>
+                                    <th>Địa chỉ</th>
+                                    <th>Số ĐT</th>
+                                    <th>Email</th>
+                                    <th>Ảnh</th>
+                                    <th>ID môn</th>
+                                    <th>Môn Học phụ trách</th>
+                                    <th>ID dân tộc</th>
+                                    <th>Dân tộc</th>
+                                    <th>ID tôn giáo</th>
+                                    <th>Tôn giáo</th>
+                                    <th>thao tác</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="card-footer">
+                        <div class="col-12">
+                            <button type="button" class="btn btn-primary" id="btnAdd" name="btnAdd"><i
+                                    class="fa fa-plus"></i>&nbsp; Thêm</button>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- The Modal delete-->
+<div class="modal fade" id="deletemodal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Xoá giáo viên</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <h5></h5>
+                <form method="post" class="form-horizontal" id="frmDelete">
+                    <input type="hidden" id="r_id">
+                </form>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+                <button type="submit" class="btn btn-success" form="frmDelete" id="btnSubmit">Xóa</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- ! The Modal appConfirm-->
+
+
+<!-- The Modal create -->
+<div class="modal fade" id="editmodal">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Thêm mới giáo viên</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form role="form" id="frmPost" method="Post">
+                    <div class="card-body">
+                        <div class="row form-group">
+                            <div class="col-md-6">
+                                <label for="TenGiaoVien">Tên giáo viên</label>
+                                <input type="text" class="form-control" id="c_TenGiaoVien" name="TenGiaoVien"
+                                    placeholder="Tên giáo viên...">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="DiaChi">Địa chỉ</label>
+                                <input type="text" class="form-control" id="c_DiaChi" name="DiaChi"
+                                    placeholder="Địa chỉ...">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="DienThoai">Số ĐT</label>
+                                <input type="tel" class="form-control" id="c_DienThoai" name="DienThoai"
+                                    placeholder="Số điện thoại...">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="Email">Địa chỉ email</label>
+                                <input type="email" class="form-control" id="c_Email" name="Email"
+                                    placeholder="Email...">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="DanToc_id">Dân tộc</label>
+                                <select name="DanToc_id" class="form-control DanToc_id" style="width: 100%">
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="MonHoc_id">Môn học phụ trách</label>
+                                <select name="MonHoc_id" class="form-control MonHoc_id" style="width: 100%">
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="TonGiao_id">Tôn giáo</label>
+                                <select name="TonGiao_id" class="form-control TonGiao_id" style="width: 100%">
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label>giới tính</label></br>
+                                <div class="custom-control custom-radio">
+                                    <input class="custom-control-input" type="radio" id="c_Nam" value=1 name="GioTinh">
+                                    <label for="c_Nam" class="custom-control-label">Nam</label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input class="custom-control-input" type="radio" id="c_Nu" value=0 name="GioTinh">
+                                    <label for="c_Nu" class="custom-control-label">Nữ</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success" form="frmPost" id="btnSubmitConfirm">Thêm</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ! The Modal create -->
+
+
+<!-- The Modal update -->
+<div class="modal fade" id="updatemodal">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Chỉnh sửa thông tin môn học</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form role="form" id="frmPut" method="Put">
+                    <input type="hidden" id="u_id">
+                    <div class="card-body">
+                        <div class="row form-group">
+                            <div class="col-md-6">
+                                <label for="TenGiaoVien">Tên giáo viên</label>
+                                <input type="text" class="form-control" id="u_TenGiaoVien" name="TenGiaoVien"
+                                    placeholder="Tên giáo viên...">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="DiaChi">Địa chỉ</label>
+                                <input type="text" class="form-control" id="u_DiaChi" name="DiaChi"
+                                    placeholder="Địa chỉ...">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="DienThoai">Số ĐT</label>
+                                <input type="tel" class="form-control" id="u_DienThoai" name="DienThoai"
+                                    placeholder="Số điện thoại...">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="Email">Địa chỉ email</label>
+                                <input type="email" class="form-control" id="u_Email" name="Email"
+                                    placeholder="Email...">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="DanToc_id">Dân tộc</label>
+                                <select name="DanToc_id" class="form-control DanToc_id" style="width: 100%">
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="MonHoc_id">Môn học phụ trách</label>
+                                <select name="MonHoc_id" class="form-control MonHoc_id" style="width: 100%">
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="TonGiao_id">Tôn giáo</label>
+                                <select name="TonGiao_id" class="form-control TonGiao_id" style="width: 100%">
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="viTri">giới tính</label></br>
+                                <div class="custom-control custom-radio">
+                                    <input class="custom-control-input" type="radio" id="u_Nam" value=1 name="GioTinh">
+                                    <label for="u_Nam" class="custom-control-label">Nam</label>
+                                  </div>
+                                  <div class="custom-control custom-radio">
+                                    <input class="custom-control-input" type="radio" id="u_Nu" value=0 name="GioTinh">
+                                    <label for="u_Nu" class="custom-control-label">Nữ</label>
+                                  </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success" form="frmPut" id="btnSubmitUpdate">Cập nhật</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<%- contentFor('pageSectionA')%>
+<script src="javascripts/GiaoVien.js"></script>

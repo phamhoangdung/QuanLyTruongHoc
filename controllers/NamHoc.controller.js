@@ -1,5 +1,19 @@
 const NamHoc = require('../models/NamHoc.model');
 
+exports.selectNamHoc = async (req, res) => {
+    let data;
+    
+    if (req.query.search) {
+        data = await NamHoc.find({ $text: { $search: req.query.search } });
+    } else {
+        data = await NamHoc.find({}).sort({created_at:-1});
+    }
+    let result = [];
+    data.map((e, i) => {
+        result.push({ "id": e._id, "text": e.TenNamHoc });
+    })
+    res.status(200).json(result);
+}
 exports.GetNamHoc = (req, res) => {
     const options = {
         offset: req.body.start,

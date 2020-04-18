@@ -7,5 +7,6 @@ var schemaOptions = {
 var DanToc = mongoose.Schema({
     TenDanToc: { type: String, require: true }
 }, schemaOptions)
+DanToc.index({'$**': 'text'});
 DanToc.plugin(mongoosePaginate);
 module.exports = mongoose.model('DanToc', DanToc)

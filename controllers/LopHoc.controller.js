@@ -2,8 +2,14 @@ const LopHoc = require('../models/LopHoc.model');
 
 exports.GetLopHoc = (req, res) => {
     const options = {
-        page: 1,
-        limit: 10,
+        offset: req.body.start,
+        page: req.body.draw,
+        sort: { created_at: -1 },
+        limit: req.body.length,
+        populate: [{ path: "NamHoc_id", select: "_id TenNamHoc" }, { path: "Khoi_id", select: "_id TenKhoi" },
+        { path: "GiaoVien_id", select: "_id TenGiaoVien" }],
+        //populate: {path:"Khoi_id",select:"_id TenKhoi"},
+        // populate: {path:"GiaoVienChuNhiem_id",select:"_id TenGiaoVien"},
         collation: {
             locale: 'en'
         }
@@ -12,23 +18,31 @@ exports.GetLopHoc = (req, res) => {
         if (error) {
             res.status(200).json({ status: false, msg: error, code: 'ERR_GET_LOPHOC' });
         } else {
-            res.status(200).json({ status: true, data: result })
+            res.status(200).json({ status: true, data: result.docs, recordsTotal: result.limit, recordsFiltered: result.totalDocs })
         }
     })
 }
 exports.CreateLopHoc = async (req, res) => {
     try {
+        console.log(req.body);
+        
         req.checkBody('TenLopHoc', 'Tên lớp học trống !').notEmpty();
+        req.checkBody('SiSo', 'Sĩ số trống !').notEmpty();
+        req.checkBody('Khoi_id', 'Khối chưa được chọn !').notEmpty().isMongoId();
+        req.checkBody('NamHoc_id', 'Năm học chưa đưỢc chọn !').notEmpty().isMongoId();
+        req.checkBody('GiaoVien_id', 'Giáo viên chủ nhiệm chưa đưỢc chọn !').notEmpty().isMongoId();
+        req.checkBody('status', 'Trạng thái chưa đưỢc chọn !').notEmpty();
         const errors = req.validationErrors();
         if (errors) {
-            res.status(200).json({ status: false, msg: errors[0], code: 'ERR_CREATE_LOPHOC' });
+            res.status(200).json({ status: false, msg: errors, code: 'ERR_CREATE_LOPHOC' });
         } else {
             var lopHoc = new LopHoc({
                 TenLopHoc: req.body.TenLopHoc,
                 SiSo: req.body.SiSo,
                 Khoi_id: req.body.Khoi_id,
                 NamHoc_id: req.body.NamHoc_id,
-                GiaoVienChuNhiem_id: req.body.GiaoVienChuNhiem_id
+                GiaoVien_id: req.body.GiaoVien_id,
+                status: req.body.status
             });
             await lopHoc.save((error, result) => {
                 if (error)
@@ -43,10 +57,16 @@ exports.CreateLopHoc = async (req, res) => {
 }
 exports.UpdateLopHoc = async (req, res) => {
     req.checkBody('TenLopHoc', 'Tên lớp học trống !').notEmpty();
+    req.checkBody('SiSo', 'Sĩ số trống !').notEmpty();
+    req.checkBody('Khoi_id', 'Khối chưa được chọn !').notEmpty();
+    req.checkBody('NamHoc_id', 'Năm học chưa đưỢc chọn !').notEmpty();
+    req.checkBody('GiaoVien_id', 'Giáo viên chủ nhiệm chưa đưỢc chọn !').notEmpty();
+    req.checkBody('status', 'Trạng thái chưa đưỢc chọn !').notEmpty();
     req.checkParams('id', 'id lớp học trống !').isMongoId();
     const errors = req.validationErrors();
     if (errors) {
-        res.status(200).json({ status: false, msg: errors[0], code: 'ERR_CREATE_LOPHOC' });
+        
+        res.status(200).json({ status: false, msg: errors, code: 'ERR_CREATE_LOPHOC' });
     } else {
         try {
             const lopHoc = await LopHoc.findById(req.params.id);
@@ -61,8 +81,6 @@ exports.UpdateLopHoc = async (req, res) => {
                 res.status(200).json({ status: false, msg: 'Không có dữ liệu', code: 'ERR_UPDATE_LOPHOC' })
             }
         } catch (error) {
-            console.log(error);
-
             res.status(500).json({ status: false, msg: error, code: 'ERR_UPDATE_LOPHOC' })
         }
     }

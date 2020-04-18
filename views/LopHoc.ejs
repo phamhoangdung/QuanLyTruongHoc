@@ -1,0 +1,235 @@
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Môn Học</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">monhoc</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Danh sách môn học</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="tblresult" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>ID</th>
+                                    <th>Tên lớp học</th>
+                                    <th>Sĩ số</th>
+                                    <th>Khối id</th>
+                                    <th>Khối</th>
+                                    <th>Năm học id</th>
+                                    <th>Năm học</th>
+                                    <th>Giáo viên chủ nhiệm id</th>
+                                    <th>Giáo viên chủ nhiệm</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>ID</th>
+                                    <th>Tên lớp học</th>
+                                    <th>Sĩ số</th>
+                                    <th>Khối id</th>
+                                    <th>Khối</th>
+                                    <th>Năm học id</th>
+                                    <th>Năm học</th>
+                                    <th>Giáo viên chủ nhiệm id</th>
+                                    <th>Giáo viên chủ nhiệm</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                        <div class="col-12">
+                            <button type="button" class="btn btn-primary" id="btnAdd" name="btnAdd"><i
+                                    class="fa fa-plus"></i>&nbsp; Thêm</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+
+<!-- The Modal delete-->
+<div class="modal fade" id="deletemodal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Xoá Lớp học</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <h5></h5>
+                <form method="post" class="form-horizontal" id="frmDelete">
+                    <input type="hidden" id="r_id">
+                </form>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+                <button type="submit" class="btn btn-success" form="frmDelete" id="btnSubmit">Xóa</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- ! The Modal appConfirm-->
+
+
+<!-- The Modal detail -->
+<div class="modal fade" id="editModal">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title"></h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form role="form" id="frmEdit">
+                    <input type="hidden" id="id">
+                    <div class="card-body">
+                        <div class="row form-group">
+                            <div class="col-md-6">
+                                <label for="viTri">Tên lớp học</label>
+                                <input type="text" class="form-control" id="TenLopHoc" name="TenLopHoc"
+                                    placeholder="Tên lớp học...">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="viTri">Sĩ số</label>
+                                <input type="number" class="form-control" id="SiSo" name="SiSo" placeholder="Sĩ số...">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="Khoi_id">Khối</label>
+                                <select name="Khoi_id" class="form-control Khoi_id" style="width: 100%">
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="NamHoc_id">Năm học</label>
+                                <select name="NamHoc_id" class="form-control NamHoc_id" style="width: 100%">
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="GiaoVien_id">Giáo viên chủ nhiệm</label>
+                                <select name="GiaoVien_id" class="form-control GiaoVien_id" style="width: 100%">
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="viTri">Trạng thái</label>
+                                <select name="status" id="status" class="form-control">
+                                    <option value=1>Hoạt động</option>
+                                    <option value=0>Không hoạt động</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success" form="frmEdit" id="btnSubmitConfirm">Xác nhận</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ! The Modal create -->
+<!-- The Modal detail -->
+<div class="modal fade" id="createModal">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title"></h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form role="form" id="frmCreate">
+                    <div class="card-body">
+                        <div class="row form-group">
+                            <div class="col-md-6">
+                                <label for="c_TenLopHoc">Tên lớp học</label>
+                                <input type="text" class="form-control" id="c_TenLopHoc" name="TenLopHoc"
+                                    placeholder="Tên lớp học...">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="c_SiSo">Sĩ số</label>
+                                <input type="number" class="form-control" id="c_SiSo" name="SiSo"
+                                    placeholder="Sĩ số...">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="Khoi_id">Khối</label>
+                                <select name="Khoi_id" class="form-control Khoi_id" style="width: 100%">
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="NamHoc_id">Năm học</label>
+                                <select name="NamHoc_id" class="form-control NamHoc_id" style="width: 100%">
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="GiaoVien_id">Giáo viên chủ nhiệm</label>
+                                <select name="GiaoVien_id" class="form-control GiaoVien_id" style="width: 100%">
+
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="c_status">Trạng thái</label>
+                                <select name="status" id="c_status" class="form-control">
+                                    <option value=1>Hoạt động</option>
+                                    <option value=0>Không hoạt động</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success" form="frmCreate" id="btnSubmitConfirm">Cập nhật</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+<%- contentFor('pageSectionA')%>
+<script src="javascripts/LopHoc.js"></script>

@@ -1,5 +1,19 @@
 const MonHoc = require('../models/MonHoc.model');
 
+exports.selectMonHoc = async (req, res) => {
+    let data;
+    console.log(req.query.search);
+    if (req.query.search) {
+        data = await MonHoc.find({ $text: { $search: req.query.search } });
+    } else {
+        data = await MonHoc.find({});
+    }
+    let result = [];
+    data.map((e, i) => {
+        result.push({ "id": e._id, "text": e.TenMonHoc });
+    })
+    res.status(200).json(result);
+}
 exports.GetMonHoc = (req, res) => {
     const options = {
         offset: req.body.start,

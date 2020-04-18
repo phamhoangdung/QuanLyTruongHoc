@@ -6,7 +6,8 @@ var schemaOptions = {
 }
 var HocKy = mongoose.Schema({
     TenHocKy: {type: String, require: true},
-    HeSo: { type: Number, require: true }
+    HeSo: { type: Number, require: true },
+    Status: { type: Boolean, default: false }
 }, schemaOptions)
 HocKy.plugin(mongoosePaginate);
 module.exports = mongoose.model('HocKy', HocKy)

@@ -7,5 +7,6 @@ var schemaOptions = {
 var TonGiao = mongoose.Schema({
     TenTonGiao: { type: String, require: true }
 }, schemaOptions)
+TonGiao.index({'$**': 'text'});
 TonGiao.plugin(mongoosePaginate);
 module.exports = mongoose.model('TonGiao', TonGiao)

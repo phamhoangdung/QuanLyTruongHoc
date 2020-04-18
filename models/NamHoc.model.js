@@ -6,6 +6,8 @@ var schemaOptions = {
 }
 var NamHoc = mongoose.Schema({
     TenNamHoc: { type: String, require: true },
+    Status: { type: Boolean, default: false }
 }, schemaOptions)
+NamHoc.index({'$**': 'text'});
 NamHoc.plugin(mongoosePaginate);
 module.exports = mongoose.model('NamHoc', NamHoc)
