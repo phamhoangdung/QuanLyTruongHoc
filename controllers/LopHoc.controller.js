@@ -1,5 +1,19 @@
 const LopHoc = require('../models/LopHoc.model');
+const PhanLop = require('../models/PhanLop.model');
 
+exports.selectLopHoc = async (req, res) => {
+    let data;
+    if (req.query.search) {
+        data = await LopHoc.find({ $text: { $search: req.query.search }, Khoi_id: req.query.Khoi_id, NamHoc_id: req.query.NamHoc_id });
+    } else {
+        data = await LopHoc.find({ Khoi_id: req.query.Khoi_id, NamHoc_id: req.query.NamHoc_id });
+    }
+    let result = [];
+    data.map((e, i) => {
+        result.push({ "id": e._id, "text": e.TenLopHoc });
+    })
+    res.status(200).json(result);
+}
 exports.GetLopHoc = (req, res) => {
     const options = {
         offset: req.body.start,
@@ -7,7 +21,7 @@ exports.GetLopHoc = (req, res) => {
         sort: { created_at: -1 },
         limit: req.body.length,
         populate: [{ path: "NamHoc_id", select: "_id TenNamHoc" }, { path: "Khoi_id", select: "_id TenKhoi" },
-        { path: "GiaoVien_id", select: "_id TenGiaoVien" }],
+        { path: "GiaoVien_id", select: "_id Ho Ten" }],
         //populate: {path:"Khoi_id",select:"_id TenKhoi"},
         // populate: {path:"GiaoVienChuNhiem_id",select:"_id TenGiaoVien"},
         collation: {
@@ -25,7 +39,7 @@ exports.GetLopHoc = (req, res) => {
 exports.CreateLopHoc = async (req, res) => {
     try {
         console.log(req.body);
-        
+
         req.checkBody('TenLopHoc', 'Tên lớp học trống !').notEmpty();
         req.checkBody('SiSo', 'Sĩ số trống !').notEmpty();
         req.checkBody('Khoi_id', 'Khối chưa được chọn !').notEmpty().isMongoId();
@@ -65,12 +79,13 @@ exports.UpdateLopHoc = async (req, res) => {
     req.checkParams('id', 'id lớp học trống !').isMongoId();
     const errors = req.validationErrors();
     if (errors) {
-        
+
         res.status(200).json({ status: false, msg: errors, code: 'ERR_CREATE_LOPHOC' });
     } else {
         try {
             const lopHoc = await LopHoc.findById(req.params.id);
             if (lopHoc) {
+                await PhanLop.findOneAndUpdate({LopHoc_id:lopHoc._id},{NamHoc_id:req.body.NamHoc_id,Khoi_id:req.body.Khoi_id})
                 lopHoc.set(req.body);
                 lopHoc.save((error, result) => {
                     if (error)

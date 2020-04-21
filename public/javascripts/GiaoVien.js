@@ -17,14 +17,14 @@ var table = $('#tblresult').DataTable({
                 element.Method = `<a class=" my-method-button btnEdit fa-hover"    title="Sửa tài khoản" ><i class="fa fa-edit"></i></a> &nbsp
                                 <a class=" my-method-button btnDelete fa-hover"    title="Xóa tài khoản" ><i class="fa fa-trash"></i></a>`;
             });
-            
+
             return json.data;
         },
     },
-    
+
     "PaginationType": "bootstrap",
     "columnDefs": [
-        { "visible": false, "targets": [1,7,8,10,12]},
+        { "visible": false, "targets": [1,8,9,11,13] },
         {
             "className": "text-center",
             "width": "50px",
@@ -35,7 +35,7 @@ var table = $('#tblresult').DataTable({
             "className": "text-center",
             "width": "60px",
             "orderable": false,
-            "targets": 14
+            "targets": 15
         },
         {
             "className": "text-center",
@@ -44,8 +44,8 @@ var table = $('#tblresult').DataTable({
             },
             "orderable": false,
             "width": "60px",
-            "targets": 3
-         },
+            "targets": 4
+        },
     ],
     "language": {
         "sLengthMenu": "Số bản ghi hiển thị trên 1 trang _MENU_ ",
@@ -61,7 +61,8 @@ var table = $('#tblresult').DataTable({
     columns: [
         { "data": null },
         { "data": '_id' },
-        { "data": 'TenGiaoVien' },
+        { "data": 'Ho' },
+        { "data": 'Ten' },
         { "data": 'GioTinh' },
         { "data": 'DiaChi' },
         { "data": 'DienThoai' },
@@ -86,7 +87,8 @@ var table = $('#tblresult').DataTable({
 
 $("#btnAdd").click(function () {
     $('#c_id').val(null);
-    $('#c_TenGiaoVien').val(null);
+    $('#c_Ho').val(null);
+    $('#c_Ten').val(null);
     $('#c_DiaChi').val(null);
     $('#c_DienThoai').val(null);
     $('#c_Email').val(null);
@@ -113,10 +115,13 @@ $('#frmPost').submit((e) => {
                 toastr["success"](data.msg);
             }
             else {
-                console.log(data.msg);
-                data.msg.forEach((e,i)=>{
-                    toastr["error"]("Lỗi số "+(i+1)+" :" + e.msg);
-                })
+                if (Array.isArray(data.msg)) {
+                    data.msg.forEach((e, i) => {
+                        toastr["error"]("Lỗi số " + (i + 1) + " :" + e.msg);
+                    })
+                } else {
+                    toastr["warning"](data.msg);
+                }
             }
         })
         .fail(() => {
@@ -129,18 +134,22 @@ $('#frmPost').submit((e) => {
 $("#tblresult").on("click", ".btnEdit", function () {
     var obj = $('#tblresult').DataTable().row($(this).parents('tr')).data();
     $('#u_id').val(obj._id);
-    $('#u_TenGiaoVien').val(obj.TenGiaoVien);
+    $('#u_Ho').val(obj.Ho);
+    $('#u_Ten').val(obj.Ten);
     $('#u_GioTinh').val(obj.GioTinh);
-    obj.GioTinh == 1 ? $('#u_Nam').prop( "checked", true ) : $('#u_Nu').prop( "checked", true )
+    obj.GioTinh == 1 ? $('#u_Nam').prop("checked", true) : $('#u_Nu').prop("checked", true)
     $('#u_DiaChi').val(obj.DiaChi);
     $('#u_DienThoai').val(obj.DienThoai);
     $('#u_Email').val(obj.Email);
-    var $Option1 = $("<option selected='selected'></option>").val(obj.MonHoc_id._id).text(obj.MonHoc_id.TenMonHoc);
-    var $Option2 = $("<option selected='selected'></option>").val(obj.DanToc_id._id).text(obj.DanToc_id.TenDanToc);
-    var $Option3 = $("<option selected='selected'></option>").val(obj.TonGiao_id._id).text(obj.TonGiao_id.TenTonGiao);
-    $(".MonHoc_id").empty().append($Option1).trigger('change');
-    $(".DanToc_id").empty().append($Option2).trigger('change');
-    $(".TonGiao_id").empty().append($Option3).trigger('change');
+    if(obj.MonHoc_id && obj.DanToc_id &&obj.TonGiao_id)
+    {
+        var $Option1 = $("<option selected='selected'></option>").val(obj.MonHoc_id._id).text(obj.MonHoc_id.TenMonHoc);
+        var $Option2 = $("<option selected='selected'></option>").val(obj.DanToc_id._id).text(obj.DanToc_id.TenDanToc);
+        var $Option3 = $("<option selected='selected'></option>").val(obj.TonGiao_id._id).text(obj.TonGiao_id.TenTonGiao);
+        $(".MonHoc_id").empty().append($Option1).trigger('change');
+        $(".DanToc_id").empty().append($Option2).trigger('change');
+        $(".TonGiao_id").empty().append($Option3).trigger('change');
+    }
     $("#updatemodal").modal('show');
 });
 
@@ -150,7 +159,7 @@ $('#frmPut').submit((e) => {
     e.preventDefault();
     let form = $('#frmPut').serializeArray();
     $.ajax({
-        url: "/api/v1/giao-vien/update/"+id,
+        url: "/api/v1/giao-vien/update/" + id,
         method: "PUT",
         data: form,
         dataType: 'json'
@@ -162,10 +171,13 @@ $('#frmPut').submit((e) => {
                 toastr["success"](data.msg);
             }
             else {
-                console.log(data.msg);
-                data.msg.forEach((e,i)=>{
-                    toastr["error"]("Lỗi số "+(i+1)+" :" + e.msg);
-                })
+                if (Array.isArray(data.msg)) {
+                    data.msg.forEach((e, i) => {
+                        toastr["error"]("Lỗi số " + (i + 1) + " :" + e.msg);
+                    })
+                } else {
+                    toastr["warning"](data.msg);
+                }
             }
         })
         .fail(() => {
@@ -180,7 +192,7 @@ $("#tblresult").on("click", ".btnDelete", function () {
     var obj = $('#tblresult').DataTable().row($(this).parents('tr')).data();
     $("#r_id").val(obj._id);
     $('#deletemodal h4').html("Xoá giao viên");
-    let q = "Bạn có chắc chắn muốn xoá <b>" + obj.TenGiaoVien + " " + "</b> không?";
+    let q = "Bạn có chắc chắn muốn xoá <b>" + obj.Ho + " " + obj.Ten + " " + "</b> không?";
     $("#btnSubmitDetail").html("Xóa")
     $('#deletemodal h5').html(q);
     $("#deletemodal").modal('show');
@@ -191,7 +203,7 @@ $('#frmDelete').submit((e) => {
     $("#btnSubmitConfirm").attr("disabled", true);
     var id = $('#r_id').val();
     $.ajax({
-        url: "/api/v1/giao-vien/delete/"+id,
+        url: "/api/v1/giao-vien/delete/" + id,
         method: "delete",
     })
         .done((data) => {
@@ -201,15 +213,13 @@ $('#frmDelete').submit((e) => {
                 toastr["success"](data.msg);
             }
             else {
-                if(Array.isArray(data.msg)){
-                    data.msg.forEach((e,i)=>{
-                        toastr["error"]("Lỗi số "+(i+1)+" :" + e.msg);
+                if (Array.isArray(data.msg)) {
+                    data.msg.forEach((e, i) => {
+                        toastr["error"]("Lỗi số " + (i + 1) + " :" + e.msg);
                     })
-                }else{
+                } else {
                     toastr["warning"](data.msg);
                 }
-                
-                
             }
         })
         .fail(() => {
@@ -302,9 +312,9 @@ toastr.options = {
     "closeButton": true,
     "debug": false,
     "newestOnTop": false,
-    "progressBar": false,
-    "positionClass": "toast-bottom-right",
-    "preventDuplicates": false,
+    "progressBar": true,
+    "positionClass": "toast-top-right",
+    "preventDuplicates": true,
     "onclick": null,
     "showDuration": "300",
     "hideDuration": "1000",

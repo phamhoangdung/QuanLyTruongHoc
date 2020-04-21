@@ -7,14 +7,14 @@ var schemaOptions = {
 var HocSinh = mongoose.Schema({
     Ho: { type: String, require: true },
     Ten: { type: String, require: true },
-    GioiTinh: { type: Number, require: true },
+    GioiTinh: { type: Number, default: 1 },
     NgaySinh: Date,
     DiaChi: String,
     QueQuan: String,
-    AnhDaiDien: String,
+    AnhDaiDien: { type: String, default: "" },
     DanToc_id: { type: mongoose.Schema.Types.ObjectId, ref: "DanToc" },
     TonGiao_id: { type: mongoose.Schema.Types.ObjectId, ref: "TonGiao" },
-    TaiKhoan_id: { type: mongoose.Schema.Types.ObjectId, ref: 'TaiKhoan' }
+    isClass: { type: Boolean, default: false }
 }, schemaOptions)
 HocSinh.plugin(mongoosePaginate);
 module.exports = mongoose.model('HocSinh', HocSinh)

@@ -1,4 +1,6 @@
 const MonHoc = require('../models/MonHoc.model');
+const GiaoVien = require('../models/GiaoVien.model');
+const Diem = require('../models/Diem.model');
 
 exports.selectMonHoc = async (req, res) => {
     let data;
@@ -18,7 +20,8 @@ exports.GetMonHoc = (req, res) => {
     const options = {
         offset: req.body.start,
         page: req.body.draw,
-        sort: { created_at: -1 },
+        populate: { path: "Khoi_id", select: "_id TenKhoi" },
+        sort: { Khoi_id: 1 },
         limit: req.body.length,
         collation: {
             locale: 'en'
@@ -28,7 +31,7 @@ exports.GetMonHoc = (req, res) => {
         if (error) {
             res.status(200).json({ status: false, msg: error, code: 'ERR_GET_MONHOC' });
         } else {
-            res.status(200).json({ status: true, data: result.docs, recordsTotal: result.limit , recordsFiltered: result.totalDocs })
+            res.status(200).json({ status: true, data: result.docs, recordsTotal: result.limit, recordsFiltered: result.totalDocs })
         }
     })
 }
@@ -36,19 +39,26 @@ exports.CreateMonHoc = async (req, res) => {
     try {
         req.checkBody('TenMonHoc', 'Tên môn học trống !').notEmpty();
         req.checkBody('SoTiet', 'Số tiết trống !').notEmpty();
+        req.checkBody('Khoi_id', 'Khối trống !').notEmpty();
         const errors = req.validationErrors();
         if (errors) {
             res.status(200).json({ status: false, msg: errors, code: 'ERR_CREATE_MONHOC' });
         } else {
-            var monHoc = new MonHoc({
-                TenMonHoc: req.body.TenMonHoc,
-                SoTiet: req.body.SoTiet
-            });
-            await monHoc.save((error, result) => {
-                if (error)
-                    res.status(200).json({ status: false, msg: error, code: 'ERR_CREATE_MONHOC' })
-                res.status(200).json({ status: true, msg: 'Tạo mới môn học thành công!', data: result })
-            })
+            let monHocCheck = await MonHoc.findOne({ TenMonHoc: req.body.TenMonHoc });
+            if (monHocCheck) {
+                res.status(200).json({ status: false, msg: "Môn học đã tồn tại", code: 'ERR_CREATE_MONHOC' })
+            } else {
+                var monHoc = new MonHoc({
+                    TenMonHoc: req.body.TenMonHoc,
+                    SoTiet: req.body.SoTiet,
+                    Khoi_id: req.body.Khoi_id,
+                });
+                await monHoc.save((error, result) => {
+                    if (error)
+                        res.status(200).json({ status: false, msg: error, code: 'ERR_CREATE_MONHOC' })
+                    res.status(200).json({ status: true, msg: 'Tạo mới môn học thành công!', data: result })
+                })
+            }
         }
     }
     catch (err) {
@@ -59,6 +69,7 @@ exports.UpdateMonHoc = async (req, res) => {
     req.checkBody('TenMonHoc', 'Tên môn học trống !').notEmpty();
     req.checkBody('SoTiet', 'Tên số tiết trống !').notEmpty();
     req.checkParams('id', 'id môn học trống !').isMongoId();
+    req.checkBody('Khoi_id', 'Khối trống !').notEmpty();
     const errors = req.validationErrors();
     if (errors) {
         res.status(200).json({ status: false, msg: errors[0], code: 'ERR_UPDATE_MONHOC' });
@@ -80,16 +91,22 @@ exports.UpdateMonHoc = async (req, res) => {
         }
     }
 }
-exports.DeleteMonHoc = (req, res) => {
+exports.DeleteMonHoc = async (req, res) => {
     req.checkParams('id', 'id môn học trống !').notEmpty();
     const errors = req.validationErrors();
     if (errors) {
         res.status(200).json({ status: false, msg: errors[0], code: 'ERR_CREATE_MONHOC' });
     } else {
-        MonHoc.findByIdAndDelete(req.params.id, (error, result) => {
-            if (error)
-                res.status(200).json({ status: false, msg: error, code: 'ERR_DELETE_MONHOC' });
-            res.status(200).json({ status: true, msg: 'Xoá môn học ' + result.TenMonHoc + ' thành công!' });
-        })
+        let giaoVien = await GiaoVien.findOne({MonHoc_id:req.params.id});
+        let diem = await Diem.findOne({MonHoc_id:req.params.id});
+        if(giaoVien || diem){
+            res.status(200).json({ status: false, msg: "Môn học đang được sử dụng !", code: 'ERR_DELETE_MONHOC' });
+        }else{
+            MonHoc.findByIdAndDelete(req.params.id, (error, result) => {
+                if (error)
+                    res.status(200).json({ status: false, msg: error, code: 'ERR_DELETE_MONHOC' });
+                res.status(200).json({ status: true, msg: 'Xoá môn học ' + result.TenMonHoc + ' thành công!' });
+            })
+        }
     }
 }

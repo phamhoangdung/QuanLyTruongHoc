@@ -2,7 +2,6 @@ const GiaoVien = require('../models/GiaoVien.model');
 const LopHoc = require('../models/LopHoc.model');
 exports.selectGiaoVien = async (req, res) => {
     let data;
-    console.log(req.query.search);
     if (req.query.search) {
         data = await GiaoVien.find({ $text: { $search: req.query.search } });
     } else {
@@ -10,7 +9,7 @@ exports.selectGiaoVien = async (req, res) => {
     }
     let result = [];
     data.map((e, i) => {
-        result.push({ "id": e._id, "text": e.TenGiaoVien });
+        result.push({ "id": e._id, "text": e.Ho + " " + e.Ten });
     })
     res.status(200).json(result);
 }
@@ -36,25 +35,30 @@ exports.GetGiaoVien = (req, res) => {
 }
 exports.CreateGiaoVien = async (req, res) => {
     try {
-        req.checkBody('TenGiaoVien', 'Tên giáo viên trống !').notEmpty();
+        req.checkBody('Ho', 'Tên giáo viên trống !').notEmpty();
+        req.checkBody('Ten', 'Tên giáo viên trống !').notEmpty();
         req.checkBody('GioTinh', 'Giới tính trống !').notEmpty();
         req.checkBody('DiaChi', 'Địa chỉ trống !').notEmpty();
         req.checkBody('DienThoai', 'Điện thoại trống !').notEmpty();
         req.checkBody('Email', 'Email trống !').notEmpty();
+        req.checkBody('DanToc_id', 'Dân tộc chưa được chọn !').notEmpty();
+        req.checkBody('TonGiao_id', 'Tôn giáo chưa được chọn !').notEmpty();
+        req.checkBody('MonHoc_id', 'Môn học chưa được chọn !').notEmpty();
         const errors = req.validationErrors();
         if (errors) {
-            res.status(200).json({ status: false, msg: errors[0], code: 'ERR_CREATE_GIAOVIEN' });
+            res.status(200).json({ status: false, msg: errors, code: 'ERR_CREATE_GIAOVIEN' });
         } else {
             var giaoVien = new GiaoVien({
-                TenGiaoVien: req.body.TenGiaoVien,
+                Ho: req.body.Ho,
+                Ten: req.body.Ten,
                 GioTinh: req.body.GioTinh,
                 DiaChi: req.body.DiaChi,
                 DienThoai: req.body.DienThoai,
                 Email: req.body.Email,
                 AnhDaiDien: req.body.AnhDaiDien,
-                // MonHoc_id: req.body.MonHoc_id,
-                // DanToc_id: req.body.DanToc_id,
-                // TonGiao_id: req.body.TonGiao_id,
+                MonHoc_id: req.body.MonHoc_id,
+                DanToc_id: req.body.DanToc_id,
+                TonGiao_id: req.body.TonGiao_id,
             });
             await giaoVien.save((error, result) => {
                 if (error)
@@ -69,14 +73,18 @@ exports.CreateGiaoVien = async (req, res) => {
 }
 exports.UpdateGiaoVien = async (req, res) => {
     req.checkParams('id', 'id giáo viên trống !').isMongoId();
-    req.checkBody('TenGiaoVien', 'Tên giáo viên trống !').notEmpty();
+    req.checkBody('Ho', 'Tên giáo viên trống !').notEmpty();
+    req.checkBody('Ten', 'Tên giáo viên trống !').notEmpty();
     req.checkBody('GioTinh', 'Giới tính trống !').notEmpty();
     req.checkBody('DiaChi', 'Địa chỉ trống !').notEmpty();
     req.checkBody('DienThoai', 'Điện thoại trống !').notEmpty();
     req.checkBody('Email', 'Email trống !').notEmpty();
+    req.checkBody('DanToc_id', 'Dân tộc chưa được chọn !').notEmpty();
+    req.checkBody('TonGiao_id', 'Tôn giáo chưa được chọn !').notEmpty();
+    req.checkBody('MonHoc_id', 'Môn học chưa được chọn !').notEmpty();
     const errors = req.validationErrors();
     if (errors) {
-        res.status(200).json({ status: false, msg: errors[0], code: 'ERR_CREATE_GIAOVIEN' });
+        res.status(200).json({ status: false, msg: errors, code: 'ERR_CREATE_GIAOVIEN' });
     } else {
         try {
             const giaoVien = await GiaoVien.findById(req.params.id);
@@ -103,14 +111,14 @@ exports.DeleteGiaoVien = async (req, res) => {
     if (errors) {
         res.status(200).json({ status: false, msg: errors, code: 'ERR_CREATE_GIAOVIEN' });
     } else {
-        let lophoc = await LopHoc.findOne({GiaoVien_id:req.params.id});
-        if(lophoc){
+        let lophoc = await LopHoc.findOne({ GiaoVien_id: req.params.id });
+        if (lophoc) {
             res.status(200).json({ status: false, msg: "Giáo viên này đang được sử dụng, không thể xoá !", code: 'ERR_DELETE_GIAOVIEN' });
-        }else{
+        } else {
             GiaoVien.findByIdAndDelete(req.params.id, (error, result) => {
                 if (error)
                     res.status(200).json({ status: false, msg: error, code: 'ERR_DELETE_GIAOVIEN' });
-                res.status(200).json({ status: true, msg: 'Xoá giáo viên ' + result.TenGiaoVien + ' thành công!' });
+                res.status(200).json({ status: true, msg: 'Xoá giáo viên ' + result.Ho + " " + result.Ten + ' thành công!' });
             })
         }
     }

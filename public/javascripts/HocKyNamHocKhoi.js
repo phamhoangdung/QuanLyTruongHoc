@@ -152,14 +152,8 @@ var tableHocKy = $('#tblresultHocKy').DataTable({
             "className": "text-center",
             "width": "50px",
             "orderable": false,
-            "targets": 0
+            "targets": [0,3,4]
         },
-        {
-            "className": "text-center",
-            "width": "50px",
-            "orderable": false,
-            "targets": 3
-        }
     ],
     "language": {
         "sLengthMenu": "Số bản ghi hiển thị trên 1 trang _MENU_ ",
@@ -395,9 +389,9 @@ toastr.options = {
     "closeButton": true,
     "debug": false,
     "newestOnTop": false,
-    "progressBar": false,
-    "positionClass": "toast-bottom-right",
-    "preventDuplicates": false,
+    "progressBar": true,
+    "positionClass": "toast-top-right",
+    "preventDuplicates": true,
     "onclick": null,
     "showDuration": "300",
     "hideDuration": "1000",

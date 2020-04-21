@@ -12,5 +12,6 @@ var LopHoc = mongoose.Schema({
     GiaoVien_id: { type: mongoose.Schema.Types.ObjectId, ref: "GiaoVien" },
     status: { type: Number, default: 1 }
 }, schemaOptions)
+LopHoc.index({ '$**': 'text' });
 LopHoc.plugin(mongoosePaginate);
 module.exports = mongoose.model('LopHoc', LopHoc)

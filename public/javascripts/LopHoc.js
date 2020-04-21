@@ -12,18 +12,17 @@ var table = $('#tblresult').DataTable({
         "cache": true,
         "dataSrc": function (json) {
             json.data.forEach(element => {
+                element.TenGiaoVien = element.GiaoVien_id.Ho + " " + element.GiaoVien_id.Ten;
                 element.Method = `<a class=" my-method-button btnEdit fa-hover"    title="Sửa tài khoản" ><i class="fa fa-edit"></i></a> &nbsp
                                 <a class=" my-method-button btnDelete fa-hover"    title="Xóa tài khoản" ><i class="fa fa-trash"></i></a>`;
             });
-console.log(json);
-
             return json.data;
         },
     },
 
     "PaginationType": "bootstrap",
     "columnDefs": [
-        { "visible": false, "targets": [1,4,6,8] },
+        { "visible": false, "targets": [1, 4, 6, 8] },
         {
             "className": "text-center",
             "width": "50px",
@@ -44,7 +43,7 @@ console.log(json);
             "orderable": false,
             "width": "50px",
             "targets": 10
-         },
+        },
     ],
     "language": {
         "sLengthMenu": "Số bản ghi hiển thị trên 1 trang _MENU_ ",
@@ -67,7 +66,7 @@ console.log(json);
         { "data": 'NamHoc_id._id' },
         { "data": 'NamHoc_id.TenNamHoc' },
         { "data": 'GiaoVien_id._id' },
-        { "data": 'GiaoVien_id.TenGiaoVien' },
+        { "data": 'TenGiaoVien' },
         { "data": 'status' },
         { "data": 'Method' }
     ],
@@ -107,9 +106,13 @@ function sendData(options, form) {
                 toastr["success"](data.msg);
             }
             else {
-                data.msg.forEach((e, i) => {
-                    toastr["error"]("Lỗi số " + (i + 1) + " :" + e.msg);
-                })
+                if (Array.isArray(data.msg)) {
+                    data.msg.forEach((e, i) => {
+                        toastr["error"]("Lỗi số " + (i + 1) + " :" + e.msg);
+                    })
+                } else {
+                    toastr["warning"](data.msg);
+                }
             }
         })
         .fail(() => {
@@ -138,7 +141,7 @@ $("#tblresult").on("click", ".btnEdit", function () {
     $('#NamHoc_id').val(obj.NamHoc_id);
     var $KhoiOption = $("<option selected='selected'></option>").val(obj.Khoi_id._id).text(obj.Khoi_id.TenKhoi);
     var $NamHocOption = $("<option selected='selected'></option>").val(obj.NamHoc_id._id).text(obj.NamHoc_id.TenNamHoc);
-    var $GiaoVienOption = $("<option selected='selected'></option>").val(obj.GiaoVien_id._id).text(obj.GiaoVien_id.TenGiaoVien);
+    var $GiaoVienOption = $("<option selected='selected'></option>").val(obj.GiaoVien_id._id).text(obj.GiaoVien_id.Ho + " " + obj.GiaoVien_id.Ten);
     $(".Khoi_id").empty().append($KhoiOption).trigger('change');
     $(".GiaoVien_id").empty().append($GiaoVienOption).trigger('change');
     $(".NamHoc_id").empty().append($NamHocOption).trigger('change');
@@ -156,7 +159,7 @@ $('#frmEdit').submit((e) => {
         method: "PUT",
         modal: "#editModal"
     }
-    sendData(options,form);
+    sendData(options, form);
 });
 
 //---- remove 
@@ -278,9 +281,9 @@ toastr.options = {
     "closeButton": true,
     "debug": false,
     "newestOnTop": false,
-    "progressBar": false,
-    "positionClass": "toast-bottom-right",
-    "preventDuplicates": false,
+    "progressBar": true,
+    "positionClass": "toast-top-right",
+    "preventDuplicates": true,
     "onclick": null,
     "showDuration": "300",
     "hideDuration": "1000",

@@ -3,10 +3,13 @@ const MonHoc = require('../controllers/MonHoc.controller');
 const NamHoc = require('../controllers/NamHoc.controller');
 const Khoi = require('../controllers/Khoi.controller');
 const KhoiModel = require('../models/Khoi.model');
+const HocSinhModel = require('../models/HocSinh.model');
 const HocKy = require('../controllers/HocKy.controller');
 const DanToc = require('../controllers/DanToc.controller');
 const TonGiao = require('../controllers/TonGiao.controller');
 const LopHoc = require('../controllers/LopHoc.controller');
+const HocSinh = require('../controllers/HocSinh.controller');
+const PhanLop = require('../controllers/PhanLop.controller');
 
 module.exports = (app) => {
   let express = require('express');
@@ -35,6 +38,13 @@ module.exports = (app) => {
   });
   app.get('/giao-vien', async (req, res) => {
     res.render('GiaoVien');
+  });
+  app.get('/hoc-sinh', async (req, res) => {
+    res.render('HocSinh');
+  });
+  app.get('/phan-lop', async (req, res) => {
+    let result = await HocSinhModel.find({isClass:false})
+    res.render('PhanLop',{HocSinh:result});
   });
   // router.post('create',GiaoVien.CreateGiaoVien);
   router.prefix('/giao-vien', (route) => {
@@ -94,10 +104,25 @@ module.exports = (app) => {
   })
   //api for LopHoc
   router.prefix('/lop-hoc', (route) => {
+    route.get('/select-lop-hoc', LopHoc.selectLopHoc);
     route.post('/get', LopHoc.GetLopHoc);
     route.post('/create', LopHoc.CreateLopHoc);
     route.put('/update/:id', LopHoc.UpdateLopHoc);
     route.delete('/delete/:id', LopHoc.DeleteLopHoc);
+  })
+  //api for HocSinh
+  router.prefix('/hoc-sinh', (route) => {
+    route.post('/get', HocSinh.GetHocSinh);
+    route.post('/create', HocSinh.CreateHocSinh);
+    route.put('/update/:id', HocSinh.UpdateHocSinh);
+    route.delete('/delete/:id', HocSinh.DeleteHocSinh);
+  })
+  //api for PhanLop
+  router.prefix('/phan-lop', (route) => {
+    route.post('/get', PhanLop.GetLopHocSinh);
+    route.post('/create', PhanLop.CreateLopHocSinh);
+    route.put('/update', PhanLop.UpdateLopHocSinh);
+    route.delete('/delete/:id', PhanLop.DeleteLopHocSinh);
   })
   app.use('/api/v1', router);
 };

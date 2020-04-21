@@ -24,7 +24,7 @@ var table = $('#tblresult').DataTable({
     
     "PaginationType": "bootstrap",
     "columnDefs": [
-        { "visible": false, "targets": 1},
+        { "visible": false, "targets": [1,4]},
         {
             "className": "text-center",
             "width": "50px",
@@ -33,9 +33,9 @@ var table = $('#tblresult').DataTable({
         },
         {
             "className": "text-center",
-            "width": "8%",
+            "width": "60px",
             "orderable": false,
-            "targets": 4
+            "targets": 6
         }
     ],
     "language": {
@@ -54,6 +54,8 @@ var table = $('#tblresult').DataTable({
         { "data": '_id' },
         { "data": 'TenMonHoc' },
         { "data": 'SoTiet' },
+        { "data": 'Khoi_id._id' },
+        { "data": 'Khoi_id.TenKhoi' },
         { "data": 'Method' }
     ],
     bAutoWidth: false,
@@ -68,6 +70,7 @@ var table = $('#tblresult').DataTable({
 $("#btnAdd").click(function () {
     $('#c_TenMonHoc').val(null);
     $('#c_SoTiet').val(null);
+    $('#c_Khoi_id').empty();
     $("#editmodal").modal('show');
 });
 
@@ -88,10 +91,13 @@ $('#frmPost').submit((e) => {
                 toastr["success"](data.msg);
             }
             else {
-                console.log(data.msg);
-                data.msg.forEach((e,i)=>{
-                    toastr["error"]("Lỗi số "+(i+1)+" :" + e.msg);
-                })
+                if (Array.isArray(data.msg)) {
+                    data.msg.forEach((e, i) => {
+                        toastr["error"]("Lỗi số " + (i + 1) + " :" + e.msg);
+                    })
+                } else {
+                    toastr["warning"](data.msg);
+                }
             }
         })
         .fail(() => {
@@ -103,6 +109,10 @@ $('#frmPost').submit((e) => {
 
 $("#tblresult").on("click", ".btnEdit", function () {
     var obj = $('#tblresult').DataTable().row($(this).parents('tr')).data();
+    if(obj.Khoi_id){
+        var $KhoiOption = $("<option selected='selected'></option>").val(obj.Khoi_id._id).text(obj.Khoi_id.TenKhoi);
+        $(".Khoi_id").empty().append($KhoiOption).trigger('change');
+    }
     $('#u_id').val(obj._id);
     $('#u_TenMonHoc').val(obj.TenMonHoc);
     $('#u_SoTiet').val(obj.SoTiet);
@@ -127,7 +137,13 @@ $('#frmPut').submit((e) => {
                 toastr["success"](data.msg);
             }
             else {
-                toastr["error"]("Xảy ra lỗi: " + data.msg);
+                if (Array.isArray(data.msg)) {
+                    data.msg.forEach((e, i) => {
+                        toastr["error"]("Lỗi số " + (i + 1) + " :" + e.msg);
+                    })
+                } else {
+                    toastr["warning"](data.msg);
+                }
             }
         })
         .fail(() => {
@@ -172,14 +188,40 @@ $('#frmDelete').submit((e) => {
         });
     $("#btnSubmitConfirm").removeAttr("disabled");
 });
-
+$(".Khoi_id").select2({
+    tags: "true",
+    width: 'resolve',
+    placeholder: "Chọn khối ...",
+    multiple: false,
+    theme: 'bootstrap4',
+    maximumSelectionSize: 1,
+    allowClear: true,
+    delay: 250,
+    ajax: {
+        url: '/api/v1/khoi/select-khoi',
+        dataType: 'json',
+        data: function (params) {
+            var query = {
+                search: params.term,
+            }
+            // Query parameters will be ?search=[term]&type=public
+            return query;
+        },
+        processResults: function (results) {
+            // Transforms the top-level key of the response object from 'items' to 'results'
+            return {
+                results: results
+            };
+        }
+    }
+});
 toastr.options = {
     "closeButton": true,
     "debug": false,
     "newestOnTop": false,
-    "progressBar": false,
-    "positionClass": "toast-bottom-right",
-    "preventDuplicates": false,
+    "progressBar": true,
+    "positionClass": "toast-top-right",
+    "preventDuplicates": true,
     "onclick": null,
     "showDuration": "300",
     "hideDuration": "1000",
