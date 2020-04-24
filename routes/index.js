@@ -103,7 +103,7 @@ module.exports = (app) => {
 
   // router.post('create',GiaoVien.CreateGiaoVien);
   router.prefix('/giao-vien', (route) => {
-    route.get('/select-giao-vien', isLoggedIn, AuthenticationController.roleAuthorization(['admin']), GiaoVien.selectGiaoVien);
+    route.get('/select-giao-vien', GiaoVien.selectGiaoVien);
     route.post('/get', GiaoVien.GetGiaoVien);
     route.post('/create', GiaoVien.CreateGiaoVien);
     route.put('/update/:id', GiaoVien.UpdateGiaoVien);
@@ -112,7 +112,8 @@ module.exports = (app) => {
 
   //api for MonHoc
   router.prefix('/mon-hoc', (route) => {
-    route.get('/select-mon-hoc', isLoggedIn, AuthenticationController.roleAuthorization(['admin']), MonHoc.selectMonHoc);
+    route.get('/select-mon-hoc', MonHoc.selectMonHoc);
+    // route.get('/select-mon-hoc', isLoggedIn, AuthenticationController.roleAuthorization(['admin']), MonHoc.selectMonHoc);
     route.post('/get', MonHoc.GetMonHoc);
     route.post('/create', MonHoc.CreateMonHoc);
     route.put('/update/:id', MonHoc.UpdateMonHoc);
