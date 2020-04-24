@@ -1,5 +1,13 @@
 const HocKy = require('../models/HocKy.model');
 
+exports.selectHocKy = async (req, res) => {
+    let data = await HocKy.find({});
+    let result = [];
+    data.map((e, i) => {
+        result.push({ "id": e._id, "text": e.TenHocKy });
+    })
+    res.status(200).json(result);
+}
 exports.GetHocKy = (req, res) => {
     const options = {
         offset: req.body.start,

@@ -14,7 +14,8 @@ var HocSinh = mongoose.Schema({
     AnhDaiDien: { type: String, default: "" },
     DanToc_id: { type: mongoose.Schema.Types.ObjectId, ref: "DanToc" },
     TonGiao_id: { type: mongoose.Schema.Types.ObjectId, ref: "TonGiao" },
-    isClass: { type: Boolean, default: false }
+    isClass: { type: Boolean, default: false },
+    TaiKhoan: { type: mongoose.Schema.Types.ObjectId, ref: "User" }
 }, schemaOptions)
 HocSinh.plugin(mongoosePaginate);
 module.exports = mongoose.model('HocSinh', HocSinh)

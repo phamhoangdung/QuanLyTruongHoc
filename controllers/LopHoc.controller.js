@@ -9,9 +9,14 @@ exports.selectLopHoc = async (req, res) => {
         data = await LopHoc.find({ Khoi_id: req.query.Khoi_id, NamHoc_id: req.query.NamHoc_id });
     }
     let result = [];
-    data.map((e, i) => {
+    data.map(async (e, i) => {
+        // let phanLop = await PhanLop.findOne({ LopHoc_id: e._id, NamHoc_id: req.query.NamHoc_id, Khoi_id: req.query.Khoi_id });
+        // console.log(phanLop.HocSinhs.length);
+
         result.push({ "id": e._id, "text": e.TenLopHoc });
     })
+    console.log(result);
+
     res.status(200).json(result);
 }
 exports.GetLopHoc = (req, res) => {
@@ -85,7 +90,7 @@ exports.UpdateLopHoc = async (req, res) => {
         try {
             const lopHoc = await LopHoc.findById(req.params.id);
             if (lopHoc) {
-                await PhanLop.findOneAndUpdate({LopHoc_id:lopHoc._id},{NamHoc_id:req.body.NamHoc_id,Khoi_id:req.body.Khoi_id})
+                await PhanLop.findOneAndUpdate({ LopHoc_id: lopHoc._id }, { NamHoc_id: req.body.NamHoc_id, Khoi_id: req.body.Khoi_id })
                 lopHoc.set(req.body);
                 lopHoc.save((error, result) => {
                     if (error)

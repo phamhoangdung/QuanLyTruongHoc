@@ -3,18 +3,25 @@ const GiaoVien = require('../models/GiaoVien.model');
 const Diem = require('../models/Diem.model');
 
 exports.selectMonHoc = async (req, res) => {
-    let data;
-    console.log(req.query.search);
-    if (req.query.search) {
-        data = await MonHoc.find({ $text: { $search: req.query.search } });
-    } else {
-        data = await MonHoc.find({});
+    console.log("ok");
+    
+    try {
+        let data;
+        if (req.query.search) {
+            data = await MonHoc.find({ Khoi_id: req.query.Khoi_id, $text: { $search: req.query.search } });
+        } else {
+            data = await MonHoc.find({ Khoi_id: req.query.Khoi_id });
+        }
+        let result = [];
+        data.map((e, i) => {
+            result.push({ "id": e._id, "text": e.TenMonHoc });
+        })
+        console.log(result);
+        
+        res.status(200).json(result);
+    } catch (error) {
+        console.log(error);
     }
-    let result = [];
-    data.map((e, i) => {
-        result.push({ "id": e._id, "text": e.TenMonHoc });
-    })
-    res.status(200).json(result);
 }
 exports.GetMonHoc = (req, res) => {
     const options = {
@@ -97,11 +104,11 @@ exports.DeleteMonHoc = async (req, res) => {
     if (errors) {
         res.status(200).json({ status: false, msg: errors[0], code: 'ERR_CREATE_MONHOC' });
     } else {
-        let giaoVien = await GiaoVien.findOne({MonHoc_id:req.params.id});
-        let diem = await Diem.findOne({MonHoc_id:req.params.id});
-        if(giaoVien || diem){
+        let giaoVien = await GiaoVien.findOne({ MonHoc_id: req.params.id });
+        let diem = await Diem.findOne({ MonHoc_id: req.params.id });
+        if (giaoVien || diem) {
             res.status(200).json({ status: false, msg: "Môn học đang được sử dụng !", code: 'ERR_DELETE_MONHOC' });
-        }else{
+        } else {
             MonHoc.findByIdAndDelete(req.params.id, (error, result) => {
                 if (error)
                     res.status(200).json({ status: false, msg: error, code: 'ERR_DELETE_MONHOC' });

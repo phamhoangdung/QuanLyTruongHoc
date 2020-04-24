@@ -7,6 +7,9 @@ var bodyParser = require('body-parser');
 var expressValidator = require('express-validator');
 var expressLayouts = require('express-ejs-layouts');
 var expressStatusMonitor = require('express-status-monitor');
+var session = require('express-session');
+const mongoose = require('mongoose');
+
 
 var app = express();
 app.use(expressStatusMonitor());
@@ -20,17 +23,30 @@ app.set('view engine', 'ejs');
 app.use(expressLayouts);
 
 app.use(logger('dev'));
-
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+var MongoStore = require('connect-mongo')(session);
+var db = mongoose.connection;
+
+app.use(session({
+  secret: 'secret',
+  saveUninitialized: true,
+  resave: true,
+  maxAge: new Date(Date.now() + 3600000), //1 Hour
+  expires: new Date(Date.now() + 3600000), //1 Hour
+  store: new MongoStore({ mongooseConnection: db })
+}));
+
 //db setup
 require('./configs/mongo.config');
 // BodyParser Middleware
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+
 
 
 app.use('/users', usersRouter);

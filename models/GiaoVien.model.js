@@ -15,6 +15,7 @@ var GiaoVien = mongoose.Schema({
     MonHoc_id: { type: mongoose.Schema.Types.ObjectId, ref: "MonHoc" },
     DanToc_id: { type: mongoose.Schema.Types.ObjectId, ref: "DanToc" },
     TonGiao_id: { type: mongoose.Schema.Types.ObjectId, ref: "TonGiao" },
+    TaiKhoan: { type: mongoose.Schema.Types.ObjectId, ref: "User" }
 }, schemaOptions)
 GiaoVien.index({ '$**': 'text' });
 GiaoVien.plugin(mongoosePaginate);
