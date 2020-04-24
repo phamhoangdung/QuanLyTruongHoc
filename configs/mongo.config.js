@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const chalk = require('chalk');
 // please hide connect string !!!
 
-module.exports = mongoose.connect(process.env.MONGODB_LOCAL, {
+module.exports = mongoose.connect("mongodb+srv://ahtuser:Admin1324@quanlytruonghoc-urj1l.mongodb.net/test?retryWrites=true&w=majority", {
     useCreateIndex: true,
     useNewUrlParser: true,
     useUnifiedTopology: true,
