@@ -3,20 +3,26 @@ const GiaoVien = require('../models/GiaoVien.model');
 const Diem = require('../models/Diem.model');
 
 exports.selectMonHoc = async (req, res) => {
-    console.log("ok");
-    
     try {
         let data;
-        if (req.query.search) {
-            data = await MonHoc.find({ Khoi_id: req.query.Khoi_id, $text: { $search: req.query.search } });
-        } else {
-            data = await MonHoc.find({ Khoi_id: req.query.Khoi_id });
+        if(req.query.Khoi_id){
+            if (req.query.search) {
+                data = await MonHoc.find({ Khoi_id: req.query.Khoi_id, $text: { $search: req.query.search } });
+            } else {
+                data = await MonHoc.find({ Khoi_id: req.query.Khoi_id });
+            }
+        }else{
+            if (req.query.search) {
+                data = await MonHoc.find({ $text: { $search: req.query.search } });
+            } else {
+                data = await MonHoc.find({ });
+            }
         }
+        
         let result = [];
         data.map((e, i) => {
             result.push({ "id": e._id, "text": e.TenMonHoc });
         })
-        console.log(result);
         
         res.status(200).json(result);
     } catch (error) {
