@@ -85,6 +85,9 @@ module.exports = (app) => {
   app.get('/quan-ly-tai-khoan', async (req, res) => {
     res.render('QuanLyTaiKhoan');
   });
+  app.get('/tra-cuu', async (req, res) => {
+    res.render('TraCuuDiem');
+  });
   app.get('/login', async (req, res) => {
     res.render('Login', { layout: false });
   });
@@ -183,6 +186,7 @@ module.exports = (app) => {
   })
   //api for Diem
   router.prefix('/diem', (route) => {
+    route.post('/tra-cuu', Diem.TraCuu);
     route.post('/get', Diem.GetDiem);
     route.post('/create', Diem.CreateDiem);
     route.put('/update', Diem.UpdateDiem);
@@ -191,8 +195,8 @@ module.exports = (app) => {
 //api for QuanLyTaiKhoan
   router.prefix('/quan-ly-tai-khoan', (route) => {
     route.post('/get', User.GetUser);
-    // route.post('/create', User.CreateDiem);
-    // route.put('/update', User.UpdateDiem);
+    route.post('/create', User.CreateUser);
+    route.put('/update/:id', User.UpdateUser);
     // route.delete('/delete/:id', User.DeleteDiem);
   })
   app.use('/api/v1', router);

@@ -1,4 +1,6 @@
 const HocSinh = require('../models/HocSinh.model');
+const user = require('../models/user.model');
+const { makeUserName } = require('../services/system.sevice');
 
 exports.GetHocSinh = (req, res) => {
     const options = {
@@ -33,6 +35,22 @@ exports.CreateHocSinh = async (req, res) => {
         if (errors) {
             res.status(200).json({ status: false, msg: errors, code: 'ERR_CREATE_HOCSINH' });
         } else {
+            let username = makeUserName(req.body.Ho, req.body.Ten, req.body.NgaySinh);
+            let usercheck = await user.findOne({ email: username });
+            if (usercheck) {
+                var taiKhoan = new user({
+                    email: makeUserName(req.body.Ho, req.body.Ten, req.body.NgaySinh) + Math.random().toString(36).substring(2, 6),
+                    password: "123456",
+                    role: "student"
+                })
+            } else {
+                var taiKhoan = new user({
+                    email: makeUserName(req.body.Ho, req.body.Ten, req.body.NgaySinh),
+                    password: "123456",
+                    role: "student"
+                })
+            }
+            let tksv = await taiKhoan.save();
             var hocSinh = new HocSinh({
                 Ho: req.body.Ho,
                 Ten: req.body.Ten,
@@ -42,11 +60,14 @@ exports.CreateHocSinh = async (req, res) => {
                 QueQuan: req.body.QueQuan,
                 DanToc_id: req.body.DanToc_id,
                 TonGiao_id: req.body.TonGiao_id,
+                TaiKhoan: tksv._id
             });
             await hocSinh.save((error, result) => {
                 if (error)
                     res.status(200).json({ status: false, msg: error, code: 'ERR_CREATE_HOCSINH' })
-                res.status(200).json({ status: true, msg: 'Tạo mới học sinh thành công!', data: result })
+                else {
+                    res.status(200).json({ status: true, msg: 'Tạo mới học sinh thành công!', data: result })
+                }
             })
         }
     }

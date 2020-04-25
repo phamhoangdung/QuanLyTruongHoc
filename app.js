@@ -9,7 +9,7 @@ var expressLayouts = require('express-ejs-layouts');
 var expressStatusMonitor = require('express-status-monitor');
 var session = require('express-session');
 const mongoose = require('mongoose');
-
+var flash = require('connect-flash');
 
 var app = express();
 app.use(expressStatusMonitor());
@@ -30,7 +30,7 @@ app.use(bodyParser.json());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
+app.use(flash());
 var MongoStore = require('connect-mongo')(session);
 var db = mongoose.connection;
 

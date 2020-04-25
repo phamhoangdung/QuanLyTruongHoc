@@ -7,6 +7,7 @@ var schemaOptions = {
 var GiaoVien = mongoose.Schema({
     Ho: { type: String, require: true },
     Ten: { type: String, require: true },
+    NgaySinh: Date,
     GioTinh: Number,
     DiaChi: String,
     DienThoai: String,

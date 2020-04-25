@@ -1,6 +1,20 @@
 const Diem = require('../models/Diem.model');
 const PhanLop = require('../models/PhanLop.model');
 
+exports.TraCuu = async (req, res) => {
+    console.log(req.user);
+    req.checkBody('HocKy_id', 'Học kỳ chưa được chọn !').notEmpty();
+    req.checkBody('LopHoc_id', 'Lớp học chưa được chọn !').notEmpty();
+    req.checkBody('NamHoc_id', 'Năm học chưa được chọn !').notEmpty();
+    const errors = req.validationErrors();
+    if(errors){
+        res.status(200).json({ status: false, msg: errors, code: 'ERR_TRA_CUU' });
+    }else{
+        if(req.user){
+
+        }
+    }
+}
 exports.GetDiem = (req, res) => {
     const options = {
         offset: req.body.start,
@@ -64,29 +78,34 @@ exports.CreateDiem = async (req, res) => {
                 LopHoc_id: req.body.LopHoc_id,
                 NamHoc_id: req.body.NamHoc_id, Khoi_id: req.body.Khoi_id
             });
-            if (phanLop.HocSinhs.length > 0) {
-                phanLop.HocSinhs.map(async (e, i) => {
-                    let diemCheck = await Diem.findOne({
-                        HocSinh_id: e, NamHoc_id: req.body.NamHoc_id,
-                        LopHoc_id: req.body.LopHoc_id,
-                        HocKy_id: req.body.HocKy_id,
-                        MonHoc_id: req.body.MonHoc_id
-                    });
-                    if (!diemCheck) {
-                        let diem = new Diem({
-                            HocSinh_id: e,
-                            NamHoc_id: req.body.NamHoc_id,
+            if(phanLop){
+                if (phanLop.HocSinhs.length > 0) {
+                    phanLop.HocSinhs.map(async (e, i) => {
+                        let diemCheck = await Diem.findOne({
+                            HocSinh_id: e, NamHoc_id: req.body.NamHoc_id,
                             LopHoc_id: req.body.LopHoc_id,
                             HocKy_id: req.body.HocKy_id,
                             MonHoc_id: req.body.MonHoc_id
-                        })
-                        await diem.save();
-                    }
-                })
-                res.status(200).json({ status: true, msg: 'Tạo mới điểm thành công!' })
-            } else {
-                res.status(200).json({ status: false, msg: "Danh sách học sinh rỗng !", code: 'ERR_CREATE_DIEM' })
+                        });
+                        if (!diemCheck) {
+                            let diem = new Diem({
+                                HocSinh_id: e,
+                                NamHoc_id: req.body.NamHoc_id,
+                                LopHoc_id: req.body.LopHoc_id,
+                                HocKy_id: req.body.HocKy_id,
+                                MonHoc_id: req.body.MonHoc_id
+                            })
+                            await diem.save();
+                        }
+                    })
+                    res.status(200).json({ status: true, msg: 'Tạo mới điểm thành công!' })
+                } else {
+                    res.status(200).json({ status: false, msg: "Danh sách học sinh rỗng !", code: 'ERR_CREATE_DIEM' })
+                }
+            }else{
+                res.status(200).json({ status: false, msg: "Lớp học chưa có học sinh !", code: 'ERR_CREATE_DIEM' })
             }
+            
             // var diem = new Diem({
             //     HocSinh_id: req.body.HocSinh_id,
             //     HocKy_id: req.body.HocKy_id,

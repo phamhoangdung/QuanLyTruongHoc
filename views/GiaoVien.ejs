@@ -30,6 +30,7 @@
                                     <th>ID</th>
                                     <th>Họ</th>
                                     <th>Tên</th>
+                                    <th>Ngày sinh</th>
                                     <th>Giới tính</th>
                                     <th>Địa chỉ</th>
                                     <th>Số ĐT</th>
@@ -41,6 +42,8 @@
                                     <th>Dân tộc</th>
                                     <th>ID tôn giáo</th>
                                     <th>Tôn giáo</th>
+                                    <th>ID tài khoản</th>
+                                    <th>Tài khoản</th>
                                     <th>thao tác</th>
                                 </tr>
                             </thead>
@@ -53,6 +56,7 @@
                                     <th>ID</th>
                                     <th>Họ</th>
                                     <th>Tên</th>
+                                    <th>Ngày sinh</th>
                                     <th>Giới tính</th>
                                     <th>Địa chỉ</th>
                                     <th>Số ĐT</th>
@@ -64,6 +68,8 @@
                                     <th>Dân tộc</th>
                                     <th>ID tôn giáo</th>
                                     <th>Tôn giáo</th>
+                                    <th>ID tài khoản</th>
+                                    <th>Tài khoản</th>
                                     <th>thao tác</th>
                                 </tr>
                             </tfoot>
@@ -142,6 +148,16 @@
                                     placeholder="Tên giáo viên...">
                             </div>
                             <div class="col-md-6">
+                                <label>Ngày Sinh</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control NgaySinh" name="NgaySinh"
+                                    data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
                                 <label for="DiaChi">Địa chỉ</label>
                                 <input type="text" class="form-control" id="c_DiaChi" name="DiaChi"
                                     placeholder="Địa chỉ...">
@@ -171,6 +187,7 @@
                                 <select name="TonGiao_id" class="form-control TonGiao_id" style="width: 100%">
                                 </select>
                             </div>
+                           
                             <div class="col-md-6">
                                 <label>giới tính</label></br>
                                 <div class="custom-control custom-radio">
@@ -224,6 +241,16 @@
                                     placeholder="Tên giáo viên...">
                             </div>
                             <div class="col-md-6">
+                                <label>Ngày Sinh</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control NgaySinh" name="NgaySinh"
+                                    data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
                                 <label for="DiaChi">Địa chỉ</label>
                                 <input type="text" class="form-control" id="u_DiaChi" name="DiaChi"
                                     placeholder="Địa chỉ...">
@@ -252,6 +279,11 @@
                                 <label for="TonGiao_id">Tôn giáo</label>
                                 <select name="TonGiao_id" class="form-control TonGiao_id" style="width: 100%">
                                 </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="TaiKhoan_id">_id tài khoản</label>
+                                <input type="text" class="form-control" id="TaiKhoan_id" name="TaiKhoan"
+                                    placeholder="_id tài khoản...">
                             </div>
                             <div class="col-md-6">
                                 <label for="viTri">giới tính</label></br>

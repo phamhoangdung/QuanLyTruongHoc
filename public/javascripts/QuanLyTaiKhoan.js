@@ -67,9 +67,9 @@ var table = $('#tblresult').DataTable({
 // insert
 
 $("#btnAdd").click(function () {
-    $('#c_TenMonHoc').val(null);
-    $('#c_SoTiet').val(null);
-    $('#c_Khoi_id').empty();
+    $('#c_email').val(null);
+    $('#c_password').val(null);
+    $('#c_role').val(null);
     $("#editmodal").modal('show');
 });
 
@@ -78,7 +78,7 @@ $('#frmPost').submit((e) => {
     e.preventDefault();
     let form = $('#frmPost').serializeArray();
     $.ajax({
-        url: "/api/v1/mon-hoc/create",
+        url: "/api/v1/quan-ly-tai-khoan/create",
         method: "POST",
         data: form,
         dataType: 'json'
@@ -108,13 +108,10 @@ $('#frmPost').submit((e) => {
 
 $("#tblresult").on("click", ".btnEdit", function () {
     var obj = $('#tblresult').DataTable().row($(this).parents('tr')).data();
-    if(obj.Khoi_id){
-        var $KhoiOption = $("<option selected='selected'></option>").val(obj.Khoi_id._id).text(obj.Khoi_id.TenKhoi);
-        $(".Khoi_id").empty().append($KhoiOption).trigger('change');
-    }
     $('#u_id').val(obj._id);
-    $('#u_TenMonHoc').val(obj.TenMonHoc);
-    $('#u_SoTiet').val(obj.SoTiet);
+    $('#u_email').val(obj.email);
+    $('#u_password').val(obj.password);
+    $('#u_role').val(obj.role);
     $("#updatemodal").modal('show');
 });
 
@@ -124,7 +121,7 @@ $('#frmPut').submit((e) => {
     e.preventDefault();
     let form = $('#frmPut').serializeArray();
     $.ajax({
-        url: "/api/v1/mon-hoc/update/"+id,
+        url: "/api/v1/quan-ly-tai-khoan/update/"+id,    
         method: "PUT",
         data: form,
         dataType: 'json'

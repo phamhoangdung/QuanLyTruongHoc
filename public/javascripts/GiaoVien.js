@@ -11,9 +11,9 @@ var table = $('#tblresult').DataTable({
         // },
         "cache": true,
         "dataSrc": function (json) {
-            console.log(json.data);
-
             json.data.forEach(element => {
+                let date = new Date(element.NgaySinh);
+                element.NgaySinh = ((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + ((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + date.getFullYear();
                 element.Method = `<a class=" my-method-button btnEdit fa-hover"    title="Sửa tài khoản" ><i class="fa fa-edit"></i></a> &nbsp
                                 <a class=" my-method-button btnDelete fa-hover"    title="Xóa tài khoản" ><i class="fa fa-trash"></i></a>`;
             });
@@ -24,7 +24,7 @@ var table = $('#tblresult').DataTable({
 
     "PaginationType": "bootstrap",
     "columnDefs": [
-        { "visible": false, "targets": [1,8,9,11,13] },
+        { "visible": false, "targets": [1, 9, 10, 12, 14,16] },
         {
             "className": "text-center",
             "width": "50px",
@@ -35,7 +35,7 @@ var table = $('#tblresult').DataTable({
             "className": "text-center",
             "width": "60px",
             "orderable": false,
-            "targets": 15
+            "targets": 18
         },
         {
             "className": "text-center",
@@ -44,7 +44,7 @@ var table = $('#tblresult').DataTable({
             },
             "orderable": false,
             "width": "60px",
-            "targets": 4
+            "targets": 5
         },
     ],
     "language": {
@@ -63,6 +63,7 @@ var table = $('#tblresult').DataTable({
         { "data": '_id' },
         { "data": 'Ho' },
         { "data": 'Ten' },
+        { "data": 'NgaySinh' },
         { "data": 'GioTinh' },
         { "data": 'DiaChi' },
         { "data": 'DienThoai' },
@@ -74,6 +75,8 @@ var table = $('#tblresult').DataTable({
         { "data": 'DanToc_id.TenDanToc' },
         { "data": 'TonGiao_id._id' },
         { "data": 'TonGiao_id.TenTonGiao' },
+        { "data": 'TaiKhoan._id' },
+        { "data": 'TaiKhoan.email' },
         { "data": 'Method' }
     ],
     bAutoWidth: false,
@@ -82,7 +85,7 @@ var table = $('#tblresult').DataTable({
         return nRow;
     },
 });
-
+$('.NgaySinh').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
 // insert
 
 $("#btnAdd").click(function () {
@@ -141,14 +144,21 @@ $("#tblresult").on("click", ".btnEdit", function () {
     $('#u_DiaChi').val(obj.DiaChi);
     $('#u_DienThoai').val(obj.DienThoai);
     $('#u_Email').val(obj.Email);
-    if(obj.MonHoc_id && obj.DanToc_id &&obj.TonGiao_id)
-    {
+    $('.NgaySinh').val(obj.NgaySinh);
+    if(obj.MonHoc_id){
         var $Option1 = $("<option selected='selected'></option>").val(obj.MonHoc_id._id).text(obj.MonHoc_id.TenMonHoc);
-        var $Option2 = $("<option selected='selected'></option>").val(obj.DanToc_id._id).text(obj.DanToc_id.TenDanToc);
-        var $Option3 = $("<option selected='selected'></option>").val(obj.TonGiao_id._id).text(obj.TonGiao_id.TenTonGiao);
         $(".MonHoc_id").empty().append($Option1).trigger('change');
+    }
+    if(obj.DanToc_id){
+        var $Option2 = $("<option selected='selected'></option>").val(obj.DanToc_id._id).text(obj.DanToc_id.TenDanToc);
         $(".DanToc_id").empty().append($Option2).trigger('change');
+    }
+    if(obj.TonGiao_id){
+        var $Option3 = $("<option selected='selected'></option>").val(obj.TonGiao_id._id).text(obj.TonGiao_id.TenTonGiao);
         $(".TonGiao_id").empty().append($Option3).trigger('change');
+    }
+    if(obj.TaiKhoan){
+        $('#TaiKhoan_id').val(obj.TaiKhoan._id);
     }
     $("#updatemodal").modal('show');
 });
