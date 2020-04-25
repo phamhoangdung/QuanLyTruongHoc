@@ -1,0 +1,94 @@
+{
+    "TenMonHoc" : "Ngữ văn 12",
+    "SoTiet" : 52,
+    "Khoi_id" : ObjectId("5ea30043e3e42f0024e3d0e9"),
+    "created_at" : ISODate("2020-04-24T15:12:27.026Z"),
+    "updated_at" : ISODate("2020-04-24T15:12:27.026Z")
+}
+
+{
+    "TenMonHoc" : "Toán 12",
+    "SoTiet" : 52,
+    "Khoi_id" : ObjectId("5ea30043e3e42f0024e3d0e9"),
+    "created_at" : ISODate("2020-04-24T15:12:47.325Z"),
+    "updated_at" : ISODate("2020-04-24T15:12:47.325Z")
+}
+
+{
+    "TenMonHoc" : "Tiếng anh 12",
+    "SoTiet" : 50,
+    "Khoi_id" : ObjectId("5ea30043e3e42f0024e3d0e9"),
+    "created_at" : ISODate("2020-04-24T15:13:13.304Z"),
+    "updated_at" : ISODate("2020-04-24T15:13:13.304Z")
+}
+
+{
+    "TenMonHoc" : "Giáo dục thể chất 12",
+    "SoTiet" : 35,
+    "Khoi_id" : ObjectId("5ea30043e3e42f0024e3d0e9"),
+    "created_at" : ISODate("2020-04-24T15:13:40.486Z"),
+    "updated_at" : ISODate("2020-04-24T15:13:40.486Z")
+}
+
+{
+    "TenMonHoc" : "Giáo dục quốc phòng an ninh",
+    "SoTiet" : 35,
+    "Khoi_id" : ObjectId("5ea30043e3e42f0024e3d0e9"),
+    "created_at" : ISODate("2020-04-24T15:14:09.505Z"),
+    "updated_at" : ISODate("2020-04-24T15:14:09.505Z")
+}
+
+{
+    "TenMonHoc" : "Lịch sử 12",
+    "SoTiet" : 40,
+    "Khoi_id" : ObjectId("5ea30043e3e42f0024e3d0e9"),
+    "created_at" : ISODate("2020-04-24T15:14:30.491Z"),
+    "updated_at" : ISODate("2020-04-24T15:14:30.491Z")
+}
+
+{
+    "TenMonHoc" : "Địa lý 12",
+    "SoTiet" : 40,
+    "Khoi_id" : ObjectId("5ea30043e3e42f0024e3d0e9"),
+    "created_at" : ISODate("2020-04-24T15:14:49.479Z"),
+    "updated_at" : ISODate("2020-04-24T15:15:13.511Z")
+}
+
+{
+    "TenMonHoc" : "Vật lý 12",
+    "SoTiet" : 50,
+    "Khoi_id" : ObjectId("5ea30043e3e42f0024e3d0e9"),
+    "created_at" : ISODate("2020-04-24T15:15:07.100Z"),
+    "updated_at" : ISODate("2020-04-24T15:15:07.100Z")
+}
+{
+    "TenMonHoc" : "Hoá học 12",
+    "SoTiet" : 50,
+    "Khoi_id" : ObjectId("5ea30043e3e42f0024e3d0e9"),
+    "created_at" : ISODate("2020-04-24T15:15:24.313Z"),
+    "updated_at" : ISODate("2020-04-24T15:15:24.313Z")
+}
+
+{
+    "TenMonHoc" : "Sinh học 12",
+    "SoTiet" : 50,
+    "Khoi_id" : ObjectId("5ea30043e3e42f0024e3d0e9"),
+    "created_at" : ISODate("2020-04-24T15:15:36.833Z"),
+    "updated_at" : ISODate("2020-04-24T15:15:36.833Z")
+}
+
+{
+    "TenMonHoc" : "Công nghệ 12",
+    "SoTiet" : 35,
+    "Khoi_id" : ObjectId("5ea30043e3e42f0024e3d0e9"),
+    "created_at" : ISODate("2020-04-24T15:16:08.390Z"),
+    "updated_at" : ISODate("2020-04-24T15:16:08.390Z")
+}
+
+{
+    "TenMonHoc" : "Tin học 12",
+    "SoTiet" : 35,
+    "Khoi_id" : ObjectId("5ea30043e3e42f0024e3d0e9"),
+    "created_at" : ISODate("2020-04-24T15:16:26.791Z"),
+    "updated_at" : ISODate("2020-04-24T15:16:26.791Z")
+}
