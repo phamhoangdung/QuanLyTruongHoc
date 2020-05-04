@@ -82,7 +82,7 @@ module.exports = (app) => {
   app.get('/phan-lop', isLoggedIn, AuthenticationController.roleAuthorization(['admin']), async (req, res) => {
     res.render('PhanLop');
   });
-  app.get('/quan-ly-diem', isLoggedIn, AuthenticationController.roleAuthorization(['admin,teacher']), async (req, res) => {
+  app.get('/quan-ly-diem', isLoggedIn, AuthenticationController.roleAuthorization(['admin','teacher']), async (req, res) => {
     res.render('QuanLyDiem');
   });
   app.get('/quan-ly-tai-khoan', isLoggedIn, AuthenticationController.roleAuthorization(['admin']), async (req, res) => {
