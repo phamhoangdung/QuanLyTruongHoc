@@ -2,6 +2,11 @@ var User = require('../models/user.model');
 var HocSinh = require('../models/HocSinh.model');
 var GiaoVien = require('../models/GiaoVien.model');
 
+const ControllerUpload = require('../controllers/Multer.controller');
+//khai báo middleware multer ở đây
+const uploadMulter = require('../models/Multer');
+
+
 exports.GetUser = (req, res) => {
     try {
         const options = {

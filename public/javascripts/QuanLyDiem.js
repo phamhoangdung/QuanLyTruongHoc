@@ -194,6 +194,7 @@ $('#frmPost').submit((e) => {
 
 $("#tblresult").on("click", ".btnEdit", function () {
     var obj = $('#tblresult').DataTable().row($(this).parents('tr')).data();
+    $('#u_id').val(obj._id);
     $('#editModal h4').html(obj.HocSinh_id.Ho + " " + obj.HocSinh_id.Ten);
     $("#Diem_m01").val(obj.Diem_m01 == -1 ? "" : obj.Diem_m01);
     $("#Diem_m02").val(obj.Diem_m02 == -1 ? "" : obj.Diem_m02);
@@ -208,6 +209,7 @@ $("#tblresult").on("click", ".btnEdit", function () {
     $("#Diem_1t03").val(obj.Diem_1t03 == -1 ? "" : obj.Diem_1t03);
     $("#Diem_1t04").val(obj.Diem_1t04 == -1 ? "" : obj.Diem_1t04);
     $("#Diem_HK").val(obj.Diem_HK == -1 ? "" : obj.Diem_HK);
+    $("#Diem_TBC").val(obj.Diem_TBC == -1 ? "" : obj.Diem_TBC);
     // if (obj.Khoi_id) {
     //     var $KhoiOption = $("<option selected='selected'></option>").val(obj.Khoi_id._id).text(obj.Khoi_id.TenKhoi);
     //     $(".Khoi_id").empty().append($KhoiOption).trigger('change');
@@ -224,7 +226,7 @@ $('#frmPut').submit((e) => {
     e.preventDefault();
     let form = $('#frmPut').serializeArray();
     $.ajax({
-        url: "/api/v1/mon-hoc/update/" + id,
+        url: "/api/v1/diem/update/" + id,
         method: "PUT",
         data: form,
         dataType: 'json'
@@ -232,7 +234,7 @@ $('#frmPut').submit((e) => {
         .done((data) => {
             if (data.status) {
                 $('#tblresult').DataTable().ajax.reload();
-                $("#updatemodal").modal('hide');
+                $("#editModal").modal('hide');
                 toastr["success"](data.msg);
             }
             else {
@@ -246,7 +248,7 @@ $('#frmPut').submit((e) => {
             }
         })
         .fail(() => {
-            $("#updatemodal").modal('hide');
+            $("#editModal").modal('hide');
             toastr["error"]("Xảy ra lỗi, vui lòng tải lại trang!");
         });
     $("#btnSubmitUpdate").removeAttr("disabled");

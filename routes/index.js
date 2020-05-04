@@ -11,6 +11,10 @@ const PhanLop = require('../controllers/PhanLop.controller');
 const Diem = require('../controllers/Diem.controller');
 const User = require('../controllers/User.controller');
 
+const ControllerUpload = require('../controllers/Multer.controller');
+//khai báo middleware multer ở đây
+const uploadMulter = require('../models/Multer')
+
 var AuthenticationController = require('../controllers/authentication.controller'),
   passportService = require('../configs/passport.config'),
   passport = require('passport');
@@ -32,8 +36,7 @@ var requireAuth = passport.authenticate('jwt', { session: false }),
 module.exports = (app) => {
   let express = require('express');
   let router = express.Router(),
-    authRoutes = express.Router(),
-    todoRoutes = express.Router();
+    authRoutes = express.Router();
 
   app.use(passport.initialize());
   app.use(passport.session());
@@ -58,35 +61,39 @@ module.exports = (app) => {
   app.get('/', function (req, res, next) {
     res.render('index');
   });
-  app.get('/mon-hoc', (req, res) => {
+  app.get('/mon-hoc', isLoggedIn, AuthenticationController.roleAuthorization(['admin']), (req, res) => {
     res.render('MonHoc');
   });
-  app.get('/hknhk', (req, res) => {
+  app.get('/hknhk', isLoggedIn, AuthenticationController.roleAuthorization(['admin']), (req, res) => {
     res.render('HocKyNamHocKhoi');
   });
-  app.get('/dantoc-tongiao', (req, res) => {
+  app.get('/dantoc-tongiao', isLoggedIn, AuthenticationController.roleAuthorization(['admin']), (req, res) => {
     res.render('DanTocTonGiao');
   });
-  app.get('/lop-hoc', async (req, res) => {
+  app.get('/lop-hoc', isLoggedIn, AuthenticationController.roleAuthorization(['admin']), async (req, res) => {
     res.render('LopHoc');
   });
-  app.get('/giao-vien', async (req, res) => {
+  app.get('/giao-vien', isLoggedIn, AuthenticationController.roleAuthorization(['admin']), async (req, res) => {
     res.render('GiaoVien');
   });
-  app.get('/hoc-sinh', async (req, res) => {
+  app.get('/hoc-sinh', isLoggedIn, AuthenticationController.roleAuthorization(['admin','teacher']), async (req, res) => {
     res.render('HocSinh');
   });
-  app.get('/phan-lop', async (req, res) => {
+  app.get('/phan-lop', isLoggedIn, AuthenticationController.roleAuthorization(['admin']), async (req, res) => {
     res.render('PhanLop');
   });
-  app.get('/quan-ly-diem', isLoggedIn, AuthenticationController.roleAuthorization(['admin']), async (req, res) => {
+  app.get('/quan-ly-diem', isLoggedIn, AuthenticationController.roleAuthorization(['admin,teacher']), async (req, res) => {
     res.render('QuanLyDiem');
   });
-  app.get('/quan-ly-tai-khoan', async (req, res) => {
+  app.get('/quan-ly-tai-khoan', isLoggedIn, AuthenticationController.roleAuthorization(['admin']), async (req, res) => {
     res.render('QuanLyTaiKhoan');
   });
-  app.get('/tra-cuu', async (req, res) => {
+  app.get('/tra-cuu', isLoggedIn, AuthenticationController.roleAuthorization(['student']), async (req, res) => {
     res.render('TraCuuDiem');
+  });
+  app.get('/tra-cuu-mon-hoc', async (req, res) => {
+    res.render('TraCuuTheoMon');
+    // Diem.TraCuuMonHoc;
   });
   app.get('/login', async (req, res) => {
     res.render('Login', { layout: false });
@@ -186,18 +193,21 @@ module.exports = (app) => {
   })
   //api for Diem
   router.prefix('/diem', (route) => {
-    route.post('/tra-cuu', Diem.TraCuu);
+    route.get('/export-excel', Diem.ExportExcel);
+    route.post('/tra-cuu', Diem.TraCuuForHocSinh);
     route.post('/get', Diem.GetDiem);
     route.post('/create', Diem.CreateDiem);
-    route.put('/update', Diem.UpdateDiem);
+    route.put('/update/:id', Diem.UpdateDiem);
     route.delete('/delete/:id', Diem.DeleteDiem);
   })
-//api for QuanLyTaiKhoan
+  //api for QuanLyTaiKhoan
   router.prefix('/quan-ly-tai-khoan', (route) => {
     route.post('/get', User.GetUser);
     route.post('/create', User.CreateUser);
     route.put('/update/:id', User.UpdateUser);
     // route.delete('/delete/:id', User.DeleteDiem);
   })
+
+  app.post('/uploadSingle', uploadMulter.single('avatar'), ControllerUpload.uploadSingleFile);
   app.use('/api/v1', router);
 };

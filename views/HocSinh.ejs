@@ -34,11 +34,12 @@
                                     <th>Ngày sinh</th>
                                     <th>Địa chỉ</th>
                                     <th>Quê quán</th>
-                                    <th>Ảnh</th>
                                     <th>ID dân tộc</th>
                                     <th>Dân tộc</th>
                                     <th>ID tôn giáo</th>
                                     <th>Tôn giáo</th>
+                                    <th>ID tài khoản</th>
+                                    <th>Tài khoản</th>
                                     <th>thao tác</th>
                                 </tr>
                             </thead>
@@ -54,11 +55,12 @@
                                     <th>Ngày sinh</th>
                                     <th>Địa chỉ</th>
                                     <th>Quê quán</th>
-                                    <th>Ảnh</th>
                                     <th>ID dân tộc</th>
                                     <th>Dân tộc</th>
                                     <th>ID tôn giáo</th>
                                     <th>Tôn giáo</th>
+                                    <th>ID tài khoản</th>
+                                    <th>Tài khoản</th>
                                     <th>thao tác</th>
                                 </tr>
                             </tfoot>
@@ -123,8 +125,8 @@
             </div>
             <!-- Modal body -->
             <div class="modal-body">
-                <form role="form" id="frmPost" method="Post">
-                    <div class="card-body">
+                <div class="card-body">
+                    <form role="form" id="frmPost" method="Post">
                         <div class="row form-group">
                             <div class="col-md-6">
                                 <label for="TenGiaoVien">Họ</label>
@@ -142,13 +144,14 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                                     </div>
-                                    <input type="text" class="form-control NgaySinh" name="NgaySinh"
-                                    data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
+                                    <input type="text" class="form-control NgaySinh" name="NgaySinh" id="c_NgaySinh"
+                                        data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy"
+                                        data-mask>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <label for="DiaChi">Địa chỉ</label>
-                                <input type="text" class="form-control" id="c_DiaChi" name="DiaChi"
+                                <input type="text" class="form-control" id="c_DiaChi" name="DiaChi" id="c_DiaChi"
                                     placeholder="Địa chỉ...">
                             </div>
                             <div class="col-md-6">
@@ -158,12 +161,14 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="DanToc_id">Dân tộc</label>
-                                <select name="DanToc_id" class="form-control DanToc_id" style="width: 100%">
+                                <select name="DanToc_id" class="form-control DanToc_id" id="c_DanToc_id"
+                                    style="width: 100%">
                                 </select>
                             </div>
                             <div class="col-md-6">
                                 <label for="TonGiao_id">Tôn giáo</label>
-                                <select name="TonGiao_id" class="form-control TonGiao_id" style="width: 100%">
+                                <select name="TonGiao_id" class="form-control TonGiao_id" id="c_TonGiao_id"
+                                    style="width: 100%">
                                 </select>
                             </div>
                             <div class="col-md-6">
@@ -178,13 +183,14 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
+
             </div>
             <!-- Modal footer -->
             <div class="modal-footer">
-                <button type="submit" class="btn btn-success" form="frmPost" id="btnSubmitConfirm">Thêm</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+                <button type="submit" class="btn btn-success" form="frmPost" id="btnSubmitConfirm"><i class="far fa-check-circle"></i>&nbsp;Thêm bản ghi</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="far fa-times-circle"></i>&nbsp;Đóng</button>
             </div>
         </div>
     </div>
@@ -225,7 +231,8 @@
                                         <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                                     </div>
                                     <input type="text" class="form-control NgaySinh" name="NgaySinh"
-                                    data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
+                                        data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy"
+                                        data-mask>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -265,12 +272,12 @@
             </div>
             <!-- Modal footer -->
             <div class="modal-footer">
-                <button type="submit" class="btn btn-success" form="frmPut" id="btnSubmitUpdate">Cập nhật</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+                <button type="submit" class="btn btn-success" form="frmPut" id="btnSubmitUpdate"><i class="far fa-check-circle"></i>&nbsp;Cập nhật</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="far fa-times-circle"></i>&nbsp;Đóng</button>
             </div>
 
         </div>
     </div>
 </div>
 <%- contentFor('pageSectionA')%>
-<script src="javascripts/HocSinh.js"></script>
+<script src="public/javascripts/HocSinh.js"></script>

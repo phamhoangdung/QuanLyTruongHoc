@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var bcrypt   = require('bcrypt-nodejs');
+var bcrypt = require('bcrypt-nodejs');
 const mongoosePaginate = require('mongoose-paginate-v2');
 
 var UserSchema = new mongoose.Schema({
@@ -18,30 +18,31 @@ var UserSchema = new mongoose.Schema({
         type: String,
         enum: ['admin', 'teacher', 'student'],
         default: 'student'
-    }
+    },
+    AnhDaiDien: { type: String, default: "" },
 
 }, {
     timestamps: true
 });
 
-UserSchema.pre('save', function(next){
+UserSchema.pre('save', function (next) {
 
     var user = this;
     var SALT_FACTOR = 5;
 
-    if(!user.isModified('password')){
+    if (!user.isModified('password')) {
         return next();
-    } 
+    }
 
-    bcrypt.genSalt(SALT_FACTOR, function(err, salt){
+    bcrypt.genSalt(SALT_FACTOR, function (err, salt) {
 
-        if(err){
+        if (err) {
             return next(err);
         }
 
-        bcrypt.hash(user.password, salt, null, function(err, hash){
+        bcrypt.hash(user.password, salt, null, function (err, hash) {
 
-            if(err){
+            if (err) {
                 return next(err);
             }
 
@@ -54,11 +55,11 @@ UserSchema.pre('save', function(next){
 
 });
 
-UserSchema.methods.comparePassword = function(passwordAttempt, cb){
+UserSchema.methods.comparePassword = function (passwordAttempt, cb) {
 
-    bcrypt.compare(passwordAttempt, this.password, function(err, isMatch){
+    bcrypt.compare(passwordAttempt, this.password, function (err, isMatch) {
 
-        if(err){
+        if (err) {
             return cb(err);
         } else {
             cb(null, isMatch);

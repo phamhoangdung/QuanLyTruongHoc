@@ -20,66 +20,6 @@
     <section class="content">
         <div class="row">
             <div class="col-12">
-                <!-- /.card -->
-
-                <div class="card card-success">
-                    <div class="card-header">
-                        <h3 class="card-title">Tìm kiếm danh sách học sinh của lớp học</h3>
-
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
-                                    class="fas fa-minus"></i></button>
-                            <button type="button" class="btn btn-tool" data-card-widget="remove"><i
-                                    class="fas fa-remove"></i></button>
-                        </div>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body">
-                        <div class="row form-group">
-                            <div class="col-md-2">
-                                <label for="Khoi_id">Khối</label>
-                                <select name="Khoi_id" class="form-control Khoi_id" id="Khoi_idFilter"
-                                    style="width: 100%">
-                                </select>
-                            </div>
-                            <div class="col-md-2">
-                                <label for="NamHoc_id">Năm học</label>
-                                <select name="NamHoc_id" class="form-control NamHoc_id" id="NamHoc_idFilter"
-                                    style="width: 100%">
-                                </select>
-                            </div>
-                            <div class="col-md-2">
-                                <label for="LopHoc_id">Lớp học</label>
-                                <select name="LopHoc_id" class="form-control LopHoc_id" id="LopHoc_idFilter"
-                                    style="width: 100%">
-                                </select>
-                            </div>
-                            <div class="col-md-2">
-                                <label for="MonHoc_id">Môn học</label>
-                                <select name="MonHoc_id" class="form-control MonHoc_id" id="MonHoc_idFilter"
-                                    style="width: 100%">
-                                </select>
-                            </div>
-                            <div class="col-md-2">
-                                <label for="HocKy_id">Học kỳ</label>
-                                <select name="HocKy_id" class="form-control HocKy_id" id="HocKy_idFilter"
-                                    style="width: 100%">
-                                </select>
-                            </div>
-                        </div>
-                        <!-- /.row -->
-                    </div>
-                    <div class="card-footer">
-                        <div class="row">
-                            <div class="col-2">
-                                <button type="button" class="btn btn-success" id="btnFind" name="btnFind"><i
-                                        class="fas fa-search"></i></i>&nbsp; Tìm kiếm</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12">
                 <div class="card card-info">
                     <div class="card-header">
                         <h3 class="card-title"><strong>Danh sách học sinh</strong></h3>
@@ -91,6 +31,7 @@
                                 <tr>
                                     <th>STT</th>
                                     <th>ID</th>
+                                    <th>ID Môn</th>
                                     <th>Môn Học</th>
                                     <th colspan="4">Điểm KT miệng</th>
                                     <th colspan="4">Điểm KT 15 phút</th>
@@ -98,7 +39,9 @@
                                     <th>Điểm KT HK</th>
                                     <th>Điểm TBC</th>
                                     <th>Xếp loại</th>
-                                    <th>Thao tác</th>
+                                    <th>Học kỳ</th>
+                                    <th>Lóp học</th>
+                                    <th>Năm học</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -107,6 +50,7 @@
                                 <tr>
                                     <th>STT</th>
                                     <th>ID</th>
+                                    <th>ID Môn</th>
                                     <th>Môn Học</th>
                                     <th colspan="4">Điểm KT miệng</th>
                                     <th colspan="4">Điểm KT 15 phút</th>
@@ -114,7 +58,9 @@
                                     <th>Điểm KT HK</th>
                                     <th>Điểm TBC</th>
                                     <th>Xếp loại</th>
-                                    <th>Thao tác</th>
+                                    <th>Học kỳ</th>
+                                    <th>Lóp học</th>
+                                    <th>Năm học</th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -123,12 +69,7 @@
                     <div class="card-footer">
                         <div class="row">
                             <div class="col-md-2">
-                                <button type="button" class="btn btn-info" id="btnAdd" name="btnAdd"><i
-                                        class="far fa-plus-square"></i>&nbsp; Tạo bảng điểm</button>
-                            </div>
-                            <div class="col-md-2">
-                                <button type="button" class="btn btn-success" id="btnSync" name="btnSync"><i
-                                        class="fas fa-sync"></i>&nbsp; Xuất Excel</button>
+                                <button type="button" class="btn btn-success" id="btnSync" name="btnSync"><i class="far fa-file-excel"></i>&nbsp; Xuất Excel</button>
                             </div>
                         </div>
                     </div>
@@ -142,181 +83,5 @@
     <!-- /.content -->
 </div>
 
-<!-- The Modal delete-->
-<div class="modal fade" id="deletemodal">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h4 class="modal-title">Xoá môn học</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-
-            <!-- Modal body -->
-            <div class="modal-body">
-                <h5></h5>
-                <form method="post" class="form-horizontal" id="frmDelete">
-                    <input type="hidden" id="r_id">
-                </form>
-            </div>
-
-            <!-- Modal footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
-                <button type="submit" class="btn btn-success" form="frmDelete" id="btnSubmit">Xóa</button>
-            </div>
-
-        </div>
-    </div>
-</div>
-<!-- ! The Modal appConfirm-->
-
-
-<!-- The Modal create -->
-<div class="modal fade" id="editModal" style="height: 80%;">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h4 class="modal-title"></h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <!-- Modal body -->
-            <div class="modal-body">
-                <form id="frmPost">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="viTri">Điểm KT miệng</label>
-                                <div class="row form-group">
-                                    <div class="col-md-3">
-                                        <input type="number" class="form-control" min="0" max="10" step="0.01" id="Diem_m01" name="Diem_m01" placeholder="m-01">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="number" class="form-control" min="0" max="10" step="0.01" id="Diem_m02" name="Diem_m02" placeholder="m-02">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="number" class="form-control" min="0" max="10" step="0.01" id="Diem_m03" name="Diem_m03" placeholder="m-03">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="number" class="form-control" min="0" max="10" step="0.01" id="Diem_m04" name="Diem_m04" placeholder="m-04">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="viTri">Điểm KT 15 phút</label>
-                                <div class="row form-group">
-                                    <div class="col-md-3">
-                                        <input type="number" class="form-control" min="0" max="10" step="0.01" id="Diem_15p01" name="Diem_15p01" placeholder="15'-01">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="number" class="form-control" min="0" max="10" step="0.01" id="Diem_15p02" name="Diem_15p02" placeholder="15'-02">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="number" class="form-control" min="0" max="10" step="0.01" id="Diem_15p03" name="Diem_15p03" placeholder="15'-03">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="number" class="form-control" min="0" max="10" step="0.01" id="Diem_15p04" name="Diem_15p04" placeholder="15'-04">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="viTri">Điểm KT 1 tiết</label>
-                                <div class="row form-group">
-                                    <div class="col-md-3">
-                                        <input type="number" class="form-control" min="0" max="10" step="0.01" id="Diem_1t01" name="Diem_1t01" placeholder="1t-01">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="number" class="form-control" min="0" max="10" step="0.01" id="Diem_1t02" name="Diem_1t02" placeholder="1t-02">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="number" class="form-control" min="0" max="10" step="0.01" id="Diem_1t03" name="Diem_1t03" placeholder="1t-03">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="number" class="form-control" min="0" max="10" step="0.01" id="Diem_1t04" name="Diem_1t04" placeholder="1t-04">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="viTri">Điêmt HK & TBC-HK</label>
-                                <div class="row form-group">
-                                    <div class="col-md-3">
-                                        <input type="number" class="form-control" min="0" max="10" id="Diem_HK" name="Diem_HK" placeholder="Điểm HK">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="number" class="form-control" min="0" max="10" id="Diem_TBC" name="Diem_TBC" placeholder="TBC-HK">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <!-- Modal footer -->
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-success" form="frmPost" id="btnSubmitConfirm">Thêm</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- ! The Modal create -->
-
-
-<!-- The Modal update -->
-<div class="modal fade" id="updateModal">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h4 class="modal-title">Chỉnh sửa thông tin môn học</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <!-- Modal body -->
-            <div class="modal-body">
-                <form role="form" id="frmPut">
-                    <input type="hidden" id="u_id">
-                    <div class="card-body">
-                        <div class="row form-group">
-                            <div class="col-md-12">
-                                <table id="tblresultUpdate" class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th><input type="checkbox" name="select_all" value="1"
-                                                    id="select-all-update"></th>
-                                            <th>ID</th>
-                                            <th>Họ</th>
-                                            <th>Tên</th>
-                                            <th>Giới tính</th>
-                                            <th>Ngày sinh</th>
-                                            <th>Địa chỉ</th>
-                                            <th>Quê quán</th>
-                                            <th>Ảnh</th>
-                                            <th>ID dân tộc</th>
-                                            <th>Dân tộc</th>
-                                            <th>ID tôn giáo</th>
-                                            <th>Tôn giáo</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <!-- Modal footer -->
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-success" form="frmPut" id="btnSubmitUpdate">Cập nhật</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
-            </div>
-
-        </div>
-    </div>
-</div>
-
 <%- contentFor('pageSectionA')%>
-<script src="javascripts/TraCuuDiem.js"></script>
+<script src="public/javascripts/TraCuuDiem.js"></script>

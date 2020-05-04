@@ -3,7 +3,7 @@ var table = $('#tblresult').DataTable({
     "serverSide": true,
     "ajax": {
         "cache": "false",
-        "url": "/api/v1/diem/get",
+        "url": "/api/v1/diem/tra-cuu",
         "type": "POST",
         "dataType": "json",
         // 'beforeSend': function (request) {
@@ -23,7 +23,11 @@ var table = $('#tblresult').DataTable({
         "dataSrc": function (json) {
             if (json.status) {
                 json.data.forEach(element => {
-                    element.Method = `<a class=" my-method-button btnEdit fa-hover"    title="Sửa tài khoản" ><i class="fa fa-edit"></i></a> &nbsp`;
+                    element.MonHoc_id.TenMonHoc = `<a href="/tra-cuu-mon-hoc?NamHoc_id=` + element.NamHoc_id._id
+                    + `&LopHoc_id=` + element.LopHoc_id._id 
+                    + `&HocKy_id=` + element.HocKy_id._id 
+                    + `&MonHoc_id=` + element.MonHoc_id._id 
+                    + `">`+ element.MonHoc_id.TenMonHoc + `</a>`;
                     element.XepLoai = 0;
                 });
 
@@ -35,7 +39,7 @@ var table = $('#tblresult').DataTable({
                         toastr["error"]("Xảy ra lỗi: " + e.msg);
                     })
                 }
-                toastr["info"]('Chọn nút "Tạo bảng điểm" để tạo !');
+                toastr["info"]('Không tìm thấy thông tin !');
                 return [];
             }
 
@@ -44,7 +48,7 @@ var table = $('#tblresult').DataTable({
 
     "PaginationType": "bootstrap",
     "columnDefs": [
-        { "visible": false, "targets": [1, 2] },
+        { "visible": false, "targets": [1, 2, 19, 20, 21] },
         {
             "className": "text-center",
             "width": "50px",
@@ -53,18 +57,12 @@ var table = $('#tblresult').DataTable({
         },
         {
             "className": "text-center",
-            "width": "60px",
-            "orderable": false,
-            "targets": 20
-        },
-        {
-            "className": "text-center",
             "render": (data, type, row) => {
                 return data == -1 ? "" : data
             },
             "width": "50px",
             "orderable": false,
-            "targets": [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+            "targets": [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
         },
         {
             "className": "text-center",
@@ -72,7 +70,7 @@ var table = $('#tblresult').DataTable({
                 return data == -1 ? "" : data
             },
             "orderable": false,
-            "targets": [17, 18]
+            "targets": [16, 17]
         },
     ],
     "language": {
@@ -89,9 +87,8 @@ var table = $('#tblresult').DataTable({
     columns: [
         { "data": null },
         { "data": '_id' },
-        { "data": 'HocSinh_id._id' },
-        { "data": 'HocSinh_id.Ho' },
-        { "data": 'HocSinh_id.Ten' },
+        { "data": 'MonHoc_id._id' },
+        { "data": 'MonHoc_id.TenMonHoc' },
         { "data": 'Diem_m01' },
         { "data": 'Diem_m02' },
         { "data": 'Diem_m03' },
@@ -107,7 +104,9 @@ var table = $('#tblresult').DataTable({
         { "data": 'Diem_HK' },
         { "data": 'Diem_TBC' },
         { "data": 'XepLoai' },
-        { "data": 'Method' }
+        { "data": 'HocKy_id._id' },
+        { "data": 'LopHoc_id._id' },
+        { "data": 'NamHoc_id._id' },
     ],
     bAutoWidth: false,
     fnRowCallback: (nRow, aData, iDisplayIndex) => {

@@ -17,11 +17,11 @@ var table = $('#tblresult').DataTable({
                 element.Method = `<a class=" my-method-button btnEdit fa-hover"    title="Sửa tài khoản" ><i class="fa fa-edit"></i></a> &nbsp
                                 <a class=" my-method-button btnDelete fa-hover"    title="Xóa tài khoản" ><i class="fa fa-trash"></i></a>`;
             });
-            
+
             return json.data;
         },
     },
-    
+
     "PaginationType": "bootstrap",
     "columnDefs": [
         // { "visible": false, "targets": [1,4]},
@@ -55,6 +55,7 @@ var table = $('#tblresult').DataTable({
         { "data": 'email' },
         { "data": 'password' },
         { "data": 'role' },
+        { "data": 'AnhDaiDien' },
         { "data": 'Method' }
     ],
     bAutoWidth: false,
@@ -70,9 +71,76 @@ $("#btnAdd").click(function () {
     $('#c_email').val(null);
     $('#c_password').val(null);
     $('#c_role').val(null);
+    $('#c_AnhDaiDien').val(null);
     $("#editmodal").modal('show');
 });
-
+//---form upload image
+$('#formPostUpload').submit((e) => {
+    e.preventDefault();
+    let formipload = $('#formPostUpload')[0];
+    var data = new FormData(formipload);
+    $.ajax({
+        type: "POST",
+        enctype: 'multipart/form-data',
+        url: "uploadSingle",
+        data: data,
+        processData: false,
+        contentType: false,
+        cache: false,
+        timeout: 600000
+    }).done((data) => {
+        console.log(data);
+        $('#c_AnhDaiDien').val(data.path);
+        if (data.status) {
+            toastr["success"](data.msg);
+        }
+        else {
+            if (Array.isArray(data.msg)) {
+                data.msg.forEach((e, i) => {
+                    toastr["error"]("Lỗi số " + (i + 1) + " :" + e.msg);
+                })
+            } else {
+                toastr["warning"](data.msg);
+            }
+        }
+    })
+        .fail(() => {
+            toastr["error"]("Xảy ra lỗi, vui lòng tải lại trang!");
+        });
+})
+$('#formPutUpload').submit((e) => {
+    e.preventDefault();
+    let formipload = $('#formPutUpload')[0];
+    var data = new FormData(formipload);
+    $.ajax({
+        type: "POST",
+        enctype: 'multipart/form-data',
+        url: "uploadSingle",
+        data: data,
+        processData: false,
+        contentType: false,
+        cache: false,
+        timeout: 600000
+    }).done((data) => {
+        console.log(data);
+        $('#u_AnhDaiDien').val(data.path);
+        if (data.status) {
+            toastr["success"](data.msg);
+        }
+        else {
+            if (Array.isArray(data.msg)) {
+                data.msg.forEach((e, i) => {
+                    toastr["error"]("Lỗi số " + (i + 1) + " :" + e.msg);
+                })
+            } else {
+                toastr["warning"](data.msg);
+            }
+        }
+    })
+        .fail(() => {
+            toastr["error"]("Xảy ra lỗi, vui lòng tải lại trang!");
+        });
+})
 
 $('#frmPost').submit((e) => {
     e.preventDefault();
@@ -105,13 +173,27 @@ $('#frmPost').submit((e) => {
         });
     $("#btnSubmitConfirm").removeAttr("disabled");
 });
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
 
+        reader.onload = function (e) {
+            $('.blah').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]); // convert to base64 string
+    }
+}
+$(".imgInp").change(function () {
+    readURL(this);
+});
 $("#tblresult").on("click", ".btnEdit", function () {
     var obj = $('#tblresult').DataTable().row($(this).parents('tr')).data();
     $('#u_id').val(obj._id);
     $('#u_email').val(obj.email);
     $('#u_password').val(obj.password);
     $('#u_role').val(obj.role);
+    $('#u_AnhDaiDien').val(obj.AnhDaiDien);
+    $('.blah').attr('src', obj.AnhDaiDien.replace(/\\/g,'/'));
     $("#updatemodal").modal('show');
 });
 
@@ -121,7 +203,7 @@ $('#frmPut').submit((e) => {
     e.preventDefault();
     let form = $('#frmPut').serializeArray();
     $.ajax({
-        url: "/api/v1/quan-ly-tai-khoan/update/"+id,    
+        url: "/api/v1/quan-ly-tai-khoan/update/" + id,
         method: "PUT",
         data: form,
         dataType: 'json'
@@ -165,7 +247,7 @@ $('#frmDelete').submit((e) => {
     $("#btnSubmitConfirm").attr("disabled", true);
     var id = $('#r_id').val();
     $.ajax({
-        url: "/api/v1/mon-hoc/delete/"+id,
+        url: "/api/v1/mon-hoc/delete/" + id,
         method: "delete",
     })
         .done((data) => {

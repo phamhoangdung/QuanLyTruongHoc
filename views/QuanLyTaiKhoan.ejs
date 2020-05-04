@@ -33,7 +33,8 @@
                                     <th>ID</th>
                                     <th>Tên tài khoản</th>
                                     <th>Mật khẩu</th>
-                                    <th>Loại tài khoản</th>                        
+                                    <th>Loại tài khoản</th>
+                                    <th>Ảnh</th>
                                     <th>Thao tác</th>
                                 </tr>
                             </thead>
@@ -46,6 +47,7 @@
                                     <th>Tên tài khoản</th>
                                     <th>Mật khẩu</th>
                                     <th>Loại tài khoản</th>
+                                    <th>Ảnh</th>
                                     <th>Thao tác</th>
                                 </tr>
                             </tfoot>
@@ -111,8 +113,19 @@
             </div>
             <!-- Modal body -->
             <div class="modal-body">
-                <form role="form" id="frmPost" method="Post">
-                    <div class="card-body">
+                <div class="card-body">
+                    <form id="formPostUpload" enctype="multipart/form-data">
+                        <div class="row form-group">
+                            <div class="col-md-6">
+                                <label for="example-input-file"> </label>
+                                <input type="file" name="avatar" id="imgInp" class="form-control-file border imgInp">
+                            </div>
+                            <div class="col-md-6">
+                                <img class="blah" src="#" alt="your image" style="width: 100px" />
+                            </div>
+                        </div>
+                    </form>
+                    <form role="form" id="frmPost" method="Post">
                         <div class="row form-group">
                             <div class="col-md-6">
                                 <label for="email">Tên đăng nhập</label>
@@ -132,12 +145,20 @@
                                     <option value="student" selected>Học sinh</option>
                                 </select>
                             </div>
+                            <div class="col-md-6">
+                                <label for="TenGiaoVien">Đường dẫn ảnh</label>
+                                <input type="text" id="c_AnhDaiDien" class="form-control" name="AnhDaiDien"
+                                    readonly="readonly">
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
             <!-- Modal footer -->
             <div class="modal-footer">
+                <button type="submit" class="btn btn-info" form="formPostUpload" id="btnUpload"><i
+                        class="fas fa-upload"></i>&nbsp;Tải ảnh
+                    lên</button>
                 <button type="submit" class="btn btn-success" form="frmPost" id="btnSubmitConfirm">Thêm</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
             </div>
@@ -159,9 +180,20 @@
             </div>
             <!-- Modal body -->
             <div class="modal-body">
-                <form role="form" id="frmPut" method="Put">
-                    <input type="hidden" id="u_id">
-                    <div class="card-body">
+                <div class="card-body">
+                    <form id="formPutUpload" enctype="multipart/form-data">
+                        <div class="row form-group">
+                            <div class="col-md-6">
+                                <label for="example-input-file"> </label>
+                                <input type="file" name="avatar" id="imgInp" class="form-control-file border imgInp">
+                            </div>
+                            <div class="col-md-6">
+                                <img class="blah" src="#" alt="your image" style="width: 100px" />
+                            </div>
+                        </div>
+                    </form>
+                    <form role="form" id="frmPut" method="Put">
+                        <input type="hidden" id="u_id">
                         <div class="row form-group">
                             <div class="col-md-6">
                                 <label for="email">Tên đăng nhập</label>
@@ -181,12 +213,20 @@
                                     <option value="student" selected>Học sinh</option>
                                 </select>
                             </div>
+                            <div class="col-md-6">
+                                <label for="TenGiaoVien">Đường dẫn ảnh</label>
+                                <input type="text" id="u_AnhDaiDien" class="form-control" name="AnhDaiDien"
+                                    readonly="readonly">
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
             <!-- Modal footer -->
             <div class="modal-footer">
+                <button type="submit" class="btn btn-info" form="formPutUpload" id="btnUpload"><i
+                        class="fas fa-upload"></i>&nbsp;Tải ảnh
+                    lên</button>
                 <button type="submit" class="btn btn-success" form="frmPut" id="btnSubmitUpdate">Cập nhật</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
             </div>
@@ -196,4 +236,4 @@
 </div>
 
 <%- contentFor('pageSectionA')%>
-<script src="javascripts/QuanLyTaiKhoan.js"></script>
+<script src="public/javascripts/QuanLyTaiKhoan.js"></script>

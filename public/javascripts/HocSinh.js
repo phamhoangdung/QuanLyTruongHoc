@@ -10,6 +10,12 @@ var table = $('#tblresult').DataTable({
         //     request.setRequestHeader("X-CSRF-TOKEN", $('meta[name="csrf-token"]').attr('content'));
         // },
         "cache": true,
+        "data": function (d) {
+            Object.assign(d, {
+                "search": $('.dataTables_filter input').val()
+            });
+            return d;
+        },
         "dataSrc": function (json) {
             json.data.forEach(element => {
                 let date = new Date(element.NgaySinh)
@@ -24,7 +30,7 @@ var table = $('#tblresult').DataTable({
 
     "PaginationType": "bootstrap",
     "columnDefs": [
-        { "visible": false, "targets": [1, 8, 9, 11] },
+        { "visible": false, "targets": [1, 8, 10, 12] },
         {
             "className": "text-center",
             "width": "50px",
@@ -35,7 +41,7 @@ var table = $('#tblresult').DataTable({
             "className": "text-center",
             "width": "60px",
             "orderable": false,
-            "targets": 13
+            "targets": 14
         },
         {
             "className": "text-center",
@@ -67,11 +73,12 @@ var table = $('#tblresult').DataTable({
         { "data": 'NgaySinh' },
         { "data": 'DiaChi' },
         { "data": 'QueQuan' },
-        { "data": 'AnhDaiDien' },
         { "data": 'DanToc_id._id' },
         { "data": 'DanToc_id.TenDanToc' },
         { "data": 'TonGiao_id._id' },
         { "data": 'TonGiao_id.TenTonGiao' },
+        { "data": 'TaiKhoan._id' },
+        { "data": 'TaiKhoan.email' },
         { "data": 'Method' }
     ],
     bAutoWidth: false,
@@ -82,7 +89,6 @@ var table = $('#tblresult').DataTable({
 });
 //Datemask dd/mm/yyyy
 $('.NgaySinh').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
-
 // insert
 
 $("#btnAdd").click(function () {

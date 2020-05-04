@@ -11,11 +11,11 @@ var HocSinh = mongoose.Schema({
     NgaySinh: Date,
     DiaChi: String,
     QueQuan: String,
-    AnhDaiDien: { type: String, default: "" },
     DanToc_id: { type: mongoose.Schema.Types.ObjectId, ref: "DanToc" },
     TonGiao_id: { type: mongoose.Schema.Types.ObjectId, ref: "TonGiao" },
     isClass: { type: Boolean, default: false },
     TaiKhoan: { type: mongoose.Schema.Types.ObjectId, ref: "User" }
 }, schemaOptions)
+HocSinh.index({'$**': 'text'});
 HocSinh.plugin(mongoosePaginate);
 module.exports = mongoose.model('HocSinh', HocSinh)

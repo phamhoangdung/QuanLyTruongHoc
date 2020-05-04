@@ -8,18 +8,29 @@ exports.GetHocSinh = (req, res) => {
         page: req.body.draw,
         limit: req.body.length,
         populate: [{ path: "DanToc_id", select: "_id TenDanToc" },
-        { path: "TonGiao_id", select: "_id TenTonGiao" }],
+        { path: "TonGiao_id", select: "_id TenTonGiao" }, { path: "TaiKhoan", select: "_id email" }],
         collation: {
             locale: 'en'
         }
     };
-    HocSinh.paginate({}, options, (error, result) => {
-        if (error) {
-            res.status(200).json({ status: false, msg: error, code: 'ERR_GET_HOCSINH' });
-        } else {
-            res.status(200).json({ status: true, data: result.docs, recordsTotal: result.limit, recordsFiltered: result.totalDocs })
-        }
-    })
+    console.log(req.body.search)
+    if (req.body.search) {
+        HocSinh.paginate({ $text: { $search: req.body.search } }, options, (error, result) => {
+            if (error) {
+                res.status(200).json({ status: false, msg: error, code: 'ERR_GET_HOCSINH' });
+            } else {
+                res.status(200).json({ status: true, data: result.docs, recordsTotal: result.limit, recordsFiltered: result.totalDocs })
+            }
+        })
+    }else{
+        HocSinh.paginate({}, options, (error, result) => {
+            if (error) {
+                res.status(200).json({ status: false, msg: error, code: 'ERR_GET_HOCSINH' });
+            } else {
+                res.status(200).json({ status: true, data: result.docs, recordsTotal: result.limit, recordsFiltered: result.totalDocs })
+            }
+        })
+    }
 }
 exports.CreateHocSinh = async (req, res) => {
     try {
@@ -60,6 +71,7 @@ exports.CreateHocSinh = async (req, res) => {
                 QueQuan: req.body.QueQuan,
                 DanToc_id: req.body.DanToc_id,
                 TonGiao_id: req.body.TonGiao_id,
+                AnhDaiDien: req.body.AnhDaiDien,
                 TaiKhoan: tksv._id
             });
             await hocSinh.save((error, result) => {
@@ -76,6 +88,8 @@ exports.CreateHocSinh = async (req, res) => {
     }
 }
 exports.UpdateHocSinh = async (req, res) => {
+    console.log(req.body);
+    
     req.checkParams('id', 'id trống !').notEmpty();
     req.checkBody('Ho', 'Họ trống !').notEmpty();
     req.checkBody('Ten', 'Tên trống !').notEmpty();
