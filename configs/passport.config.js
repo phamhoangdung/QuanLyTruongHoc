@@ -24,8 +24,7 @@ module.exports = function (passport) {
             }
 
             if (!user) {
-                
-                return done(null, false, req.flash('message', 'User Not found.'));
+                return done(null, false, req.flash('message', 'Người dùng không tồn tại.'));
             }
 
             user.comparePassword(password, function (err, isMatch) {
@@ -33,11 +32,9 @@ module.exports = function (passport) {
                 if (err) {
                     return done(err);
                 }
-
                 if (!isMatch) {
-                    return done(null, false, req.flash('message', 'Invalid Password'));
+                    return done(null, false, req.flash('message', 'Mật khẩu không chính xác.'));
                 }
-
                 return done(null, user);
 
             });

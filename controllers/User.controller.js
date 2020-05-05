@@ -101,6 +101,28 @@ exports.UpdateUser = async (req, res) => {
         }
     }
 }
+exports.changePassword = async (req, res) => {
+    req.checkBody('id', 'ID trống !').notEmpty();
+    req.checkBody('password', 'Mật khẩu trống !').notEmpty();
+    req.checkBody('confirm_password', 'Xác nhận mật khẩu trống !').notEmpty();
+    const errors = req.validationErrors();
+    if (errors) {
+        res.status(200).json({ status: false, msg: errors, code: 'ERR_UPDATE_USER' });
+    } else {
+        if (req.body.password === req.body.confirm_password) {
+            let user = await User.findById(req.body.id);
+            if (user) {
+                user.set({ password: req.body.password });
+                user.save();
+                res.status(200).json({ status: true, msg: "Đổi mật khẩu thành công !" })
+            } else {
+                res.status(200).json({ status: false, msg: "Tài khoản không tồn tại !" });
+            }
+        } else {
+            res.status(200).json({ status: false, msg: "Mật khẩu không trùng khớp !" });
+        }
+    }
+}
 // exports.DeleteMonHoc = async (req, res) => {
 //     req.checkParams('id', 'id môn học trống !').notEmpty();
 //     const errors = req.validationErrors();

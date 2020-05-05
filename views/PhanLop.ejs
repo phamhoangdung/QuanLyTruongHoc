@@ -119,15 +119,19 @@
                     <div class="card-footer">
                         <div class="row">
                             <div class="col-md-1">
-                                <button type="button" class="btn btn-info" id="btnAdd" name="btnAdd"><i
+                                <button type="button" class="btn btn-primary" id="btnAdd" name="btnAdd" style="width: 100%;"><i
                                         class="far fa-plus-square"></i>&nbsp; Tạo DS</button>
                             </div>
                             <div class="col-md-1">
-                                <button type="button" class="btn btn-warning" id="btnUpdate" name="btnUpdate"><i
+                                <button type="button" class="btn btn-warning" id="btnUpdate" name="btnUpdate" style="width: 100%"><i
                                         class="far fa-edit"></i>&nbsp; Sửa DS</button>
                             </div>
+                            <div class="col-md-1">
+                                <button type="button" class="btn btn-success" id="btnExcel" name="btnExcel" style="width: 100%"><i
+                                        class="far fa-file-excel"></i>&nbsp; Xuất excel</button>
+                            </div>
                             <div class="col-md-2">
-                                <button type="button" class="btn btn-success" id="btnSync" name="btnSync"><i
+                                <button type="button" class="btn btn-info" id="btnSync" name="btnSync"><i
                                         class="fas fa-sync"></i>&nbsp; Hiện thị tất cả</button>
                             </div>
                         </div>
@@ -192,7 +196,8 @@
                                 <table id="tblresultCreate" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th><input type="checkbox" name="select_all" value="1" id="select-all-create"></th>
+                                            <th><input type="checkbox" name="select_all" value="1"
+                                                    id="select-all-create"></th>
                                             <th>ID</th>
                                             <th>Họ</th>
                                             <th>Tên</th>
@@ -245,7 +250,8 @@
                                 <table id="tblresultUpdate" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th><input type="checkbox" name="select_all" value="1" id="select-all-update"></th>
+                                            <th><input type="checkbox" name="select_all" value="1"
+                                                    id="select-all-update"></th>
                                             <th>ID</th>
                                             <th>Họ</th>
                                             <th>Tên</th>

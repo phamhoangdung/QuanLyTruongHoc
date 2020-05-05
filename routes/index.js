@@ -22,7 +22,7 @@ var AuthenticationController = require('../controllers/authentication.controller
 var requireAuth = passport.authenticate('jwt', { session: false }),
   // requireLogin = passport.authenticate('local', { session: false });
   requireLogin = passport.authenticate('local-login', {
-    successRedirect: '/giao-vien',
+    successRedirect: '/',
     failureRedirect: '/login',
     failureFlash: true
   });
@@ -58,7 +58,7 @@ module.exports = (app) => {
     return router;
   };
   /* GET home page. */
-  app.get('/', function (req, res, next) {
+  app.get('/', isLoggedIn, function (req, res, next) {
     res.render('index');
   });
   app.get('/mon-hoc', isLoggedIn, AuthenticationController.roleAuthorization(['admin']), (req, res) => {
@@ -76,31 +76,39 @@ module.exports = (app) => {
   app.get('/giao-vien', isLoggedIn, AuthenticationController.roleAuthorization(['admin']), async (req, res) => {
     res.render('GiaoVien');
   });
-  app.get('/hoc-sinh', isLoggedIn, AuthenticationController.roleAuthorization(['admin','teacher']), async (req, res) => {
+  app.get('/hoc-sinh', isLoggedIn, AuthenticationController.roleAuthorization(['admin', 'teacher']), async (req, res) => {
     res.render('HocSinh');
   });
   app.get('/phan-lop', isLoggedIn, AuthenticationController.roleAuthorization(['admin']), async (req, res) => {
     res.render('PhanLop');
   });
-  app.get('/quan-ly-diem', isLoggedIn, AuthenticationController.roleAuthorization(['admin','teacher']), async (req, res) => {
+  app.get('/quan-ly-diem', isLoggedIn, AuthenticationController.roleAuthorization(['admin', 'teacher']), async (req, res) => {
     res.render('QuanLyDiem');
   });
   app.get('/quan-ly-tai-khoan', isLoggedIn, AuthenticationController.roleAuthorization(['admin']), async (req, res) => {
     res.render('QuanLyTaiKhoan');
   });
-  app.get('/tra-cuu', isLoggedIn, AuthenticationController.roleAuthorization(['student']), async (req, res) => {
+  app.get('/tra-cuu', isLoggedIn, AuthenticationController.roleAuthorization(['student']), (req, res) => {
     res.render('TraCuuDiem');
   });
-  app.get('/tra-cuu-mon-hoc', async (req, res) => {
+  app.get('/change-password', isLoggedIn, (req, res) => {
+    res.render('ChangePassword', { layout: false, user: req.user });
+  });
+  app.get('/tra-cuu-mon-hoc', (req, res) => {
     res.render('TraCuuTheoMon');
     // Diem.TraCuuMonHoc;
   });
-  app.get('/login', async (req, res) => {
-    res.render('Login', { layout: false });
+  app.get('/login', (req, res) => {
+    res.render('Login', { layout: false, title: 'login', message: req.flash('message') });
   });
   app.get('/logout', function (req, res) {
     req.logout();
+    // delete req.session;
     res.redirect('/login');
+
+    // req.session.destroy(function (err) {
+    //    //Inside a callback… bulletproof!
+    // });
   });
 
   function isLoggedIn(req, res, next) {
@@ -190,6 +198,7 @@ module.exports = (app) => {
     route.post('/create', PhanLop.CreateLopHocSinh);
     route.put('/update', PhanLop.UpdateLopHocSinh);
     route.delete('/delete/:id', PhanLop.DeleteLopHocSinh);
+    route.get('/export-excel', PhanLop.excelExport);
   })
   //api for Diem
   router.prefix('/diem', (route) => {
@@ -204,6 +213,7 @@ module.exports = (app) => {
   router.prefix('/quan-ly-tai-khoan', (route) => {
     route.post('/get', User.GetUser);
     route.post('/create', User.CreateUser);
+    route.post('/change-password', User.changePassword);
     route.put('/update/:id', User.UpdateUser);
     // route.delete('/delete/:id', User.DeleteDiem);
   })

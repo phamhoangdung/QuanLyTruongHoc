@@ -3,7 +3,7 @@ const LopHoc = require('../models/LopHoc.model');
 const NamHoc = require('../models/NamHoc.model');
 const Khoi = require('../models/Khoi.model');
 const PhanLop = require('../models/PhanLop.model');
-
+var xl = require('excel4node');
 exports.GetLopHocSinh = async (req, res) => {
     if (req.body.LopHoc_id && req.body.NamHoc_id && req.body.Khoi_id) {
         console.log(req.body.update);
@@ -189,4 +189,105 @@ exports.DeleteLopHocSinh = (req, res) => {
             res.status(500).json({ status: false, msg: "Lỗi: " + error, code: 'ERR_UPDATE_HOCSINH' })
         }
     }
+}
+var convertDate = (date) => {
+    return ((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + ((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + date.getFullYear();
+}
+exports.excelExport = async (req, res) => {
+    // Create a new instance of a Workbook class
+    var wb = new xl.Workbook();
+
+    // Add Worksheets to the workbook
+    var ws = wb.addWorksheet('Sheet 1');
+    var style = wb.createStyle({
+        border: {
+            left: {
+                style: 'thin',
+                color: 'black',
+            },
+            right: {
+                style: 'thin',
+                color: 'black',
+            },
+            top: {
+                style: 'thin',
+                color: 'black',
+            },
+            bottom: {
+                style: 'thin',
+                color: 'black',
+            },
+            outline: false,
+        },
+        font: {
+            size: 12,
+        },
+    });
+    var styleHead = wb.createStyle({
+        border: {
+            left: {
+                style: 'thin',
+                color: 'black',
+            },
+            right: {
+                style: 'thin',
+                color: 'black',
+            },
+            top: {
+                style: 'thin',
+                color: 'black',
+            },
+            bottom: {
+                style: 'thin',
+                color: 'black',
+            },
+            outline: false,
+        },
+        font: {
+            size: 12,
+            bold: true
+        },
+    });
+
+    var data = PhanLop.findOne({ LopHoc_id: req.query.LopHoc_id, NamHoc_id: req.query.NamHoc_id, Khoi_id: req.query.Khoi_id })
+        .populate([{
+            path: "HocSinhs", populate:
+                [{ path: 'DanToc_id' }, { path: "TonGiao_id" }]
+        },
+        { path: "LopHoc_id", select: "TenLopHoc" },
+        { path: "NamHoc_id", select: "TenNamHoc" },
+        { path: "Khoi_id", select: "TenKhoi" }])
+        .lean()
+        .exec((error, result) => {
+            ws.column(1).setWidth(15);
+            ws.column(4).setWidth(15);
+            ws.column(7).setWidth(12);
+            ws.column(5).setWidth(30);
+            ws.column(6).setWidth(30);
+            ws.cell(2, 1).string("Lớp: ");
+            ws.cell(2, 2).string(result.LopHoc_id.TenLopHoc);
+            ws.cell(2, 3).string("Năm học: ");
+            ws.cell(2, 4).string(result.NamHoc_id.TenNamHoc);
+            ws.cell(2, 5).string("Khối: ");
+            ws.cell(2, 6).string(result.Khoi_id.TenKhoi);
+            ws.cell(4, 1).string('Họ').style(styleHead);
+            ws.cell(4, 2).string('Tên').style(styleHead);
+            ws.cell(4, 3).string('Giới tính').style(styleHead);
+            ws.cell(4, 4).string('Ngày sinh').style(styleHead);
+            ws.cell(4, 5).string('Địa chỉ').style(styleHead);
+            ws.cell(4, 6).string('Quê quán').style(styleHead);
+            ws.cell(4, 7).string('Dân tộc').style(styleHead);
+            ws.cell(4, 8).string('Tôn giáo').style(styleHead);
+            result.HocSinhs.map((e, i) => {
+                ws.cell(i + 5, 1).string(e.Ho).style(style);
+                ws.cell(i + 5, 2).string(e.Ten).style(style);
+                ws.cell(i + 5, 3).string(e.GioiTinh == 1 ? 'Nam' : 'Nữ').style(style);
+                ws.cell(i + 5, 4).string(convertDate(e.NgaySinh)).style(style);
+                ws.cell(i + 5, 5).string(e.DiaChi).style(style);
+                ws.cell(i + 5, 6).string(e.QueQuan).style(style);
+                ws.cell(i + 5, 7).string(e.DanToc_id.TenDanToc).style(style);
+                ws.cell(i + 5, 8).string(e.TonGiao_id.TenTonGiao).style(style);
+            })
+            wb.write('ExcelFile.xlsx', res);
+        })
 }

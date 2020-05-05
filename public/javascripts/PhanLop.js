@@ -331,7 +331,7 @@ $('#tblresultUpdate tbody').on('change', 'input[type="checkbox"]', function () {
         }
     }
 });
-$('#btnSync').on("click",()=>{
+$('#btnSync').on("click", () => {
     $("#NamHoc_idFilter").empty();
     $("#LopHoc_idFilter").empty();
     $("#Khoi_idFilter").empty();
@@ -636,6 +636,16 @@ $('#NamHoc_idFilter').on("change", (e) => {
     selectdis();
     $(".LopHoc_id").empty();
 });
+//==========================================================export excel==========================================================
+
+$('#btnExcel').on('click', () => {
+    if ($('#Khoi_idFilter').val() && $('#NamHoc_idFilter').val() && $('#LopHoc_idFilter').val()) {
+        window.open("/api/v1/phan-lop/export-excel?Khoi_id=" + $('#Khoi_idFilter').val() + "&NamHoc_id=" + $('#NamHoc_idFilter').val() + "&LopHoc_id=" + $('#LopHoc_idFilter').val());
+    } else {
+        toastr["warning"]("Khối, năm học, lớp học chưa được chọn !");
+    }
+})
+
 toastr.options = {
     "closeButton": true,
     "debug": false,
