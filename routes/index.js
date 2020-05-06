@@ -59,43 +59,43 @@ module.exports = (app) => {
   };
   /* GET home page. */
   app.get('/', isLoggedIn, function (req, res, next) {
-    res.render('index');
+    res.render('index', { user: req.user });
   });
   app.get('/mon-hoc', isLoggedIn, AuthenticationController.roleAuthorization(['admin']), (req, res) => {
-    res.render('MonHoc');
+    res.render('MonHoc', { user: req.user });
   });
   app.get('/hknhk', isLoggedIn, AuthenticationController.roleAuthorization(['admin']), (req, res) => {
-    res.render('HocKyNamHocKhoi');
+    res.render('HocKyNamHocKhoi', { user: req.user });
   });
   app.get('/dantoc-tongiao', isLoggedIn, AuthenticationController.roleAuthorization(['admin']), (req, res) => {
-    res.render('DanTocTonGiao');
+    res.render('DanTocTonGiao', { user: req.user });
   });
   app.get('/lop-hoc', isLoggedIn, AuthenticationController.roleAuthorization(['admin']), async (req, res) => {
-    res.render('LopHoc');
+    res.render('LopHoc', { user: req.user });
   });
   app.get('/giao-vien', isLoggedIn, AuthenticationController.roleAuthorization(['admin']), async (req, res) => {
-    res.render('GiaoVien');
+    res.render('GiaoVien', { user: req.user });
   });
   app.get('/hoc-sinh', isLoggedIn, AuthenticationController.roleAuthorization(['admin', 'teacher']), async (req, res) => {
-    res.render('HocSinh');
+    res.render('HocSinh', { user: req.user });
   });
   app.get('/phan-lop', isLoggedIn, AuthenticationController.roleAuthorization(['admin']), async (req, res) => {
-    res.render('PhanLop');
+    res.render('PhanLop', { user: req.user });
   });
   app.get('/quan-ly-diem', isLoggedIn, AuthenticationController.roleAuthorization(['admin', 'teacher']), async (req, res) => {
-    res.render('QuanLyDiem');
+    res.render('QuanLyDiem', { user: req.user });
   });
   app.get('/quan-ly-tai-khoan', isLoggedIn, AuthenticationController.roleAuthorization(['admin']), async (req, res) => {
-    res.render('QuanLyTaiKhoan');
+    res.render('QuanLyTaiKhoan', { user: req.user });
   });
   app.get('/tra-cuu', isLoggedIn, AuthenticationController.roleAuthorization(['student']), (req, res) => {
-    res.render('TraCuuDiem');
+    res.render('TraCuuDiem', { user: req.user });
   });
   app.get('/change-password', isLoggedIn, (req, res) => {
     res.render('ChangePassword', { layout: false, user: req.user });
   });
   app.get('/tra-cuu-mon-hoc', (req, res) => {
-    res.render('TraCuuTheoMon');
+    res.render('TraCuuTheoMon', { user: req.user });
     // Diem.TraCuuMonHoc;
   });
   app.get('/login', (req, res) => {

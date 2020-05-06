@@ -1,9 +1,8 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->
-  <a href="../../index3.html" class="brand-link">
-    <img src="../../public/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
-      style="opacity: .8">
-    <span class="brand-text font-weight-light">AdminLTE 3</span>
+  <a href="/" class="brand-link">
+    <img src="../../public/dist/img/logo.png" alt="AdminLTE Logo" class="brand-image">
+    <span class="brand-text font-weight-light">DONGHIEU - PHD</span>
   </a>
 
   <!-- Sidebar -->
@@ -21,6 +20,7 @@
     <!-- Sidebar Menu -->
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <% if(user.role === "admin"){ %>
         <li class="nav-item">
           <a href="/mon-hoc" class="nav-link">
             <i class="nav-icon fas fa-book"></i>
@@ -95,6 +95,29 @@
             </p>
           </a>
         </li>
+        <% } %>
+        <% if(user.role === "teacher"){ %>
+        <li class="nav-header">Giáo viên</li>
+        <li class="nav-item">
+          <a href="/quan-ly-diem" class="nav-link">
+            <i class="nav-icon far fa-id-card"></i>
+            <p>
+              Quản lý điểm
+            </p>
+          </a>
+        </li>
+        <% } %>
+        <% if(user.role === "student"){ %>
+        <li class="nav-header">Học sinh</li>
+        <li class="nav-item">
+          <a href="/tra-cuu" class="nav-link">
+            <i class="nav-icon fas fa-poll"></i>
+            <p>
+              Tra cứu điểm
+            </p>
+          </a>
+        </li>
+        <% } %>
       </ul>
     </nav>
     <!-- /.sidebar-menu -->
