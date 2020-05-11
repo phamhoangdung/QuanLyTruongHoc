@@ -483,6 +483,19 @@ $('#NamHoc_idFilter').on("change", (e) => {
     selectdis();
     $(".LopHoc_id").empty();
 });
+//==========================================================export excel==========================================================
+
+$('#btnExcel').on('click', () => {
+    if ($('#Khoi_idFilter').val() && $('#NamHoc_idFilter').val() && $('#LopHoc_idFilter').val() && $("#MonHoc_idFilter").val() && $("#NamHoc_idFilter").val()) {
+        window.open("/api/v1/diem/export-excel?Khoi_id=" + $('#Khoi_idFilter').val() +
+            "&NamHoc_id=" + $('#NamHoc_idFilter').val() +
+            "&LopHoc_id=" + $('#LopHoc_idFilter').val() +
+            "&MonHoc_id=" + $("#MonHoc_idFilter").val() +
+            "&HocKy_id=" + $("#HocKy_idFilter").val());
+    } else {
+        toastr["warning"]("Khối, năm học, lớp học, môn học, năm học... chưa được chọn !");
+    }
+})
 toastr.options = {
     "closeButton": true,
     "debug": false,

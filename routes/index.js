@@ -85,6 +85,12 @@ module.exports = (app) => {
   app.get('/quan-ly-diem', isLoggedIn, AuthenticationController.roleAuthorization(['admin', 'teacher']), async (req, res) => {
     res.render('QuanLyDiem', { user: req.user });
   });
+  app.get('/ds-hoc-sinh', isLoggedIn, AuthenticationController.roleAuthorization(['admin', 'teacher']), (req, res) => {
+    res.render('DanhSachHocSinh', { user: req.user });
+  });
+  app.get('/ds-giao-vien', isLoggedIn, AuthenticationController.roleAuthorization(['admin', 'teacher','student']), (req, res) => {
+    res.render('DanhSachGiaoVien', { user: req.user });
+  });
   app.get('/quan-ly-tai-khoan', isLoggedIn, AuthenticationController.roleAuthorization(['admin']), async (req, res) => {
     res.render('QuanLyTaiKhoan', { user: req.user });
   });
@@ -202,7 +208,7 @@ module.exports = (app) => {
   })
   //api for Diem
   router.prefix('/diem', (route) => {
-    route.get('/export-excel', Diem.ExportExcel);
+    route.get('/export-excel', Diem.excelExport);
     route.post('/tra-cuu', Diem.TraCuuForHocSinh);
     route.post('/get', Diem.GetDiem);
     route.post('/create', Diem.CreateDiem);

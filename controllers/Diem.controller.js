@@ -1,62 +1,8 @@
 const Diem = require('../models/Diem.model');
 const PhanLop = require('../models/PhanLop.model');
 const HocSinh = require('../models/HocSinh.model');
-const excel = require('node-excel-export');
+var xl = require('excel4node');
 
-exports.ExportExcel = async (req, res) => {
-
-    const specification = {
-        customer_name: { // <- the key should match the actual data key
-            displayName: 'Customer', // <- Here you specify the column header
-            headerStyle: styles.headerDark, // <- Header style
-            cellStyle: function (value, row) { // <- style renderer function
-                return (row.status_id == 1) ? styles.cellGreen : { fill: { fgColor: { rgb: 'FFFF0000' } } }; // <- Inline cell style is possible 
-            },
-            width: 120 // <- width in pixels
-        },
-        status_id: {
-            displayName: 'Status',
-            headerStyle: styles.headerDark,
-            cellFormat: function (value, row) { // <- Renderer function, you can access also any row.property
-                return (value == 1) ? 'Active' : 'Inactive';
-            },
-            width: '10' // <- width in chars (when the number is passed as string)
-        },
-        note: {
-            displayName: 'Description',
-            headerStyle: styles.headerDark,
-            cellStyle: styles.cellPink, // <- Cell style
-            width: 220 // <- width in pixels
-        }
-    }
-
-    const dataset = [
-        { customer_name: 'IBM', status_id: 1, note: 'some note', misc: 'not shown' },
-        { customer_name: 'HP', status_id: 0, note: 'some note' },
-        { customer_name: 'MS', status_id: 0, note: 'some note', misc: 'not shown' }
-    ]
-
-    const merges = [
-        { start: { row: 1, column: 1 }, end: { row: 1, column: 10 } },
-        { start: { row: 2, column: 1 }, end: { row: 2, column: 5 } },
-        { start: { row: 2, column: 6 }, end: { row: 2, column: 10 } }
-    ]
-
-    const report = excel.buildExport(
-        [ // <- Notice that this is an array. Pass multiple sheets to create multi sheet report
-            {
-                name: 'Report', // <- Specify sheet name (optional)
-                heading: heading, // <- Raw heading array (optional)
-                merges: merges, // <- Merge cell ranges
-                specification: specification, // <- Report specification
-                data: dataset // <-- Report data
-            }
-        ]
-    );
-
-    res.attachment('report.xlsx'); 
-    return res.send(report);
-}
 exports.TraCuuForHocSinh = async (req, res) => {
     const options = {
         offset: req.body.start,
@@ -129,7 +75,7 @@ exports.GetDiem = (req, res) => {
     } else {
         const conditions = {
             NamHoc_id: req.body.NamHoc_id,
-            Lop_id: req.body.Lop_id,
+            LopHoc_id: req.body.LopHoc_id,
             HocKy_id: req.body.HocKy_id,
             MonHoc_id: req.body.MonHoc_id
         }
@@ -209,6 +155,46 @@ exports.CreateDiem = async (req, res) => {
         res.status(200).json({ status: false, msg: err, code: 'ERR_CREATE_DIEM' })
     }
 }
+function TinhDiemTBC(Diem) {
+    let hs1 = [
+        Diem.Diem_m01 == '' ? -1 : Diem.Diem_m01,
+        Diem.Diem_m02 == '' ? -1 : Diem.Diem_m02,
+        Diem.Diem_m03 == '' ? -1 : Diem.Diem_m03,
+        Diem.Diem_m04 == '' ? -1 : Diem.Diem_m04,
+        Diem.Diem_15p01 == '' ? -1 : Diem.Diem_15p01,
+        Diem.Diem_15p02 == '' ? -1 : Diem.Diem_15p02,
+        Diem.Diem_15p03 == '' ? -1 : Diem.Diem_15p03,
+        Diem.Diem_15p04 == '' ? -1 : Diem.Diem_15p04,
+    ];
+    let demhs1 = 0;
+    let sumhs1 = 0;
+    hs1.map((e, i) => {
+        if (e >= 0) {
+            demhs1++;
+            sumhs1 += parseInt(e);
+        }
+    })
+    let hs2 = [
+        Diem.Diem_1t01 == '' ? -1 : Diem.Diem_1t01,
+        Diem.Diem_1t02 == '' ? -1 : Diem.Diem_1t02,
+        Diem.Diem_1t03 == '' ? -1 : Diem.Diem_1t03,
+        Diem.Diem_1t04 == '' ? -1 : Diem.Diem_1t04,
+    ];
+    let demhs2 = 0;
+    let sumhs2 = 0;
+    hs2.map((e, i) => {
+        if (e >= 0) {
+            demhs2++;
+            sumhs2 += parseInt(e);
+        }
+    })
+    let hs3 = Diem.Diem_HK == '' ? -1 : Diem.Diem_HK;
+    if (hs3 >= 0) {
+        return (Math.round((sumhs1 + sumhs2 * 2 + hs3 * 3) / (demhs1 + demhs2 * 2 + 3)));
+    } else {
+        return (Math.round((sumhs1 + sumhs2 * 2) / (demhs1 + demhs2 * 2)));
+    }
+}
 exports.UpdateDiem = async (req, res) => {
     req.checkParams('id', 'id trống !').notEmpty();
     const errors = req.validationErrors();
@@ -218,7 +204,24 @@ exports.UpdateDiem = async (req, res) => {
         try {
             const diem = await Diem.findById(req.params.id);
             if (diem) {
-                diem.set(req.body);
+                // console.log( TinhDiemTBC(req.body));
+                diem.set({
+                    Diem_m01: req.body.Diem_m01,
+                    Diem_m02: req.body.Diem_m02,
+                    Diem_m03: req.body.Diem_m03,
+                    Diem_m04: req.body.Diem_m04,
+                    Diem_15p01: req.body.Diem_15p01,
+                    Diem_15p02: req.body.Diem_15p02,
+                    Diem_15p03: req.body.Diem_15p03,
+                    Diem_15p04: req.body.Diem_15p04,
+                    Diem_1t01: req.body.Diem_1t01,
+                    Diem_1t02: req.body.Diem_1t02,
+                    Diem_1t03: req.body.Diem_1t03,
+                    Diem_1t04: req.body.Diem_1t04,
+                    Diem_HK: req.body.Diem_HK,
+                    Diem_TBC: TinhDiemTBC(req.body)
+                });
+                // res.status(200).json({ status: true, msg: 'Tạo mới điểm thành công!' })
                 diem.save((error, result) => {
                     if (error)
                         res.status(200).json({ status: false, msg: error, code: 'ERR_UPDATE_DIEM' })
@@ -229,7 +232,6 @@ exports.UpdateDiem = async (req, res) => {
             }
         } catch (error) {
             console.log(error);
-
             res.status(500).json({ status: false, msg: error, code: 'ERR_UPDATE_DIEM' })
         }
     }
@@ -247,4 +249,130 @@ exports.DeleteDiem = (req, res) => {
             res.status(200).json({ status: true, msg: 'Xoá điểm ' + result.TenDiem + ' thành công!' });
         })
     }
+}
+exports.excelExport = async (req, res) => {
+    // Create a new instance of a Workbook class
+    var wb = new xl.Workbook();
+
+    // Add Worksheets to the workbook
+    var ws = wb.addWorksheet('Sheet 1');
+    var style = wb.createStyle({
+        border: {
+            left: {
+                style: 'thin',
+                color: 'black',
+            },
+            right: {
+                style: 'thin',
+                color: 'black',
+            },
+            top: {
+                style: 'thin',
+                color: 'black',
+            },
+            bottom: {
+                style: 'thin',
+                color: 'black',
+            },
+            outline: false,
+        },
+        font: {
+            size: 12,
+        },
+    });
+    var styleHead = wb.createStyle({
+        border: {
+            left: {
+                style: 'thin',
+                color: 'black',
+            },
+            right: {
+                style: 'thin',
+                color: 'black',
+            },
+            top: {
+                style: 'thin',
+                color: 'black',
+            },
+            bottom: {
+                style: 'thin',
+                color: 'black',
+            },
+            outline: false,
+        },
+        font: {
+            size: 12,
+            bold: true
+        },
+    });
+    console.log({
+        NamHoc_id: req.query.NamHoc_id,
+        LopHoc_id: req.query.LopHoc_id,
+        HocKy_id: req.query.HocKy_id,
+        MonHoc_id: req.query.MonHoc_id
+    });
+
+    var data = Diem.find({
+        NamHoc_id: req.query.NamHoc_id,
+        LopHoc_id: req.query.LopHoc_id,
+        HocKy_id: req.query.HocKy_id,
+        MonHoc_id: req.query.MonHoc_id
+    })
+        .populate({ path: "HocSinh_id", select: "Ho Ten" })
+        .lean()
+        .exec((error, result) => {
+            if (error)
+                console.log(error);
+            result.map((e, i) => {
+                ws.cell(i + 5, 1).string(e.HocSinh_id.Ho).style(style);
+                ws.cell(i + 5, 2).string(e.HocSinh_id.Ten).style(style);
+                ws.cell(i + 5, 3).string(e.Diem_m01.toString()).style(style);
+                ws.cell(i + 5, 4).string(e.Diem_m02.toString()).style(style);
+                ws.cell(i + 5, 5).string(e.Diem_m03.toString()).style(style);
+                ws.cell(i + 5, 6).string(e.Diem_m04.toString()).style(style);
+                ws.cell(i + 5, 7).string(e.Diem_15p01.toString()).style(style);
+                ws.cell(i + 5, 8).string(e.Diem_15p02.toString()).style(style);
+                ws.cell(i + 5, 9).string(e.Diem_15p03.toString()).style(style);
+                ws.cell(i + 5, 10).string(e.Diem_15p04.toString()).style(style);
+                ws.cell(i + 5, 11).string(e.Diem_1t01.toString()).style(style);
+                ws.cell(i + 5, 12).string(e.Diem_1t02.toString()).style(style);
+                ws.cell(i + 5, 13).string(e.Diem_1t03.toString()).style(style);
+                ws.cell(i + 5, 14).string(e.Diem_1t04.toString()).style(style);
+                ws.cell(i + 5, 15).string(e.Diem_HK.toString()).style(style);
+                ws.cell(i + 5, 16).string(e.Diem_TBC.toString()).style(style);
+            })
+
+            // res.status(200).json(result)
+            // ws.column(1).setWidth(15);
+            // ws.column(4).setWidth(15);
+            // ws.column(7).setWidth(12);
+            // ws.column(5).setWidth(30);
+            // ws.column(6).setWidth(30);
+            // ws.cell(2, 1).string("Lớp: ");
+            // ws.cell(2, 2).string(result.LopHoc_id.TenLopHoc);
+            // ws.cell(2, 3).string("Năm học: ");
+            // ws.cell(2, 4).string(result.NamHoc_id.TenNamHoc);
+            // ws.cell(2, 5).string("Khối: ");
+            // ws.cell(2, 6).string(result.Khoi_id.TenKhoi);
+            // ws.cell(4, 1).string('Họ').style(styleHead);
+            // ws.cell(4, 2).string('Tên').style(styleHead);
+            // ws.cell(4, 3).string('Giới tính').style(styleHead);
+            // ws.cell(4, 4).string('Ngày sinh').style(styleHead);
+            // ws.cell(4, 5).string('Địa chỉ').style(styleHead);
+            // ws.cell(4, 6).string('Quê quán').style(styleHead);
+            // ws.cell(4, 7).string('Dân tộc').style(styleHead);
+            // ws.cell(4, 8).string('Tôn giáo').style(styleHead);
+
+            // result.HocSinhs.map((e, i) => {
+            //     ws.cell(i + 5, 1).string(e.Ho).style(style);
+            //     ws.cell(i + 5, 2).string(e.Ten).style(style);
+            //     ws.cell(i + 5, 3).string(e.GioiTinh == 1 ? 'Nam' : 'Nữ').style(style);
+            //     ws.cell(i + 5, 4).string(convertDate(e.NgaySinh)).style(style);
+            //     ws.cell(i + 5, 5).string(e.DiaChi).style(style);
+            //     ws.cell(i + 5, 6).string(e.QueQuan).style(style);
+            //     ws.cell(i + 5, 7).string(e.DanToc_id.TenDanToc).style(style);
+            //     ws.cell(i + 5, 8).string(e.TonGiao_id.TenTonGiao).style(style);
+            // })
+            wb.write('ExcelFile.xlsx', res);
+        })
 }

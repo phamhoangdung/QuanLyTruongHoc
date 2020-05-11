@@ -15,7 +15,6 @@ exports.selectLopHoc = async (req, res) => {
 
         result.push({ "id": e._id, "text": e.TenLopHoc });
     })
-    console.log(result);
 
     res.status(200).json(result);
 }
@@ -43,7 +42,6 @@ exports.GetLopHoc = (req, res) => {
 }
 exports.CreateLopHoc = async (req, res) => {
     try {
-        console.log(req.body);
 
         req.checkBody('TenLopHoc', 'Tên lớp học trống !').notEmpty();
         req.checkBody('SiSo', 'Sĩ số trống !').notEmpty();
