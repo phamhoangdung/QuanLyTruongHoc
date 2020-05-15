@@ -20,6 +20,7 @@
     <!-- Sidebar Menu -->
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <% if(user){ %>
         <% if(user.role === "admin"){ %>
         <li class="nav-item">
           <a href="/mon-hoc" class="nav-link">
@@ -77,6 +78,14 @@
             </p>
           </a>
         </li>
+        <li class="nav-item">
+          <a href="/phan-cong-cv" class="nav-link">
+            <i class="nav-icon far fa-calendar-alt"></i>
+            <p>
+             Phân lịch giảng dạy
+            </p>
+          </a>
+        </li>
         <% } %>
         <% if(user.role === "teacher" || user.role === "admin"){ %>
         <li class="nav-header">Giáo viên</li>
@@ -115,6 +124,7 @@
             </p>
           </a>
         </li>
+        <% } %>
         <% } %>
       </ul>
     </nav>

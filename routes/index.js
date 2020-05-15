@@ -10,6 +10,7 @@ const HocSinh = require('../controllers/HocSinh.controller');
 const PhanLop = require('../controllers/PhanLop.controller');
 const Diem = require('../controllers/Diem.controller');
 const User = require('../controllers/User.controller');
+const PhanMon = require('../controllers/PhanMon.controller');
 
 const ControllerUpload = require('../controllers/Multer.controller');
 //khai báo middleware multer ở đây
@@ -87,6 +88,12 @@ module.exports = (app) => {
   });
   app.get('/ds-hoc-sinh', isLoggedIn, AuthenticationController.roleAuthorization(['admin', 'teacher']), (req, res) => {
     res.render('DanhSachHocSinh', { user: req.user });
+  });
+  app.get('/phan-cong-cv', isLoggedIn, AuthenticationController.roleAuthorization(['admin', 'teacher']), (req, res) => {
+    res.render('PhanCongCongViec', { user: req.user });
+  });
+  app.get('/phan-mon', isLoggedIn, AuthenticationController.roleAuthorization(['admin', 'teacher']), (req, res) => {
+    res.render('PhanMon', { user: req.user });
   });
   app.get('/ds-giao-vien', isLoggedIn, AuthenticationController.roleAuthorization(['admin', 'teacher','student']), (req, res) => {
     res.render('DanhSachGiaoVien', { user: req.user });
@@ -221,6 +228,13 @@ module.exports = (app) => {
     route.post('/create', User.CreateUser);
     route.post('/change-password', User.changePassword);
     route.put('/update/:id', User.UpdateUser);
+    // route.delete('/delete/:id', User.DeleteDiem);
+  })
+  //api for QuanLyTaiKhoan
+  router.prefix('/phan-mon', (route) => {
+    route.post('/get', PhanMon.GetPhanMon);
+    route.post('/create', PhanMon.CreatePhanMon);
+    route.put('/update/:id', PhanMon.UpdatePhanMon);
     // route.delete('/delete/:id', User.DeleteDiem);
   })
 

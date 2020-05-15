@@ -1,22 +1,35 @@
 var table = $('#tblresult').DataTable({
     "processing": true,
     "serverSide": true,
+    "pageLength": 50,
     "ajax": {
         "cache": "false",
-        "url": "/api/v1/quan-ly-tai-khoan/get",
+        "url": "/api/v1/phan-mon/get",
         "type": "POST",
         "dataType": "json",
         // 'beforeSend': function (request) {
         //     request.setRequestHeader("X-CSRF-TOKEN", $('meta[name="csrf-token"]').attr('content'));
         // },
         "cache": true,
-        "dataSrc": function (json) {
-            console.log(json.data);
-
-            json.data.forEach(element => {
-                element.Method = `<a class=" my-method-button btnEdit fa-hover"    title="Sửa tài khoản" ><i class="fa fa-edit"></i></a> &nbsp
-                                <a class=" my-method-button btnDelete fa-hover"    title="Xóa tài khoản" ><i class="fa fa-trash"></i></a>`;
+        "data": function (d) {
+            Object.assign(d, {
+                "NamHoc_id": $('#NamHoc_idFilter').val(),
+                "Khoi_id": $('#Khoi_idFilter').val(),
+                "LopHoc_id": $('#LopHoc_idFilter').val(),
+                "HocKy_id": $('#HocKy_idFilter').val(),
             });
+            return d;
+        },
+        "dataSrc": function (json) {
+            if (json.data.length > 0) {
+
+                json.data.forEach(element => {
+                    console.log(element.GiaoVien_id);
+                    element.GiaoVien_id = element.GiaoVien_id == undefined ? { _id: "", TenGiaoVien: `<p style="color: cadetblue;">Chưa được phân công</p>` } : element.GiaoVien_id
+                    element.Method = `<a class=" my-method-button btnEdit fa-hover"    title="Gán giáo viên" ><i class="fa fa-edit"></i></a>`;
+                });
+            }
+
 
             return json.data;
         },
@@ -24,13 +37,19 @@ var table = $('#tblresult').DataTable({
 
     "PaginationType": "bootstrap",
     "columnDefs": [
-        { "visible": false, "targets": [1,3]},
-        // {
-        //     "className": "text-center",
-        //     "width": "50px",
-        //     "orderable": false,
-        //     "targets": 0
-        // },
+        { "visible": false, "targets": [1, 3, 6] },
+        {
+            "className": "text-center",
+            "width": "50px",
+            "orderable": false,
+            "targets": [0, 5]
+        },
+        {
+            // "className": "text-center",
+            "width": "20%",
+            "orderable": false,
+            "targets": 2
+        },
         // {
         //     "className": "text-center",
         //     "width": "60px",
@@ -51,12 +70,12 @@ var table = $('#tblresult').DataTable({
     },
     columns: [
         { "data": null },
-        { "data": '_id' },
-        { "data": 'email' },
-        { "data": 'password' },
-        { "data": 'role' },
-        { "data": 'AnhDaiDien' },
-        { "data": 'Method' }
+        { "data": 'MonHoc_id._id' },
+        { "data": 'MonHoc_id.TenMonHoc' },
+        { "data": 'GiaoVien_id._id' },
+        { "data": 'GiaoVien_id.TenGiaoVien' },
+        { "data": 'Method' },
+        { "data": '_id' }
     ],
     bAutoWidth: false,
     fnRowCallback: (nRow, aData, iDisplayIndex) => {
@@ -64,89 +83,26 @@ var table = $('#tblresult').DataTable({
         return nRow;
     },
 });
-
+$('#btnFind').on('click', () => {
+    if ($('#Khoi_idFilter').val() && $('#NamHoc_idFilter').val() && $('#LopHoc_idFilter').val()) {
+        $('#tblresult').DataTable().ajax.reload();
+    }
+})
 // insert
 
 $("#btnAdd").click(function () {
-    $('#c_email').val(null);
-    $('#c_password').val(null);
-    $('#c_role').val(null);
-    $('#c_AnhDaiDien').val(null);
+    $('#c_TenMonHoc').val(null);
+    $('#c_SoTiet').val(null);
+    $('#c_Khoi_id').empty();
     $("#editmodal").modal('show');
 });
-//---form upload image
-$('#formPostUpload').submit((e) => {
-    e.preventDefault();
-    let formipload = $('#formPostUpload')[0];
-    var data = new FormData(formipload);
-    $.ajax({
-        type: "POST",
-        enctype: 'multipart/form-data',
-        url: "uploadSingle",
-        data: data,
-        processData: false,
-        contentType: false,
-        cache: false,
-        timeout: 600000
-    }).done((data) => {
-        console.log(data);
-        $('#c_AnhDaiDien').val(data.path);
-        if (data.status) {
-            toastr["success"](data.msg);
-        }
-        else {
-            if (Array.isArray(data.msg)) {
-                data.msg.forEach((e, i) => {
-                    toastr["error"]("Lỗi số " + (i + 1) + " :" + e.msg);
-                })
-            } else {
-                toastr["warning"](data.msg);
-            }
-        }
-    })
-        .fail(() => {
-            toastr["error"]("Xảy ra lỗi, vui lòng tải lại trang!");
-        });
-})
-$('#formPutUpload').submit((e) => {
-    e.preventDefault();
-    let formipload = $('#formPutUpload')[0];
-    var data = new FormData(formipload);
-    $.ajax({
-        type: "POST",
-        enctype: 'multipart/form-data',
-        url: "uploadSingle",
-        data: data,
-        processData: false,
-        contentType: false,
-        cache: false,
-        timeout: 600000
-    }).done((data) => {
-        console.log(data);
-        $('#u_AnhDaiDien').val(data.path);
-        if (data.status) {
-            toastr["success"](data.msg);
-        }
-        else {
-            if (Array.isArray(data.msg)) {
-                data.msg.forEach((e, i) => {
-                    toastr["error"]("Lỗi số " + (i + 1) + " :" + e.msg);
-                })
-            } else {
-                toastr["warning"](data.msg);
-            }
-        }
-    })
-        .fail(() => {
-            toastr["error"]("Xảy ra lỗi, vui lòng tải lại trang!");
-        });
-})
+
 
 $('#frmPost').submit((e) => {
     e.preventDefault();
     let form = $('#frmPost').serializeArray();
     $.ajax({
-        url: "/api/v1/quan-ly-tai-khoan/create",
+        url: "/api/v1/mon-hoc/create",
         method: "POST",
         data: form,
         dataType: 'json'
@@ -173,27 +129,16 @@ $('#frmPost').submit((e) => {
         });
     $("#btnSubmitConfirm").removeAttr("disabled");
 });
-function readURL(input) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
 
-        reader.onload = function (e) {
-            $('.blah').attr('src', e.target.result);
-        }
-        reader.readAsDataURL(input.files[0]); // convert to base64 string
-    }
-}
-$(".imgInp").change(function () {
-    readURL(this);
-});
 $("#tblresult").on("click", ".btnEdit", function () {
     var obj = $('#tblresult').DataTable().row($(this).parents('tr')).data();
+    if (obj.Khoi_id) {
+        var $KhoiOption = $("<option selected='selected'></option>").val(obj.Khoi_id._id).text(obj.Khoi_id.TenKhoi);
+        $(".Khoi_id").empty().append($KhoiOption).trigger('change');
+    }
     $('#u_id').val(obj._id);
-    $('#u_email').val(obj.email);
-    $('#u_password').val(obj.password);
-    $('#u_role').val(obj.role);
-    $('#u_AnhDaiDien').val(obj.AnhDaiDien);
-    $('.blah').attr('src', obj.AnhDaiDien.replace(/\\/g,'/'));
+    $('#u_TenMonHoc').val(obj.TenMonHoc);
+    $('#u_SoTiet').val(obj.SoTiet);
     $("#updatemodal").modal('show');
 });
 
@@ -203,7 +148,7 @@ $('#frmPut').submit((e) => {
     e.preventDefault();
     let form = $('#frmPut').serializeArray();
     $.ajax({
-        url: "/api/v1/quan-ly-tai-khoan/update/" + id,
+        url: "/api/v1/mon-hoc/update/" + id,
         method: "PUT",
         data: form,
         dataType: 'json'
@@ -266,6 +211,8 @@ $('#frmDelete').submit((e) => {
         });
     $("#btnSubmitConfirm").removeAttr("disabled");
 });
+//================================================================================================
+
 $(".Khoi_id").select2({
     tags: "true",
     width: 'resolve',
@@ -292,6 +239,112 @@ $(".Khoi_id").select2({
             };
         }
     }
+});
+$(".NamHoc_id").select2({
+    tags: "true",
+    width: 'resolve',
+    multiple: false,
+    placeholder: "Chọn năm học ...",
+    theme: 'bootstrap4',
+    maximumSelectionSize: 1,
+    allowClear: true,
+    delay: 250,
+    ajax: {
+        url: '/api/v1/nam-hoc/select-nam-hoc',
+        dataType: 'json',
+        data: function (params) {
+            var query = {
+                search: params.term,
+            }
+            // Query parameters will be ?search=[term]&type=public
+            return query;
+        },
+        processResults: function (results) {
+            // Transforms the top-level key of the response object from 'items' to 'results'
+            return {
+                results: results
+            };
+        }
+    }
+});
+$(".LopHoc_id").select2({
+    tags: "true",
+    width: 'resolve',
+    placeholder: "Chọn lớp học ...",
+    theme: 'bootstrap4',
+    multiple: false,
+    allowClear: true,
+    delay: 250,
+    ajax: {
+        url: '/api/v1/lop-hoc/select-lop-hoc',
+        dataType: 'json',
+        data: function (params) {
+            var query = {
+                search: params.term,
+                NamHoc_id: $('#NamHoc_idFilter').val(),
+                Khoi_id: $('#Khoi_idFilter').val()
+            }
+            // Query parameters will be ?search=[term]&type=public
+            return query;
+        },
+        processResults: function (results) {
+            // Transforms the top-level key of the response object from 'items' to 'results'
+            return {
+                results: results
+            };
+        }
+    },
+});
+
+$(".HocKy_id").select2({
+    tags: "true",
+    width: 'resolve',
+    placeholder: "Chọn học kỳ...",
+    theme: 'bootstrap4',
+    multiple: false,
+    allowClear: true,
+    delay: 250,
+    ajax: {
+        url: '/api/v1/hoc-ky/select-hoc-ky',
+        dataType: 'json',
+        data: function (params) {
+            var query = {
+                search: params.term,
+                // NamHoc_id: $('#NamHoc_idFilter').val(),
+                Khoi_id: $('#HocKy_idFilter').val()
+            }
+            // Query parameters will be ?search=[term]&type=public
+            return query;
+        },
+        processResults: function (results) {
+            // Transforms the top-level key of the response object from 'items' to 'results'
+            return {
+                results: results
+            };
+        }
+    },
+});
+function selectdis() {
+    if ($('#Khoi_idFilter').val() && $('#NamHoc_idFilter').val()) {
+        $('#LopHoc_idFilter').prop("disabled", false);
+    } else {
+        $('#LopHoc_idFilter').prop("disabled", true);
+    }
+}
+$('#LopHoc_idFilter').prop("disabled", true);
+$('#Khoi_idFilter').on("select2:close", (e) => {
+    selectdis();
+});
+$('#NamHoc_idFilter').on("select2:close", (e) => {
+    selectdis();
+});
+$('#Khoi_idFilter').on("change", (e) => {
+    selectdis();
+    $(".LopHoc_id").empty();
+});
+$('#NamHoc_idFilter').on("change", (e) => {
+    selectdis();
+    $(".LopHoc_id").empty();
 });
 toastr.options = {
     "closeButton": true,

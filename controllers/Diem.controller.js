@@ -109,7 +109,7 @@ exports.CreateDiem = async (req, res) => {
             });
             if (phanLop) {
                 if (phanLop.HocSinhs.length > 0) {
-                    phanLop.HocSinhs.map(async (e, i) => {
+                    await phanLop.HocSinhs.map(async (e, i) => {
                         let diemCheck = await Diem.findOne({
                             HocSinh_id: e, NamHoc_id: req.body.NamHoc_id,
                             LopHoc_id: req.body.LopHoc_id,
@@ -127,7 +127,8 @@ exports.CreateDiem = async (req, res) => {
                             await diem.save();
                         }
                     })
-                    res.status(200).json({ status: true, msg: 'Tạo mới điểm thành công!' })
+                    
+                    res.status(200).json({ status: true, msg: 'Tạo mới điểm thành công' })
                 } else {
                     res.status(200).json({ status: false, msg: "Danh sách học sinh rỗng !", code: 'ERR_CREATE_DIEM' })
                 }
@@ -190,9 +191,9 @@ function TinhDiemTBC(Diem) {
     })
     let hs3 = Diem.Diem_HK == '' ? -1 : Diem.Diem_HK;
     if (hs3 >= 0) {
-        return (Math.round((sumhs1 + sumhs2 * 2 + hs3 * 3) / (demhs1 + demhs2 * 2 + 3)));
+        return (Math.round((sumhs1 + sumhs2 * 2 + hs3 * 3) / (demhs1 + demhs2 * 2 + 3) * 4) / 4).toFixed(2);
     } else {
-        return (Math.round((sumhs1 + sumhs2 * 2) / (demhs1 + demhs2 * 2)));
+        return (Math.round((sumhs1 + sumhs2 * 2) / (demhs1 + demhs2 * 2) * 4) / 4).toFixed(2);
     }
 }
 exports.UpdateDiem = async (req, res) => {
@@ -299,17 +300,16 @@ exports.excelExport = async (req, res) => {
                 color: 'black',
             },
             outline: false,
+
         },
         font: {
             size: 12,
             bold: true
         },
-    });
-    console.log({
-        NamHoc_id: req.query.NamHoc_id,
-        LopHoc_id: req.query.LopHoc_id,
-        HocKy_id: req.query.HocKy_id,
-        MonHoc_id: req.query.MonHoc_id
+        alignment: {
+            wrapText: true,
+            horizontal: 'center',
+        },
     });
 
     var data = Diem.find({
@@ -318,61 +318,41 @@ exports.excelExport = async (req, res) => {
         HocKy_id: req.query.HocKy_id,
         MonHoc_id: req.query.MonHoc_id
     })
-        .populate({ path: "HocSinh_id", select: "Ho Ten" })
+        .populate([{ path: "HocSinh_id", select: "Ho Ten" }, { path: "MonHoc_id", select: "TenMonHoc" }, { path: "LopHoc_id", select: "TenLopHoc" }])
         .lean()
         .exec((error, result) => {
+            ws.cell(2, 1).string("Môn học");
+            ws.cell(2, 2).string(result[0].MonHoc_id.TenMonHoc);
+            ws.cell(3, 1).string("Lớp học");
+            ws.cell(3, 2).string(result[0].LopHoc_id.TenLopHoc);
+            ws.cell(4, 1).string("Họ").style(styleHead);
+            ws.cell(4, 2).string("Tên").style(styleHead);
+            ws.cell(4, 3, 4, 6, true).string('Điểm miệng').style(styleHead);
+            ws.cell(4, 7, 4, 10, true).string("Điểm 15 phút").style(styleHead);
+            ws.cell(4, 11, 4, 14, true).string("Điểm 1 tiết").style(styleHead);
+            ws.cell(4, 15).string("Điểm HK").style(styleHead);
+            ws.cell(4, 16).string("Điểm TBC").style(styleHead);
             if (error)
                 console.log(error);
-            result.map((e, i) => {
-                ws.cell(i + 5, 1).string(e.HocSinh_id.Ho).style(style);
-                ws.cell(i + 5, 2).string(e.HocSinh_id.Ten).style(style);
-                ws.cell(i + 5, 3).string(e.Diem_m01.toString()).style(style);
-                ws.cell(i + 5, 4).string(e.Diem_m02.toString()).style(style);
-                ws.cell(i + 5, 5).string(e.Diem_m03.toString()).style(style);
-                ws.cell(i + 5, 6).string(e.Diem_m04.toString()).style(style);
-                ws.cell(i + 5, 7).string(e.Diem_15p01.toString()).style(style);
-                ws.cell(i + 5, 8).string(e.Diem_15p02.toString()).style(style);
-                ws.cell(i + 5, 9).string(e.Diem_15p03.toString()).style(style);
-                ws.cell(i + 5, 10).string(e.Diem_15p04.toString()).style(style);
-                ws.cell(i + 5, 11).string(e.Diem_1t01.toString()).style(style);
-                ws.cell(i + 5, 12).string(e.Diem_1t02.toString()).style(style);
-                ws.cell(i + 5, 13).string(e.Diem_1t03.toString()).style(style);
-                ws.cell(i + 5, 14).string(e.Diem_1t04.toString()).style(style);
-                ws.cell(i + 5, 15).string(e.Diem_HK.toString()).style(style);
-                ws.cell(i + 5, 16).string(e.Diem_TBC.toString()).style(style);
-            })
-
-            // res.status(200).json(result)
-            // ws.column(1).setWidth(15);
-            // ws.column(4).setWidth(15);
-            // ws.column(7).setWidth(12);
-            // ws.column(5).setWidth(30);
-            // ws.column(6).setWidth(30);
-            // ws.cell(2, 1).string("Lớp: ");
-            // ws.cell(2, 2).string(result.LopHoc_id.TenLopHoc);
-            // ws.cell(2, 3).string("Năm học: ");
-            // ws.cell(2, 4).string(result.NamHoc_id.TenNamHoc);
-            // ws.cell(2, 5).string("Khối: ");
-            // ws.cell(2, 6).string(result.Khoi_id.TenKhoi);
-            // ws.cell(4, 1).string('Họ').style(styleHead);
-            // ws.cell(4, 2).string('Tên').style(styleHead);
-            // ws.cell(4, 3).string('Giới tính').style(styleHead);
-            // ws.cell(4, 4).string('Ngày sinh').style(styleHead);
-            // ws.cell(4, 5).string('Địa chỉ').style(styleHead);
-            // ws.cell(4, 6).string('Quê quán').style(styleHead);
-            // ws.cell(4, 7).string('Dân tộc').style(styleHead);
-            // ws.cell(4, 8).string('Tôn giáo').style(styleHead);
-
-            // result.HocSinhs.map((e, i) => {
-            //     ws.cell(i + 5, 1).string(e.Ho).style(style);
-            //     ws.cell(i + 5, 2).string(e.Ten).style(style);
-            //     ws.cell(i + 5, 3).string(e.GioiTinh == 1 ? 'Nam' : 'Nữ').style(style);
-            //     ws.cell(i + 5, 4).string(convertDate(e.NgaySinh)).style(style);
-            //     ws.cell(i + 5, 5).string(e.DiaChi).style(style);
-            //     ws.cell(i + 5, 6).string(e.QueQuan).style(style);
-            //     ws.cell(i + 5, 7).string(e.DanToc_id.TenDanToc).style(style);
-            //     ws.cell(i + 5, 8).string(e.TonGiao_id.TenTonGiao).style(style);
-            // })
+            else
+                result.map((e, i) => {
+                    ws.cell(i + 5, 1).string(e.HocSinh_id.Ho).style(style);
+                    ws.cell(i + 5, 2).string(e.HocSinh_id.Ten).style(style);
+                    ws.cell(i + 5, 3).string(e.Diem_m01.toString()).style(style);
+                    ws.cell(i + 5, 4).string(e.Diem_m02.toString()).style(style);
+                    ws.cell(i + 5, 5).string(e.Diem_m03.toString()).style(style);
+                    ws.cell(i + 5, 6).string(e.Diem_m04.toString()).style(style);
+                    ws.cell(i + 5, 7).string(e.Diem_15p01.toString()).style(style);
+                    ws.cell(i + 5, 8).string(e.Diem_15p02.toString()).style(style);
+                    ws.cell(i + 5, 9).string(e.Diem_15p03.toString()).style(style);
+                    ws.cell(i + 5, 10).string(e.Diem_15p04.toString()).style(style);
+                    ws.cell(i + 5, 11).string(e.Diem_1t01.toString()).style(style);
+                    ws.cell(i + 5, 12).string(e.Diem_1t02.toString()).style(style);
+                    ws.cell(i + 5, 13).string(e.Diem_1t03.toString()).style(style);
+                    ws.cell(i + 5, 14).string(e.Diem_1t04.toString()).style(style);
+                    ws.cell(i + 5, 15).string(e.Diem_HK.toString()).style(style);
+                    ws.cell(i + 5, 16).string(e.Diem_TBC.toString()).style(style);
+                })
             wb.write('ExcelFile.xlsx', res);
         })
 }

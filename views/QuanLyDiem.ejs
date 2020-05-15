@@ -66,14 +66,21 @@
                                     style="width: 100%">
                                 </select>
                             </div>
+                            <div class="col-md-1">
+                                <button type="button" class="btn btn-success" id="btnFind" name="btnFind"
+                                    style="margin-top: 31px;width: 100%;"><i class="fas fa-search"></i></i>&nbsp;
+                                    Lọc</button>
+                            </div>
                         </div>
                         <!-- /.row -->
                     </div>
                     <div class="card-footer">
                         <div class="row">
-                            <div class="col-2">
-                                <button type="button" class="btn btn-success" id="btnFind" name="btnFind"><i
-                                        class="fas fa-search"></i></i>&nbsp; Tìm kiếm</button>
+                            <div class="col-md-12">
+                                <button type="button" class="btn btn-info" id="btnAdd" name="btnAdd"><i
+                                        class="far fa-plus-square"></i>&nbsp; Tạo bảng điểm</button>
+                                <button type="button" class="btn btn-success" id="btnExcel" name="btnExcel"><i
+                                        class="far fa-file-excel"></i>&nbsp; Xuất excel</button>
                             </div>
                         </div>
                     </div>
@@ -82,59 +89,73 @@
             <div class="col-12">
                 <div class="card card-info">
                     <div class="card-header">
-                        <h3 class="card-title"><strong>Danh sách học sinh</strong></h3>
+                        <h3 class="card-title"><strong>Bảng điểm</strong></h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <table id="tblresult" class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>STT</th>
-                                    <th>ID</th>
-                                    <th>ID học sinh</th>
-                                    <th>Họ</th>
-                                    <th>Tên</th>
-                                    <th colspan="4">Điểm KT miệng</th>
-                                    <th colspan="4">Điểm KT 15 phút</th>
-                                    <th colspan="4">Điểm KT 1 tiết</th>
-                                    <th>Điểm KT HK</th>
-                                    <th>Điểm TBC</th>
-                                    <th>Xếp loại</th>
-                                    <th>Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>STT</th>
-                                    <th>ID</th>
-                                    <th>ID học sinh</th>
-                                    <th>Họ</th>
-                                    <th>Tên</th>
-                                    <th colspan="4">Điểm miệng</th>
-                                    <th colspan="4">Điểm KT 15 phút</th>
-                                    <th colspan="4">Điểm KT 1 tiết</th>
-                                    <th>Điểm KT HK</th>
-                                    <th>Điểm TBC</th>
-                                    <th>Xếp loại</th>
-                                    <th>Thao tác</th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                    <!-- /.card-body -->
-                    <div class="card-footer">
                         <div class="row">
-                            <div class="col-md-1">
-                                <button type="button" class="btn btn-success" id="btnExcel" name="btnExcel" style="width: 100%"><i
-                                        class="far fa-file-excel"></i>&nbsp; Xuất excel</button>
+                            <div class="col-6 col-md-6 col-sm-12">
+                                <table id="tableinfo" style="margin-bottom: 50px;width: 100%;">
+                                    <tbody>
+                                        <tr>
+                                            <th>Giáo viên giảng dạy:</th>
+                                            <td><span id="TenGiaoVien"></span></td>
+                                            <th>khối:</th>
+                                            <td><span id="TenKhoi"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Môn học:</th>
+                                            <td><span id="TenMonHoc"></span></td>
+                                            <th>Năm học:</th>
+                                            <td><span id="TenNamHoc"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <th>lớp</th>
+                                            <td><span id="TenLop"></span></td>
+                                            <th>Học kỳ</th>
+                                            <td><span id="TenHocKy"></span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
-                            <div class="col-md-2">
-                                <button type="button" class="btn btn-info" id="btnAdd" name="btnAdd"><i
-                                        class="far fa-plus-square"></i>&nbsp; Tạo bảng điểm</button>
+                            <div class="col-12">
+                                <table id="tblresult" class="table table-bordered table-striped dataTable">
+                                    <thead>
+                                        <tr>
+                                            <th rowspan="2">STT</th>
+                                            <th rowspan="2">ID</th>
+                                            <th rowspan="2">ID học sinh</th>
+                                            <th rowspan="2">Họ</th>
+                                            <th rowspan="2">Tên</th>
+                                            <th colspan="4" style="text-align: center;">Điểm KT miệng</th>
+                                            <th colspan="4" style="text-align: center;">Điểm KT 15 phút</th>
+                                            <th colspan="4" style="text-align: center;">Điểm KT 1 tiết</th>
+                                            <th rowspan="2">Điểm HK</th>
+                                            <th rowspan="2">Điểm TBC</th>
+                                            <th rowspan="2">Xếp loại</th>
+                                            <th rowspan="2">Thao tác</th>
+                                        </tr>
+                                        <tr>
+                                            <th>1</th>
+                                            <th>2</th>
+                                            <th>3</th>
+                                            <th>4</th>
+                                            <th>1</th>
+                                            <th>2</th>
+                                            <th>3</th>
+                                            <th>4</th>
+                                            <th>1</th>
+                                            <th>2</th>
+                                            <th>3</th>
+                                            <th>4</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
+
                     </div>
                 </div>
                 <!-- /.card -->

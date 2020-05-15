@@ -62,15 +62,6 @@ var table = $('#tblresult').DataTable({
             "width": "60px",
             "targets": 4
         },
-        {
-            "className": "text-center",
-            "render": (data, type, row) => {
-                return data == 1 ? '<i class="fa fa-toggle-on" title="Đã được thêm vào lớp" style="color:green"></i>' : '<i class="fa fa-toggle-off" title="Chưa được thêm vào lớp nào"></i>'
-            },
-            "orderable": false,
-            "width": "50px",
-            "targets": 13
-        },
     ],
     "language": {
         "sLengthMenu": "Số bản ghi hiển thị trên 1 trang _MENU_ ",
@@ -97,7 +88,6 @@ var table = $('#tblresult').DataTable({
         { "data": 'DanToc_id.TenDanToc' },
         { "data": 'TonGiao_id._id' },
         { "data": 'TonGiao_id.TenTonGiao' },
-        { "data": 'isClass' },
     ],
     bAutoWidth: false,
     fnRowCallback: (nRow, aData, iDisplayIndex) => {
@@ -521,10 +511,12 @@ $('#frmDelete').submit((e) => {
 });
 
 //================================================Select2 setting=================================================================
-
 $('#btnFind').on('click', () => {
     if ($('#Khoi_idFilter').val() && $('#NamHoc_idFilter').val() && $('#LopHoc_idFilter').val()) {
         $('#tblresult').DataTable().ajax.reload();
+        console.log($('#LopHoc_idFilter option:selected').text());
+        
+        $('#headertext').text("Danh sách học sinh " + $('#LopHoc_idFilter option:selected').text())
         //table.clear().draw();
         //table.rows.add(NewlyCreatedData); // Add new data
         //table.columns.adjust().draw();

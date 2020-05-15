@@ -9,7 +9,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">phan-lop</li>
+                        <li class="breadcrumb-item active">monhoc</li>
                     </ol>
                 </div>
             </div>
@@ -21,9 +21,10 @@
         <div class="row">
             <div class="col-12">
                 <!-- /.card -->
+
                 <div class="card card-success">
                     <div class="card-header">
-                        <h3 class="card-title">Lọc danh sách học sinh của lớp học</h3>
+                        <h3 class="card-title">Tìm kiếm danh sách học sinh của lớp học</h3>
 
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
@@ -35,56 +36,54 @@
                     <!-- /.card-header -->
                     <div class="card-body">
                         <div class="row form-group">
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <label for="Khoi_id">Khối</label>
                                 <select name="Khoi_id" class="form-control Khoi_id" id="Khoi_idFilter"
                                     style="width: 100%">
                                 </select>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <label for="NamHoc_id">Năm học</label>
                                 <select name="NamHoc_id" class="form-control NamHoc_id" id="NamHoc_idFilter"
                                     style="width: 100%">
                                 </select>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <label for="LopHoc_id">Lớp học</label>
                                 <select name="LopHoc_id" class="form-control LopHoc_id" id="LopHoc_idFilter"
                                     style="width: 100%">
                                 </select>
                             </div>
-                            <div class="col-md-2 col-sm-2">
+                            <div class="col-md-2">
+                                <label for="HocKy_id">Học kỳ</label>
+                                <select name="HocKy_id" class="form-control HocKy_id" id="HocKy_idFilter"
+                                    style="width: 100%">
+                                </select>
+                            </div>
+                            <div class="col-md-1">
                                 <button type="button" class="btn btn-success" id="btnFind" name="btnFind"
-                                    style="margin-top: 31px;width: 100%;"><i class="fas fa-search"></i></i>&nbsp; Lọc DS
-                                    học sinh</button>
+                                    style="margin-top: 31px;width: 100%;"><i class="fas fa-search"></i></i>&nbsp;
+                                    Lọc</button>
                             </div>
                         </div>
                         <!-- /.row -->
                     </div>
                     <div class="card-footer">
-                        <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <button type="button" class="btn btn-info" id="btnSync" name="btnSync"><i
-                                            class="fas fa-th-list"></i></i>&nbsp; DS-HS Chưa phân lớp</button>
-                                    <button type="button" class="btn btn-primary" id="btnAdd" name="btnAdd"><i
-                                            class="far fa-plus-square"></i>&nbsp; Khởi tạo lớp</button>
-                                    <button type="button" class="btn btn-primary" id="btnUpdate" name="btnUpdate"><i
-                                            class="far fa-edit"></i>&nbsp; Sửa DS</button>
-                                    <button type="button" class="btn btn-primary" id="btnExcel" name="btnExcel"><i
-                                            class="fas fa-chalkboard-teacher"></i></i>&nbsp; Gán giáo viên CN</button>
-                                    <button type="button" class="btn btn-success" id="btnExcel" name="btnExcel"><i
-                                            class="far fa-file-excel"></i>&nbsp; Xuất excel</button>
-                                </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button type="button" class="btn btn-info" id="btnAdd" name="btnAdd"><i
+                                        class="far fa-plus-square"></i>&nbsp; Tạo bảng điểm</button>
+                                <button type="button" class="btn btn-success" id="btnExcel" name="btnExcel"><i
+                                        class="far fa-file-excel"></i>&nbsp; Xuất excel</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-12">
-                <div class="card card-info">
+                <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title" id="headertext">Danh sách học sinh chưa phân lớp</strong></h3>
+                        <h3 class="card-title">Danh sách giáo viên được phân công giảng dạy</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
@@ -92,18 +91,12 @@
                             <thead>
                                 <tr>
                                     <th>STT</th>
-                                    <th>ID</th>
-                                    <th>Họ</th>
-                                    <th>Tên</th>
-                                    <th>Giới tính</th>
-                                    <th>Ngày sinh</th>
-                                    <th>Địa chỉ</th>
-                                    <th>Quê quán</th>
-                                    <th>Ảnh</th>
-                                    <th>ID dân tộc</th>
-                                    <th>Dân tộc</th>
-                                    <th>ID tôn giáo</th>
-                                    <th>Tôn giáo</th>
+                                    <th>MonHoc_id</th>
+                                    <th>Tên môn học</th>
+                                    <th>GiaoVien_id</th>
+                                    <th>Tên giáo viên phụ trách</th>
+                                    <th>Thao tác</th>
+                                    <th>_id</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -112,7 +105,10 @@
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer">
-
+                        <div class="col-12">
+                            <button type="button" class="btn btn-primary" id="btnAdd" name="btnAdd"><i
+                                    class="fa fa-plus"></i>&nbsp; Thêm</button>
+                        </div>
                     </div>
                 </div>
                 <!-- /.card -->
@@ -156,43 +152,34 @@
 
 
 <!-- The Modal create -->
-<div class="modal fade" id="createModal" style="height: 80%;">
+<div class="modal fade" id="editmodal">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h4 class="modal-title">Tạo mới danh sách học sinh của lớp học</h4>
+                <h4 class="modal-title">Tạo mới môn học</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <!-- Modal body -->
             <div class="modal-body">
-                <form id="frmPost">
+                <form role="form" id="frmPost" method="Post">
                     <div class="card-body">
                         <div class="row form-group">
-                            <div class="col-md-12">
-                                <table id="tblresultCreate" class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th><input type="checkbox" name="select_all" value="1"
-                                                    id="select-all-create"></th>
-                                            <th>ID</th>
-                                            <th>Họ</th>
-                                            <th>Tên</th>
-                                            <th>Giới tính</th>
-                                            <th>Ngày sinh</th>
-                                            <th>Địa chỉ</th>
-                                            <th>Quê quán</th>
-                                            <th>Ảnh</th>
-                                            <th>ID dân tộc</th>
-                                            <th>Dân tộc</th>
-                                            <th>ID tôn giáo</th>
-                                            <th>Tôn giáo</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
+                            <div class="col-md-6">
+                                <label for="viTri">Tên môn học</label>
+                                <input type="text" class="form-control" id="c_TenMonHoc" name="TenMonHoc"
+                                    placeholder="Tên môn học...">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="viTri">Số tiết</label>
+                                <input type="number" class="form-control" id="c_SoTiet" name="SoTiet"
+                                    placeholder="Số tiết...">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="Khoi_id">Khối</label>
+                                <select name="Khoi_id" class="form-control Khoi_id" style="width: 100%">
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -210,9 +197,10 @@
 
 
 <!-- The Modal update -->
-<div class="modal fade" id="updateModal">
+<div class="modal fade" id="updatemodal">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
+
             <!-- Modal Header -->
             <div class="modal-header">
                 <h4 class="modal-title">Chỉnh sửa thông tin môn học</h4>
@@ -220,33 +208,24 @@
             </div>
             <!-- Modal body -->
             <div class="modal-body">
-                <form role="form" id="frmPut">
+                <form role="form" id="frmPut" method="Put">
                     <input type="hidden" id="u_id">
                     <div class="card-body">
                         <div class="row form-group">
-                            <div class="col-md-12">
-                                <table id="tblresultUpdate" class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th><input type="checkbox" name="select_all" value="1"
-                                                    id="select-all-update"></th>
-                                            <th>ID</th>
-                                            <th>Họ</th>
-                                            <th>Tên</th>
-                                            <th>Giới tính</th>
-                                            <th>Ngày sinh</th>
-                                            <th>Địa chỉ</th>
-                                            <th>Quê quán</th>
-                                            <th>Ảnh</th>
-                                            <th>ID dân tộc</th>
-                                            <th>Dân tộc</th>
-                                            <th>ID tôn giáo</th>
-                                            <th>Tôn giáo</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
+                            <div class="col-md-6">
+                                <label for="viTri">Tên môn học</label>
+                                <input type="text" class="form-control" id="u_TenMonHoc" name="TenMonHoc"
+                                    placeholder="Tên môn học...">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="viTri">Số tiết</label>
+                                <input type="number" class="form-control" id="u_SoTiet" name="SoTiet"
+                                    placeholder="Số tiết...">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="Khoi_id">Khối</label>
+                                <select name="Khoi_id" class="form-control Khoi_id" style="width: 100%">
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -263,4 +242,4 @@
 </div>
 
 <%- contentFor('pageSectionA')%>
-<script src="public/javascripts/PhanLop.js"></script>
+<script src="public/javascripts/PhanMon.js"></script>

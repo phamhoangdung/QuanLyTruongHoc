@@ -6,7 +6,6 @@ const PhanLop = require('../models/PhanLop.model');
 var xl = require('excel4node');
 exports.GetLopHocSinh = async (req, res) => {
     if (req.body.LopHoc_id && req.body.NamHoc_id && req.body.Khoi_id) {
-        console.log(req.body.update);
 
         if (req.body.update) {
             const options = {
@@ -64,7 +63,7 @@ exports.GetLopHocSinh = async (req, res) => {
                 locale: 'en'
             }
         };
-        if (req.body.create) {
+        // if (req.body.create) {
             HocSinh.paginate({ isClass: false }, options, (error, result) => {
                 if (error) {
                     res.status(200).json({ status: false, msg: error, code: 'ERR_GET_HOCSINH' });
@@ -72,15 +71,15 @@ exports.GetLopHocSinh = async (req, res) => {
                     res.status(200).json({ status: true, data: result.docs, recordsTotal: result.limit, recordsFiltered: result.totalDocs })
                 }
             })
-        } else {
-            HocSinh.paginate({}, options, (error, result) => {
-                if (error) {
-                    res.status(200).json({ status: false, msg: error, code: 'ERR_GET_HOCSINH' });
-                } else {
-                    res.status(200).json({ status: true, data: result.docs, recordsTotal: result.limit, recordsFiltered: result.totalDocs })
-                }
-            })
-        }
+        // } else {
+        //     HocSinh.paginate({}, options, (error, result) => {
+        //         if (error) {
+        //             res.status(200).json({ status: false, msg: error, code: 'ERR_GET_HOCSINH' });
+        //         } else {
+        //             res.status(200).json({ status: true, data: result.docs, recordsTotal: result.limit, recordsFiltered: result.totalDocs })
+        //         }
+        //     })
+        // }
     }
 }
 exports.CreateLopHocSinh = async (req, res) => {
