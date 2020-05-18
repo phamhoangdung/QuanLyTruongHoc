@@ -9,7 +9,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">monhoc</li>
+                        <li class="breadcrumb-item active">phan-mon</li>
                     </ol>
                 </div>
             </div>
@@ -24,7 +24,7 @@
 
                 <div class="card card-success">
                     <div class="card-header">
-                        <h3 class="card-title">Tìm kiếm danh sách học sinh của lớp học</h3>
+                        <h3 class="card-title">Tìm kiếm danh sách phân môn</h3>
 
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
@@ -71,8 +71,8 @@
                     <div class="card-footer">
                         <div class="row">
                             <div class="col-md-12">
-                                <button type="button" class="btn btn-info" id="btnAdd" name="btnAdd"><i
-                                        class="far fa-plus-square"></i>&nbsp; Tạo bảng điểm</button>
+                                <button type="button" class="btn btn-primary" id="btnAdd" name="btnAdd"><i
+                                        class="fa fa-plus"></i>&nbsp; Tạo bảng phân môn</button>
                                 <button type="button" class="btn btn-success" id="btnExcel" name="btnExcel"><i
                                         class="far fa-file-excel"></i>&nbsp; Xuất excel</button>
                             </div>
@@ -103,13 +103,6 @@
                             </tbody>
                         </table>
                     </div>
-                    <!-- /.card-body -->
-                    <div class="card-footer">
-                        <div class="col-12">
-                            <button type="button" class="btn btn-primary" id="btnAdd" name="btnAdd"><i
-                                    class="fa fa-plus"></i>&nbsp; Thêm</button>
-                        </div>
-                    </div>
                 </div>
                 <!-- /.card -->
             </div>
@@ -120,82 +113,6 @@
     <!-- /.content -->
 </div>
 
-<!-- The Modal delete-->
-<div class="modal fade" id="deletemodal">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h4 class="modal-title">Xoá môn học</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-
-            <!-- Modal body -->
-            <div class="modal-body">
-                <h5></h5>
-                <form method="post" class="form-horizontal" id="frmDelete">
-                    <input type="hidden" id="r_id">
-                </form>
-            </div>
-
-            <!-- Modal footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
-                <button type="submit" class="btn btn-success" form="frmDelete" id="btnSubmit">Xóa</button>
-            </div>
-
-        </div>
-    </div>
-</div>
-<!-- ! The Modal appConfirm-->
-
-
-<!-- The Modal create -->
-<div class="modal fade" id="editmodal">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h4 class="modal-title">Tạo mới môn học</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <!-- Modal body -->
-            <div class="modal-body">
-                <form role="form" id="frmPost" method="Post">
-                    <div class="card-body">
-                        <div class="row form-group">
-                            <div class="col-md-6">
-                                <label for="viTri">Tên môn học</label>
-                                <input type="text" class="form-control" id="c_TenMonHoc" name="TenMonHoc"
-                                    placeholder="Tên môn học...">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="viTri">Số tiết</label>
-                                <input type="number" class="form-control" id="c_SoTiet" name="SoTiet"
-                                    placeholder="Số tiết...">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="Khoi_id">Khối</label>
-                                <select name="Khoi_id" class="form-control Khoi_id" style="width: 100%">
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <!-- Modal footer -->
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-success" form="frmPost" id="btnSubmitConfirm">Thêm</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- ! The Modal create -->
-
-
 <!-- The Modal update -->
 <div class="modal fade" id="updatemodal">
     <div class="modal-dialog modal-xl">
@@ -203,34 +120,33 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h4 class="modal-title">Chỉnh sửa thông tin môn học</h4>
+                <h4 class="modal-title">Gán giáo viên</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <!-- Modal body -->
-            <div class="modal-body">
-                <form role="form" id="frmPut" method="Put">
-                    <input type="hidden" id="u_id">
-                    <div class="card-body">
-                        <div class="row form-group">
-                            <div class="col-md-6">
-                                <label for="viTri">Tên môn học</label>
-                                <input type="text" class="form-control" id="u_TenMonHoc" name="TenMonHoc"
-                                    placeholder="Tên môn học...">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="viTri">Số tiết</label>
-                                <input type="number" class="form-control" id="u_SoTiet" name="SoTiet"
-                                    placeholder="Số tiết...">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="Khoi_id">Khối</label>
-                                <select name="Khoi_id" class="form-control Khoi_id" style="width: 100%">
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
+            <form id="frmPut">
+                <input type="hidden" id="u_id">
+                <input type="hidden" id="MonHoc_id">
+                <div class="modal-body">
+                    <table id="tblresult-gv" class="table table-bordered table-striped display" style="width: 100%">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>ID</th>
+                                <th>Họ</th>
+                                <th>Tên</th>
+                                <th>Ngày sinh</th>
+                                <th>Giới tính</th>
+                                <th>Địa chỉ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+
             <!-- Modal footer -->
             <div class="modal-footer">
                 <button type="submit" class="btn btn-success" form="frmPut" id="btnSubmitUpdate">Cập nhật</button>

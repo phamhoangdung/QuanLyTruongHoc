@@ -22,12 +22,15 @@ var table = $('#tblresult').DataTable({
         },
         "dataSrc": function (json) {
             if (json.data.length > 0) {
-
                 json.data.forEach(element => {
                     console.log(element.GiaoVien_id);
-                    element.GiaoVien_id = element.GiaoVien_id == undefined ? { _id: "", TenGiaoVien: `<p style="color: cadetblue;">Chưa được phân công</p>` } : element.GiaoVien_id
+                    element.GiaoVien_id = element.GiaoVien_id == undefined ? { _id: "", TenGiaoVien: `<p style="color: cadetblue;">Chưa được phân công</p>` } : 
+                    { _id: element.GiaoVien_id._id, TenGiaoVien: `<p style="color: #2089f9;">` + element.GiaoVien_id.Ho + " " + element.GiaoVien_id.Ten + `</p>` };
                     element.Method = `<a class=" my-method-button btnEdit fa-hover"    title="Gán giáo viên" ><i class="fa fa-edit"></i></a>`;
                 });
+            }
+            else {
+                toastr["info"]("Không có dữ liệu, chọn khởi tạo bảng phân môn !")
             }
 
 
@@ -89,12 +92,119 @@ $('#btnFind').on('click', () => {
     }
 })
 // insert
+var tablegv = $('#tblresult-gv').DataTable({
+    "processing": true,
+    "serverSide": true,
+    "ajax": {
+        "cache": "false",
+        "url": "/api/v1/giao-vien/get",
+        "type": "POST",
+        "dataType": "json",
+        // 'beforeSend': function (request) {
+        //     request.setRequestHeader("X-CSRF-TOKEN", $('meta[name="csrf-token"]').attr('content'));
+        // },
+        "cache": true,
+        "dataSrc": function (json) {
+            json.data.forEach(element => {
+                let date = new Date(element.NgaySinh);
+                element.NgaySinh = ((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + ((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + date.getFullYear();
+            });
 
+            return json.data;
+        },
+    },
+
+    "PaginationType": "bootstrap",
+    "columnDefs": [
+        {
+            "orderable": false,
+            "className": 'select-checkbox',
+            "targets": 0
+        },
+        { "visible": false, "targets": 1 },
+        // {
+        //     "className": "text-center",
+        //     "width": "50px",
+        //     "orderable": false,
+        //     "targets": 0
+        // },
+        {
+            "className": "text-center",
+            "render": (data, type, row) => {
+                return data == 1 ? 'Nam' : 'Nữ'
+            },
+            "orderable": false,
+            "width": "60px",
+            "targets": 5
+        },
+    ],
+    "select": {
+        "style": 'os',
+        "selector": 'td:first-child'
+    },
+    "language": {
+        "sLengthMenu": "Số bản ghi hiển thị trên 1 trang _MENU_ ",
+        "sInfo": "Hiển thị từ _START_ đến _END_ của _TOTAL_ bản ghi",
+        "search": "Tìm kiếm:",
+        "oPaginate": {
+            "sFirst": "Đầu",
+            "sPrevious": "Trước",
+            "sNext": "Tiếp",
+            "sLast": "Cuối"
+        }
+    },
+    "columns": [
+        { "data": null },
+        { "data": '_id' },
+        { "data": 'Ho' },
+        { "data": 'Ten' },
+        { "data": 'NgaySinh' },
+        { "data": 'GioTinh' },
+        { "data": 'DiaChi' },
+    ],
+    bAutoWidth: false,
+    fnRowCallback: (nRow, aData, iDisplayIndex) => {
+        $("td:first", nRow).html("");
+        return nRow;
+    },
+});
+let GiaoVien_id = tablegv.on('select', function (e, dt, type, indexes) {
+    var bla = dt.row({ selected: true }).data()
+    return bla;
+})
 $("#btnAdd").click(function () {
-    $('#c_TenMonHoc').val(null);
-    $('#c_SoTiet').val(null);
-    $('#c_Khoi_id').empty();
-    $("#editmodal").modal('show');
+    let form = [
+        { name: 'NamHoc_id', value: $('#NamHoc_idFilter').val() },
+        { name: 'LopHoc_id', value: $('#LopHoc_idFilter').val() },
+        { name: 'HocKy_id', value: $('#HocKy_idFilter').val() },
+        { name: 'Khoi_id', value: $('#Khoi_idFilter').val() },
+    ]
+    $.ajax({
+        url: "/api/v1/phan-mon/create",
+        method: "POST",
+        data: form,
+        dataType: 'json'
+    })
+        .done((data) => {
+            if (data.status) {
+                $('#tblresult').DataTable().ajax.reload();
+                // $("#editmodal").modal('hide');
+                toastr["success"](data.msg);
+            }
+            else {
+                if (Array.isArray(data.msg)) {
+                    data.msg.forEach((e, i) => {
+                        toastr["error"]("Lỗi số " + (i + 1) + " :" + e.msg);
+                    })
+                } else {
+                    toastr["warning"](data.msg);
+                }
+            }
+        })
+        .fail(() => {
+            // $("#editmodal").modal('hide');
+            toastr["error"]("Xảy ra lỗi, vui lòng tải lại trang!");
+        });
 });
 
 
@@ -137,18 +247,21 @@ $("#tblresult").on("click", ".btnEdit", function () {
         $(".Khoi_id").empty().append($KhoiOption).trigger('change');
     }
     $('#u_id').val(obj._id);
-    $('#u_TenMonHoc').val(obj.TenMonHoc);
-    $('#u_SoTiet').val(obj.SoTiet);
+    $("#MonHoc_id").val(obj.MonHoc_id._id);
     $("#updatemodal").modal('show');
 });
 
 // update
 $('#frmPut').submit((e) => {
-    var id = $('#u_id').val();
     e.preventDefault();
-    let form = $('#frmPut').serializeArray();
+    var id = $('#u_id').val();
+    let form = {
+        "GiaoVien_id": $('#tblresult-gv').DataTable().row({ selected: true }).data()._id,
+    };
+    console.log(form);
+
     $.ajax({
-        url: "/api/v1/mon-hoc/update/" + id,
+        url: "/api/v1/phan-mon/update/" + id,
         method: "PUT",
         data: form,
         dataType: 'json'

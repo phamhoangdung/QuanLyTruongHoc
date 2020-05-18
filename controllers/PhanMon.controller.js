@@ -8,7 +8,7 @@ exports.GetPhanMon = (req, res) => {
         page: req.body.draw,
         sort: { created_at: -1 },
         populate: [{ path: "MonHoc_id", select: "_id TenMonHoc" },
-        { path: "GiaoVien_id", select: "_id TenGiaoVien" },
+        { path: "GiaoVien_id" , select: "_id Ho Ten"},
         { path: "HocKy_id", select: "_id TenHocKy" },
         { path: "NamHoc_id", select: "_id TenNamHoc" },
         { path: "LopHoc_id", select: "_id TenLopHoc" }],
@@ -32,7 +32,7 @@ exports.GetPhanMon = (req, res) => {
 }
 exports.CreatePhanMon = async (req, res) => {
     req.checkBody('HocKy_id', 'Học kỳ chưa được chọn !').notEmpty();
-    req.checkBody('MonHoc_id', 'Môn học chưa được chọn !').notEmpty();
+    // req.checkBody('MonHoc_id', 'Môn học chưa được chọn !').notEmpty();
     req.checkBody('LopHoc_id', 'Lớp học chưa được chọn !').notEmpty();
     req.checkBody('NamHoc_id', 'Năm học chưa được chọn !').notEmpty();
     const errors = req.validationErrors();
@@ -63,25 +63,27 @@ exports.CreatePhanMon = async (req, res) => {
     }
 }
 exports.UpdatePhanMon = async (req, res) => {
-    req.checkBody('TenPhanMon', 'Tên Phân môn trống !').notEmpty();
+    req.checkBody('GiaoVien_id', 'giáo viên trống !').notEmpty();
     req.checkParams('id', 'id Phân môn trống !').isMongoId();
     const errors = req.validationErrors();
     if (errors) {
         res.status(200).json({ status: false, msg: errors[0], code: 'ERR_UPDATE_PhanMon' });
     } else {
         try {
-            const PhanMon = await PhanMon.findById(req.params.id);
-            if (PhanMon) {
-                PhanMon.set(req.body);
-                PhanMon.save((error, result) => {
+            const phanMon = await PhanMon.findById(req.params.id);
+            if (phanMon) {
+                phanMon.set(req.body);
+                phanMon.save((error, result) => {
                     if (error)
                         res.status(200).json({ status: false, msg: error, code: 'ERR_UPDATE_PhanMon' })
-                    res.status(200).json({ status: true, msg: 'Cập nhật mới Phân môn thành công!', data: PhanMon })
+                    res.status(200).json({ status: true, msg: 'Cập nhật mới Phân môn thành công!', data: phanMon })
                 })
             } else {
                 res.status(200).json({ status: false, msg: 'Không có dữ liệu', code: 'ERR_UPDATE_PhanMon' })
             }
         } catch (error) {
+            console.log(error);
+            
             res.status(500).json({ status: false, msg: error, code: 'ERR_UPDATE_PhanMon' })
         }
     }
