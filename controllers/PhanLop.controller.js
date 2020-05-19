@@ -2,6 +2,7 @@ const HocSinh = require('../models/HocSinh.model');
 const LopHoc = require('../models/LopHoc.model');
 const NamHoc = require('../models/NamHoc.model');
 const Khoi = require('../models/Khoi.model');
+const GiaoVien = require('../models/GiaoVien.model');
 const PhanLop = require('../models/PhanLop.model');
 var xl = require('excel4node');
 exports.GetLopHocSinh = async (req, res) => {
@@ -19,13 +20,7 @@ exports.GetLopHocSinh = async (req, res) => {
                 }
             };
             let phanLop = await PhanLop.findOne({ LopHoc_id: req.body.LopHoc_id, NamHoc_id: req.body.NamHoc_id, Khoi_id: req.body.Khoi_id });
-            // HocSinh.find({ $or: [{ _id: { $in: phanLop.HocSinhs } }, { isClass: false }] }, (error, result) => {
-            //     if (error) {
-            //         res.status(200).json({ status: false, msg: error, code: 'ERR_GET_HOCSINH' });
-            //     } else {
-            //         res.status(200).json({ status: true, data: result })
-            //     }
-            // })
+
             HocSinh.paginate({ $or: [{ _id: { $in: phanLop.HocSinhs } }, { isClass: false }] }, options, (error, result) => {
                 if (error) {
                     res.status(200).json({ status: false, msg: error, code: 'ERR_GET_HOCSINH' });
@@ -34,6 +29,8 @@ exports.GetLopHocSinh = async (req, res) => {
                 }
             })
         } else {
+            let lopHoc = await LopHoc.findById( req.body.LopHoc_id )
+                .populate([{ path: "GiaoVien_id", select: "Ho Ten" }, { path: "NamHoc_id", select: "TenNamHoc" }, { path: "Khoi_id", select: "TenKhoi" }]);
             PhanLop.findOne({ LopHoc_id: req.body.LopHoc_id, NamHoc_id: req.body.NamHoc_id, Khoi_id: req.body.Khoi_id })
                 .populate({
                     path: "HocSinhs", populate:
@@ -47,7 +44,7 @@ exports.GetLopHocSinh = async (req, res) => {
                         if (!result)
                             res.status(200).json({ status: false, msg: "Không có dữ liệu, hoặc danh sách chưa được tạo !", code: 'ERR_GET_HOCSINH_CLASS' })
                         else
-                            res.status(200).json({ status: true, msg: 'thành công!', data: result.HocSinhs, recordsFiltered: result.HocSinhs.length })
+                            res.status(200).json({ status: true, msg: 'thành công!', LopInfo: lopHoc, data: result.HocSinhs, recordsFiltered: result.HocSinhs.length })
                     }
 
                 })
@@ -64,13 +61,13 @@ exports.GetLopHocSinh = async (req, res) => {
             }
         };
         // if (req.body.create) {
-            HocSinh.paginate({ isClass: false }, options, (error, result) => {
-                if (error) {
-                    res.status(200).json({ status: false, msg: error, code: 'ERR_GET_HOCSINH' });
-                } else {
-                    res.status(200).json({ status: true, data: result.docs, recordsTotal: result.limit, recordsFiltered: result.totalDocs })
-                }
-            })
+        HocSinh.paginate({ isClass: false }, options, (error, result) => {
+            if (error) {
+                res.status(200).json({ status: false, msg: error, code: 'ERR_GET_HOCSINH' });
+            } else {
+                res.status(200).json({ status: true, data: result.docs, recordsTotal: result.limit, recordsFiltered: result.totalDocs })
+            }
+        })
         // } else {
         //     HocSinh.paginate({}, options, (error, result) => {
         //         if (error) {

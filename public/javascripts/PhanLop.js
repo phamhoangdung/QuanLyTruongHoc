@@ -31,6 +31,14 @@ var table = $('#tblresult').DataTable({
         "cache": true,
         "dataSrc": function (json) {
             if (json.status) {
+                if (json.LopInfo) {
+                    $("#TenGiaoVien").text(json.LopInfo.GiaoVien_id.Ho + " " + json.LopInfo.GiaoVien_id.Ten);
+                    $("#TenLop").text(json.LopInfo.TenLopHoc);
+                    $("#TenKhoi").text(json.LopInfo.Khoi_id.TenKhoi);
+                    $("#TenNamHoc").text(json.LopInfo.NamHoc_id.TenNamHoc);
+                    $("#SiSo").text(json.LopInfo.SiSo);
+                }
+
                 json.data.forEach(element => {
                     let date = new Date(element.NgaySinh)
                     element.NgaySinh = ((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + ((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + date.getFullYear();
@@ -515,7 +523,7 @@ $('#btnFind').on('click', () => {
     if ($('#Khoi_idFilter').val() && $('#NamHoc_idFilter').val() && $('#LopHoc_idFilter').val()) {
         $('#tblresult').DataTable().ajax.reload();
         console.log($('#LopHoc_idFilter option:selected').text());
-        
+
         $('#headertext').text("Danh sách học sinh " + $('#LopHoc_idFilter option:selected').text())
         //table.clear().draw();
         //table.rows.add(NewlyCreatedData); // Add new data

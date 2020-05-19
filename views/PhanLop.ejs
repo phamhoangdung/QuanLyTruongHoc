@@ -71,8 +71,6 @@
                                             class="far fa-plus-square"></i>&nbsp; Khởi tạo lớp</button>
                                     <button type="button" class="btn btn-primary" id="btnUpdate" name="btnUpdate"><i
                                             class="far fa-edit"></i>&nbsp; Sửa DS</button>
-                                    <button type="button" class="btn btn-primary" id="btnExcel" name="btnExcel"><i
-                                            class="fas fa-chalkboard-teacher"></i></i>&nbsp; Gán giáo viên CN</button>
                                     <button type="button" class="btn btn-success" id="btnExcel" name="btnExcel"><i
                                             class="far fa-file-excel"></i>&nbsp; Xuất excel</button>
                                 </div>
@@ -88,27 +86,54 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <table id="tblresult" class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>STT</th>
-                                    <th>ID</th>
-                                    <th>Họ</th>
-                                    <th>Tên</th>
-                                    <th>Giới tính</th>
-                                    <th>Ngày sinh</th>
-                                    <th>Địa chỉ</th>
-                                    <th>Quê quán</th>
-                                    <th>Ảnh</th>
-                                    <th>ID dân tộc</th>
-                                    <th>Dân tộc</th>
-                                    <th>ID tôn giáo</th>
-                                    <th>Tôn giáo</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
+                        <div class="row form-group">
+                            <div class="col-6 col-md-6 col-sm-12">
+                                <table id="tableinfo" style="margin-bottom: 50px;width: 100%;">
+                                    <tbody>
+                                        <tr>
+                                            <th>Giáo viên chủ nhiệm:</th>
+                                            <td><span id="TenGiaoVien"></span></td>
+                                            <th>khối:</th>
+                                            <td><span id="TenKhoi"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <th>lớp:</th>
+                                            <td><span id="TenLop"></span></td>
+                                            <th>Năm học:</th>
+                                            <td><span id="TenNamHoc"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Sĩ số</th>
+                                            <td><span id="SiSo"></span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-12">
+                                <table id="tblresult" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>ID</th>
+                                            <th>Họ</th>
+                                            <th>Tên</th>
+                                            <th>Giới tính</th>
+                                            <th>Ngày sinh</th>
+                                            <th>Địa chỉ</th>
+                                            <th>Quê quán</th>
+                                            <th>Ảnh</th>
+                                            <th>ID dân tộc</th>
+                                            <th>Dân tộc</th>
+                                            <th>ID tôn giáo</th>
+                                            <th>Tôn giáo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer">
