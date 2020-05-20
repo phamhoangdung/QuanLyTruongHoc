@@ -22,12 +22,21 @@ var table = $('#tblresult').DataTable({
         },
         "dataSrc": function (json) {
             if (json.status) {
-                json.data.forEach(element => {
-                    element.Method = `<a class=" my-method-button btnEdit fa-hover"    title="Sửa tài khoản" ><i class="fa fa-edit"></i></a> &nbsp`;
-                    element.XepLoai = 0;
-                });
+                if (json.data.length > 0) {
+                    $("#TenGiaoVien").text(json.GiaoVien.GiaoVien_id == undefined ? "Chưa có giáo viên" : (json.GiaoVien.GiaoVien_id.Ho + " " + json.GiaoVien.GiaoVien_id.Ten))
+                    $("#TenMonHoc").text($("#MonHoc_idFilter").text());
+                    $("#TenLopHoc").text($("#LopHoc_idFilter").text());
+                    $("#TenKhoi").text($("#Khoi_idFilter").text());
+                    $("#TenNamHoc").text($("#NamHoc_idFilter").text());
+                    $("#TenHocKy").text($("#HocKy_idFilter").text());
+                    json.data.forEach(element => {
+                        element.Method = `<a class=" my-method-button btnEdit fa-hover"    title="Sửa tài khoản" ><i class="fa fa-edit"></i></a> &nbsp`;
+                        element.XepLoai = element.Diem_TBC == "" ? "Chưa xếp loại" : (element.Diem_TBC > 8 ? "Giỏi" : (element.Diem_TBC > 6.5 ? "Khá" : (element.Diem_TBC > 3.5 ? "Trung bình" : "Yếu")));
+                    });
 
-                return json.data;
+                    return json.data;
+                } else
+                    return []
             } else {
 
                 if (Array.isArray(json.msg)) {
@@ -289,33 +298,7 @@ $('#frmDelete').submit((e) => {
         });
     $("#btnSubmitConfirm").removeAttr("disabled");
 });
-$(".Khoi_id").select2({
-    tags: "true",
-    width: 'resolve',
-    placeholder: "Chọn khối ...",
-    multiple: false,
-    theme: 'bootstrap4',
-    maximumSelectionSize: 1,
-    allowClear: true,
-    delay: 250,
-    ajax: {
-        url: '/api/v1/khoi/select-khoi',
-        dataType: 'json',
-        data: function (params) {
-            var query = {
-                search: params.term,
-            }
-            // Query parameters will be ?search=[term]&type=public
-            return query;
-        },
-        processResults: function (results) {
-            // Transforms the top-level key of the response object from 'items' to 'results'
-            return {
-                results: results
-            };
-        }
-    }
-});
+
 $(".Khoi_id").select2({
     tags: "true",
     width: 'resolve',
@@ -385,7 +368,9 @@ $(".LopHoc_id").select2({
             var query = {
                 search: params.term,
                 NamHoc_id: $('#NamHoc_idFilter').val(),
-                Khoi_id: $('#Khoi_idFilter').val()
+                Khoi_id: $('#Khoi_idFilter').val(),
+                User_id: $('#user_id').val(),
+                user_role: $('#user_role').val()
             }
             // Query parameters will be ?search=[term]&type=public
             return query;
@@ -413,11 +398,15 @@ $(".MonHoc_id").select2({
             var query = {
                 search: params.term,
                 // NamHoc_id: $('#NamHoc_idFilter').val(),
-                Khoi_id: $('#Khoi_idFilter').val()
+                Khoi_id: $('#Khoi_idFilter').val(),
+                User_id: $('#user_id').val(),
+                user_role: $('#user_role').val()
+
             }
             // Query parameters will be ?search=[term]&type=public
             return query;
         },
+
         processResults: function (results) {
             // Transforms the top-level key of the response object from 'items' to 'results'
             return {
@@ -439,13 +428,14 @@ $(".HocKy_id").select2({
         dataType: 'json',
         data: function (params) {
             var query = {
-                search: params.term,
+                "search": params.term,
                 // NamHoc_id: $('#NamHoc_idFilter').val(),
-                Khoi_id: $('#HocKy_idFilter').val()
+                "Khoi_id": $('#HocKy_idFilter').val()
             }
             // Query parameters will be ?search=[term]&type=public
             return query;
         },
+
         processResults: function (results) {
             // Transforms the top-level key of the response object from 'items' to 'results'
             return {

@@ -1,12 +1,27 @@
 const LopHoc = require('../models/LopHoc.model');
 const PhanLop = require('../models/PhanLop.model');
-
+const PhanMon = require('../models/PhanMon.model');
+const GiaoVien = require('../models/GiaoVien.model');
 exports.selectLopHoc = async (req, res) => {
     let data;
     if (req.query.search) {
-        data = await LopHoc.find({ $text: { $search: req.query.search }, Khoi_id: req.query.Khoi_id, NamHoc_id: req.query.NamHoc_id });
+        if (req.query.user_role == "teacher") {
+            let giaoVien = await GiaoVien.findOne({ TaiKhoan: req.query.User_id });
+            let phanMon = await PhanMon.find({ GiaoVien_id: giaoVien._id }).select("LopHoc_id");
+            data = await LopHoc.find({ $text: { $search: req.query.search }, _id: { $in: phanMon.map(a => a.LopHoc_id) }, Khoi_id: req.query.Khoi_id, NamHoc_id: req.query.NamHoc_id });
+        }
+        else {
+            data = await LopHoc.find({ $text: { $search: req.query.search }, Khoi_id: req.query.Khoi_id, NamHoc_id: req.query.NamHoc_id });
+        }
     } else {
-        data = await LopHoc.find({ Khoi_id: req.query.Khoi_id, NamHoc_id: req.query.NamHoc_id });
+        if (req.query.user_role == "teacher") {
+            let giaoVien = await GiaoVien.findOne({ TaiKhoan: req.query.User_id });
+            let phanMon = await PhanMon.find({ GiaoVien_id: giaoVien._id }).select("LopHoc_id");
+            data = await LopHoc.find({ Khoi_id: req.query.Khoi_id, NamHoc_id: req.query.NamHoc_id, _id: { $in: phanMon.map(a => a.LopHoc_id) } });
+        }
+        else {
+            data = await LopHoc.find({ Khoi_id: req.query.Khoi_id, NamHoc_id: req.query.NamHoc_id });
+        }
     }
     let result = [];
     data.map(async (e, i) => {

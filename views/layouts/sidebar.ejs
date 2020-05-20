@@ -6,6 +6,7 @@
   </a>
 
   <!-- Sidebar -->
+  <% if(user){ %>
   <div class="sidebar">
     <!-- Sidebar user (optional) -->
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
@@ -13,14 +14,16 @@
         <img src="../../public/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
       </div>
       <div class="info">
-        <a href="#" class="d-block">Alexander Pierce</a>
+        <input type="hidden" id="user_id" value="<%= user._id %>">
+        <input type="hidden" id="user_role" value="<%= user.role %>">
+        <a href="#" class="d-block"><strong><%= user.email %></strong></a>
       </div>
     </div>
 
     <!-- Sidebar Menu -->
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-        <% if(user){ %>
+
         <% if(user.role === "admin"){ %>
         <li class="nav-item">
           <a href="/mon-hoc" class="nav-link">
@@ -79,6 +82,14 @@
           </a>
         </li>
         <li class="nav-item">
+          <a href="/quan-ly-diem" class="nav-link">
+            <i class="nav-icon far fa-id-card"></i>
+            <p>
+              Quản lý điểm
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
           <a href="/quan-ly-tai-khoan" class="nav-link">
             <i class="nav-icon fas fa-user-circle"></i>
             <p>
@@ -90,7 +101,7 @@
           <a href="/phan-cong-cv" class="nav-link">
             <i class="nav-icon far fa-calendar-alt"></i>
             <p>
-             Phân lịch giảng dạy
+              Phân lịch giảng dạy
             </p>
           </a>
         </li>

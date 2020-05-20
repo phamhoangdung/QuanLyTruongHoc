@@ -1,5 +1,6 @@
 const Diem = require('../models/Diem.model');
 const PhanLop = require('../models/PhanLop.model');
+const PhanMon = require('../models/PhanMon.model');
 const HocSinh = require('../models/HocSinh.model');
 var xl = require('excel4node');
 
@@ -60,36 +61,27 @@ exports.GetDiem = (req, res) => {
     req.checkBody('LopHoc_id', 'Lớp học chưa được chọn !').notEmpty();
     req.checkBody('NamHoc_id', 'Năm học chưa được chọn !').notEmpty();
     const errors = req.validationErrors();
-    if (!req.body.HocKy_id && !req.body.MonHoc_id && !req.body.LopHoc_id && !req.body.NamHoc_id) {
-        Diem.paginate({}, options, (error, result) => {
-            if (error) {
-                res.status(200).json({ status: false, msg: error, code: 'ERR_GET_DIEM' });
-            } else {
-                if (result.docs.length > 0) {
-                    res.status(200).json({ status: true, data: result.docs, recordsTotal: result.limit, recordsFiltered: result.totalDocs })
-                } else {
-                    res.status(200).json({ status: false, msg: "Dữ liệu không tồn tại" });
-                }
-            }
-        })
-    } else {
+    if (!errors) {
         const conditions = {
             NamHoc_id: req.body.NamHoc_id,
             LopHoc_id: req.body.LopHoc_id,
             HocKy_id: req.body.HocKy_id,
             MonHoc_id: req.body.MonHoc_id
         }
-        Diem.paginate(conditions, options, (error, result) => {
+        Diem.paginate(conditions, options, async (error, result) => {
             if (error) {
                 res.status(200).json({ status: false, msg: error, code: 'ERR_GET_DIEM' });
             } else {
                 if (result.docs.length > 0) {
-                    res.status(200).json({ status: true, data: result.docs, recordsTotal: result.limit, recordsFiltered: result.totalDocs })
+                    let table = await PhanMon.findOne(conditions).populate({ path: "GiaoVien_id", select: "Ho Ten" });
+                    res.status(200).json({ status: true, data: result.docs, GiaoVien: table, recordsTotal: result.limit, recordsFiltered: result.totalDocs })
                 } else {
                     res.status(200).json({ status: false, msg: "Dữ liệu không tồn tại" });
                 }
             }
         })
+    } else {
+        res.status(200).json({ status: true, data: [] })
     }
 }
 exports.CreateDiem = async (req, res) => {
@@ -127,7 +119,7 @@ exports.CreateDiem = async (req, res) => {
                             await diem.save();
                         }
                     })
-                    
+
                     res.status(200).json({ status: true, msg: 'Tạo mới điểm thành công' })
                 } else {
                     res.status(200).json({ status: false, msg: "Danh sách học sinh rỗng !", code: 'ERR_CREATE_DIEM' })

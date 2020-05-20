@@ -1,29 +1,45 @@
 const MonHoc = require('../models/MonHoc.model');
 const GiaoVien = require('../models/GiaoVien.model');
 const Diem = require('../models/Diem.model');
+const PhanMon = require('../models/PhanMon.model');
 
 exports.selectMonHoc = async (req, res) => {
     try {
         let data;
-        if(req.query.Khoi_id){
+        if (req.query.Khoi_id) {
             if (req.query.search) {
-                data = await MonHoc.find({ Khoi_id: req.query.Khoi_id, $text: { $search: req.query.search } });
+                if (req.query.user_role == "teacher") {
+                    let giaoVien = await GiaoVien.findOne({ TaiKhoan: req.query.User_id });
+                    let phanMon = await PhanMon.find({ GiaoVien_id: giaoVien._id }).select("MonHoc_id");
+                    
+                    data = await MonHoc.find({ Khoi_id: req.query.Khoi_id, $text: { $search: req.query.search }, _id: { $in: phanMon.map(a => a.MonHoc_id) } });
+                } else {
+                    console.log("here");
+
+                    data = await MonHoc.find({ Khoi_id: req.query.Khoi_id, $text: { $search: req.query.search } });
+                }
             } else {
-                data = await MonHoc.find({ Khoi_id: req.query.Khoi_id });
+                if (req.query.user_role == "teacher") {
+                    let giaoVien = await GiaoVien.findOne({ TaiKhoan: req.query.User_id });
+                    let phanMon = await PhanMon.find({ GiaoVien_id: giaoVien._id }).select("MonHoc_id");
+                    data = await MonHoc.find({ Khoi_id: req.query.Khoi_id,_id: { $in: phanMon.map(a => a.MonHoc_id) } });
+                } else {
+                    data = await MonHoc.find({ Khoi_id: req.query.Khoi_id });
+                }
             }
-        }else{
+        } else {
             if (req.query.search) {
                 data = await MonHoc.find({ $text: { $search: req.query.search } });
             } else {
-                data = await MonHoc.find({ });
+                data = await MonHoc.find({});
             }
         }
-        
+
         let result = [];
         data.map((e, i) => {
             result.push({ "id": e._id, "text": e.TenMonHoc });
         })
-        
+
         res.status(200).json(result);
     } catch (error) {
         console.log(error);
