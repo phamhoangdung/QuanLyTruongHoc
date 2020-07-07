@@ -1,4 +1,4 @@
 # QuanLyTruongHoc
-author: Déo
+author: Déo /n
 contact: fb/dungphamno1
 run "npm install" then "npm start" to run project
